@@ -129,8 +129,8 @@ int main(int argc, char *argv[]){
     string* s = &(samples[i]);
     
     tabXSec.set(int(i+1),0,(*s));//samples[i]);  
-    //tabXSec.set(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
-    //tabXSec.set(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
+    tabXSec.set(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
+    tabXSec.set(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
   }
     
   tabXSec.setColumnDecorationBefore(0,"|");
