@@ -119,18 +119,18 @@ int main(int argc, char *argv[]){
   //_________________________________________  
   ICLatexTabular tabXSec(18,3);
   
-  tabXSec.set(0,0,"Sample");
-  tabXSec.set(0,1,"Cross Section [pb]");
-  tabXSec.set(0,2,"Event Weight");
+  tabXSec.setCellContent(0,0,"Sample");
+  tabXSec.setCellContent(0,1,"Cross Section [pb]");
+  tabXSec.setCellContent(0,2,"Event Weight");
   
   cout << "N Samples: " << samples.size() << endl;
   for(unsigned i=0; i<samples.size(); i++){
     
     string* s = &(samples[i]);
     
-    tabXSec.set(int(i+1),0,(*s));//samples[i]);  
-    tabXSec.set(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
-    tabXSec.set(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
+    tabXSec.setCellContent(int(i+1),0,(*s));//samples[i]);  
+    tabXSec.setCellContent(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
+    tabXSec.setCellContent(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
   }
     
   tabXSec.setColumnDecorationBefore(0,"|");
@@ -141,29 +141,55 @@ int main(int argc, char *argv[]){
   tabXSec.setRowDecorationAfter (17,"\\hline");
   
   tabXSec.saveAs("table_xSec.tex");
-  
-  //_________________________________________
-  cout << "Weights" << endl;
-  for(unsigned i=0; i<samples.size() ; i++){
-    
-    string s = samples[i];
-    double w = wgt[s];
-    
-    printf("%20s : %10.4f\n",s.c_str(),w);
-  }
-  cout<<endl;
+  tabXSec.print();
     
   //_________________________________________    
+  map<string,TH1F*> HLTMetClean_n_vtx;
+  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
+    TH1F* h = (TH1F*) f->second->Get("HLTMetClean/n_vtx");
+    HLTMetClean_n_vtx[f->first] = h; 
+  }
+
   map<string,TH1F*> JetPair_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    
     TH1F* h = (TH1F*) f->second->Get("JetPair/n_vtx");
-    
-    JetPair_n_vtx[f->first] = h;
-    
-  }
-  cout<<endl;  
+    JetPair_n_vtx[f->first] = h; 
+  }  
 
+  map<string,TH1F*> DEta_n_vtx;
+  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
+    TH1F* h = (TH1F*) f->second->Get("DEta/n_vtx");
+    DEta_n_vtx[f->first] = h; 
+  }  
+  
+  map<string,TH1F*> MET_n_vtx;
+  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
+    TH1F* h = (TH1F*) f->second->Get("MET/n_vtx");
+    MET_n_vtx[f->first] = h; 
+  }  
+  
+  map<string,TH1F*> TightMjj_n_vtx;
+  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
+    TH1F* h = (TH1F*) f->second->Get("TightMjj/n_vtx");
+    TightMjj_n_vtx[f->first] = h; 
+  }  
+  
+  map<string,TH1F*> CJVpass_n_vtx;
+  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
+    TH1F* h = (TH1F*) f->second->Get("CJVpass/n_vtx");
+    CJVpass_n_vtx[f->first] = h; 
+  }  
+  
+  map<string,TH1F*> DPhiSIGNAL_CJVpass_n_vtx;
+  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
+    TH1F* h = (TH1F*) f->second->Get("DPhiSIGNAL_CJVpass/n_vtx");
+    DPhiSIGNAL_CJVpass_n_vtx[f->first] = h; 
+  }  
+
+  //_________________________________________
+  
+  
+  
   //_________________________________________  
   cout << "Entries" << endl;
   for(unsigned i=0; i<samples.size() ; i++){
