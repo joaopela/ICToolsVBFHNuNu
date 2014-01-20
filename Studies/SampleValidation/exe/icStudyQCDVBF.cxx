@@ -18,7 +18,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-  double lumi = 19000;
+  double lumi = 19500.3;
 
   //_________________________________________
   map<string,TFile*> files;
@@ -128,7 +128,7 @@ int main(int argc, char *argv[]){
     
     string* s = &(samples[i]);
     
-    tabXSec.setCellContent(int(i+1),0,(*s));//samples[i]);  
+    tabXSec.setCellContent(int(i+1),0,Form("\\verb|%s|",(*s).c_str()));//samples[i]);  
     tabXSec.setCellContent(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
     tabXSec.setCellContent(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
   }
@@ -144,51 +144,225 @@ int main(int argc, char *argv[]){
   tabXSec.print();
     
   //_________________________________________    
+  vector< map<string,TH1F*>* > cuts;
+  
   map<string,TH1F*> HLTMetClean_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("HLTMetClean/n_vtx");
     HLTMetClean_n_vtx[f->first] = h; 
   }
-
+  cuts.push_back(&HLTMetClean_n_vtx);
+  
   map<string,TH1F*> JetPair_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("JetPair/n_vtx");
     JetPair_n_vtx[f->first] = h; 
   }  
-
+  cuts.push_back(&JetPair_n_vtx);
+  
   map<string,TH1F*> DEta_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("DEta/n_vtx");
     DEta_n_vtx[f->first] = h; 
   }  
+  cuts.push_back(&DEta_n_vtx);
   
   map<string,TH1F*> MET_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("MET/n_vtx");
     MET_n_vtx[f->first] = h; 
   }  
+  cuts.push_back(&MET_n_vtx);
   
   map<string,TH1F*> TightMjj_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("TightMjj/n_vtx");
     TightMjj_n_vtx[f->first] = h; 
   }  
+  cuts.push_back(&TightMjj_n_vtx);
   
   map<string,TH1F*> CJVpass_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("CJVpass/n_vtx");
     CJVpass_n_vtx[f->first] = h; 
   }  
+  cuts.push_back(&CJVpass_n_vtx);
   
   map<string,TH1F*> DPhiSIGNAL_CJVpass_n_vtx;
   for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
     TH1F* h = (TH1F*) f->second->Get("DPhiSIGNAL_CJVpass/n_vtx");
     DPhiSIGNAL_CJVpass_n_vtx[f->first] = h; 
   }  
-
+  cuts.push_back(&DPhiSIGNAL_CJVpass_n_vtx);
+  
   //_________________________________________
+  ICLatexTabular tabEvWeighted(9,11);
+  tabEvWeighted.setTabularPrecision(".2");
+  
+  tabEvWeighted.setColumnDecorationBefore( 0,"|");
+  tabEvWeighted.setColumnDecorationAfter ( 0,"|");
+  tabEvWeighted.setColumnDecorationAfter ( 2,"|");
+  tabEvWeighted.setColumnDecorationAfter ( 4,"|");
+  tabEvWeighted.setColumnDecorationAfter ( 6,"|");
+  tabEvWeighted.setColumnDecorationAfter ( 8,"|");
+  tabEvWeighted.setColumnDecorationAfter (10,"|");
+  
+  tabEvWeighted.setRowDecorationBefore(0,"\\hline");
+  tabEvWeighted.setRowDecorationBefore(1,"\\hline");
+  tabEvWeighted.setRowDecorationBefore(2,"\\hline \\hline");
+  tabEvWeighted.setRowDecorationAfter (8,"\\hline");
+  
+  tabEvWeighted.setCellContent(1, 0,"Sample");
+  tabEvWeighted.setCellContent(0, 1, "80to120"); tabEvWeighted.setCellContent(1, 1,"Inc");
+  tabEvWeighted.setCellContent(0, 2, "80to120"); tabEvWeighted.setCellContent(1, 2,"VBF");
+  tabEvWeighted.setCellContent(0, 3,"120to170"); tabEvWeighted.setCellContent(1, 3,"Inc");
+  tabEvWeighted.setCellContent(0, 4,"120to170"); tabEvWeighted.setCellContent(1, 4,"VBF");
+  tabEvWeighted.setCellContent(0, 5,"170to300"); tabEvWeighted.setCellContent(1, 5,"Inc");
+  tabEvWeighted.setCellContent(0, 6,"170to300"); tabEvWeighted.setCellContent(1, 6,"VBF");
+  tabEvWeighted.setCellContent(0, 7,"300to470"); tabEvWeighted.setCellContent(1, 7,"Inc");
+  tabEvWeighted.setCellContent(0, 8,"300to470"); tabEvWeighted.setCellContent(1, 8,"VBF");
+  tabEvWeighted.setCellContent(0, 9,"470to600"); tabEvWeighted.setCellContent(1, 9,"Inc");
+  tabEvWeighted.setCellContent(0,10,"470to600"); tabEvWeighted.setCellContent(1,10,"VBF");
+  
+  tabEvWeighted.setCellContent(2, 0,"HLTMetClean");
+  tabEvWeighted.setCellContent(3, 0,"JetPair");  
+  tabEvWeighted.setCellContent(4, 0,"DEta");
+  tabEvWeighted.setCellContent(5, 0,"MET");
+  tabEvWeighted.setCellContent(6, 0,"TightMjj");
+  tabEvWeighted.setCellContent(7, 0,"CJVpass");
+  tabEvWeighted.setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  
+  //_________________________________________
+  ICLatexTabular tabEvAbsolute(9,11);
+  tabEvAbsolute.setTabularPrecision(".0");
+  
+  tabEvAbsolute.setColumnDecorationBefore( 0,"|");
+  tabEvAbsolute.setColumnDecorationAfter ( 0,"|");
+  tabEvAbsolute.setColumnDecorationAfter ( 2,"|");
+  tabEvAbsolute.setColumnDecorationAfter ( 4,"|");
+  tabEvAbsolute.setColumnDecorationAfter ( 6,"|");
+  tabEvAbsolute.setColumnDecorationAfter ( 8,"|");
+  tabEvAbsolute.setColumnDecorationAfter (10,"|");
+  
+  tabEvAbsolute.setRowDecorationBefore(0,"\\hline");
+  tabEvAbsolute.setRowDecorationBefore(1,"\\hline");
+  tabEvAbsolute.setRowDecorationBefore(2,"\\hline \\hline");
+  tabEvAbsolute.setRowDecorationAfter (8,"\\hline");
+  
+  tabEvAbsolute.setCellContent(1, 0,"Sample");
+  tabEvAbsolute.setCellContent(0, 1, "80to120"); tabEvAbsolute.setCellContent(1, 1,"Inc");
+  tabEvAbsolute.setCellContent(0, 2, "80to120"); tabEvAbsolute.setCellContent(1, 2,"VBF");
+  tabEvAbsolute.setCellContent(0, 3,"120to170"); tabEvAbsolute.setCellContent(1, 3,"Inc");
+  tabEvAbsolute.setCellContent(0, 4,"120to170"); tabEvAbsolute.setCellContent(1, 4,"VBF");
+  tabEvAbsolute.setCellContent(0, 5,"170to300"); tabEvAbsolute.setCellContent(1, 5,"Inc");
+  tabEvAbsolute.setCellContent(0, 6,"170to300"); tabEvAbsolute.setCellContent(1, 6,"VBF");
+  tabEvAbsolute.setCellContent(0, 7,"300to470"); tabEvAbsolute.setCellContent(1, 7,"Inc");
+  tabEvAbsolute.setCellContent(0, 8,"300to470"); tabEvAbsolute.setCellContent(1, 8,"VBF");
+  tabEvAbsolute.setCellContent(0, 9,"470to600"); tabEvAbsolute.setCellContent(1, 9,"Inc");
+  tabEvAbsolute.setCellContent(0,10,"470to600"); tabEvAbsolute.setCellContent(1,10,"VBF");
+  
+  tabEvAbsolute.setCellContent(2, 0,"HLTMetClean");
+  tabEvAbsolute.setCellContent(3, 0,"JetPair");  
+  tabEvAbsolute.setCellContent(4, 0,"DEta");
+  tabEvAbsolute.setCellContent(5, 0,"MET");
+  tabEvAbsolute.setCellContent(6, 0,"TightMjj");
+  tabEvAbsolute.setCellContent(7, 0,"CJVpass");
+  tabEvAbsolute.setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
   
   
+  // Applying weights
+  for(unsigned i=0; i<cuts.size(); i++){
+    
+    map<string,TH1F*>* plots = cuts[i];
+    TH1F* h;
+    
+    h = (*plots)["QCD-Pt-80to120"];  
+    tabEvAbsolute.setCellContent(i+2,1,h->GetEntries());
+    h->Scale(wgt["QCD-Pt-80to120"]);  
+    tabEvWeighted.setCellContent(i+2,1,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD-Pt-120to170"]; 
+    tabEvAbsolute.setCellContent(i+2,3,h->GetEntries());
+    h->Scale(wgt["QCD-Pt-120to170"]); 
+    tabEvWeighted.setCellContent(i+2,3,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD-Pt-170to300"]; 
+    tabEvAbsolute.setCellContent(i+2,5,h->GetEntries());
+    h->Scale(wgt["QCD-Pt-170to300"]); 
+    tabEvWeighted.setCellContent(i+2,5,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD-Pt-300to470"]; 
+    tabEvAbsolute.setCellContent(i+2,7,h->GetEntries());
+    h->Scale(wgt["QCD-Pt-300to470"]); 
+    tabEvWeighted.setCellContent(i+2,7,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD-Pt-470to600"]; 
+    tabEvAbsolute.setCellContent(i+2,9,h->GetEntries());
+    h->Scale(wgt["QCD-Pt-470to600"]); 
+    tabEvWeighted.setCellContent(i+2,9,h->Integral(0,h->GetNbinsX()+1));
+    
+    
+    
+    h = (*plots)["QCD_VBF-Pt-80to120"];
+    tabEvAbsolute.setCellContent(i+2,2,h->GetEntries());
+    h->Scale(wgt["QCD_VBF-Pt-80to120"]);  
+    tabEvWeighted.setCellContent(i+2, 2,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD_VBF-Pt-120to170"];
+    tabEvAbsolute.setCellContent(i+2,4,h->GetEntries());
+    h->Scale(wgt["QCD_VBF-Pt-120to170"]); 
+    tabEvWeighted.setCellContent(i+2, 4,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD_VBF-Pt-170to300"]; 
+    tabEvAbsolute.setCellContent(i+2,6,h->GetEntries());
+    h->Scale(wgt["QCD_VBF-Pt-170to300"]); 
+    tabEvWeighted.setCellContent(i+2, 6,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD_VBF-Pt-300to470"]; 
+    tabEvAbsolute.setCellContent(i+2,8,h->GetEntries());
+    h->Scale(wgt["QCD_VBF-Pt-300to470"]); 
+    tabEvWeighted.setCellContent(i+2, 8,h->Integral(0,h->GetNbinsX()+1));
+    
+    h = (*plots)["QCD_VBF-Pt-470to600"];
+    tabEvAbsolute.setCellContent(i+2,10,h->GetEntries());
+    h->Scale(wgt["QCD_VBF-Pt-470to600"]); 
+    tabEvWeighted.setCellContent(i+2,10,h->Integral(0,h->GetNbinsX()+1));   
+    
+  }
+  
+  tabEvWeighted.saveAs("table_EvWeighted.tex");
+  tabEvWeighted.print();
+
+  tabEvAbsolute.saveAs("table_EvAbsolute.tex");
+  tabEvWeighted.print();
+  
+  // 
+  for(unsigned i=0; i<cuts.size(); i++){
+  
+    map<string,TH1F*>* plots = cuts[i];
+    
+    TH1F* QCDInc = (TH1F*) (*plots)["QCD-Pt-80to120"]->Clone("QCDInc");
+    QCDInc->Add((*plots)["QCD-Pt-120to170"]);
+    QCDInc->Add((*plots)["QCD-Pt-170to300"]);
+    QCDInc->Add((*plots)["QCD-Pt-300to470"]);
+    QCDInc->Add((*plots)["QCD-Pt-470to600"]);
+
+    
+    TH1F* QCDVBF = (TH1F*) (*plots)["QCD_VBF-Pt-80to120"]->Clone("QCDVBF");
+    QCDVBF->Add((*plots)["QCD_VBF-Pt-120to170"]);
+    QCDVBF->Add((*plots)["QCD_VBF-Pt-170to300"]);
+    QCDVBF->Add((*plots)["QCD_VBF-Pt-300to470"]);
+    QCDVBF->Add((*plots)["QCD_VBF-Pt-470to600"]);    
+
+    QCDInc->Integral(0,QCDInc->GetNbinsX()+1);    
+    double intQCDInc = QCDInc->Integral(0,QCDInc->GetNbinsX()+1);
+    
+    QCDVBF->Integral(0,QCDVBF->GetNbinsX()+1);
+    double intQCDVBF = QCDVBF->Integral(0,QCDVBF->GetNbinsX()+1);
+
+    printf("QCD Inc: %15.2f   QCD VBF : %15.2f\n",intQCDInc,intQCDVBF);        
+    
+  }
   
   //_________________________________________  
   cout << "Entries" << endl;
