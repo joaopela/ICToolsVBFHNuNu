@@ -1,0 +1,451 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[margin=1.0cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+
+%opening
+\title{Validation of QCD VBF like samples}
+\author{Joao Pela}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Tables}
+
+\subsection{Weights}
+
+Weights used on the normalization of each monte carlo sample to the total luminosity of 2012.
+
+\begin{table}[!h]
+\centering
+\input{table_xSec}
+\caption{Weights used to normalize each sample to to the integrated luminosity of 19500.3 $[pb^{-1}]$}
+\end{table}
+
+\subsection{QCD Inclusive}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{\input{table_EvAllTrig}}
+\caption{}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\input{table_EvAllTotalWeighted}
+\caption{}
+\end{table}
+
+\subsection{Comparison between QCD Inclusive and VBF-like samples}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{\input{table_EvAbsolute}}
+\caption{Number of entries for each QCD $p_T$ hat for after several cuts in current cut flow}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{\input{table_EvTrig}}
+\caption{Weighted (only trigger, PU) number of events for each QCD $p_T$ hat for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{\input{table_EvWeighted}}
+\caption{Weighted (only trigger, PU, cross section) number of events for each QCD $p_T$ hat for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\input{table_EvTotalWeighted}
+\caption{Weighted number of events for summed QCD $p_T$ hats for 80 to 600 $[GeV]$ for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
+\end{table}
+
+\clearpage
+\section{Plots}
+
+For all plots blue is QCD Inclusive and red is QCD VBF samples. All plots are normalized to 1.
+
+\subsection{HLTMetClean}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{HLTMetClean_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{HLTMetClean_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{HLTMetClean_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{HLTMetClean_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{HLTMetClean_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{HLTMetClean_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{HLTMetClean_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{HLTMetClean_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\clearpage
+\subsection{JetPair}  
+              
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{JetPair_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{JetPair_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{JetPair_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{JetPair_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{JetPair_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{JetPair_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{JetPair_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{JetPair_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\clearpage
+\subsection{DEta}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DEta_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{DEta_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DEta_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DEta_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DEta_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DEta_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DEta_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{DEta_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\clearpage
+\subsection{MET}
+     
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{MET_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{MET_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{MET_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{MET_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{MET_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{MET_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{MET_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{MET_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\clearpage
+\subsection{TightMjj}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{TightMjj_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{TightMjj_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{TightMjj_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{TightMjj_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{TightMjj_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{TightMjj_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{TightMjj_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{TightMjj_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\clearpage
+\subsection{CJVpass}
+  
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{CJVpass_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{CJVpass_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{CJVpass_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{CJVpass_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{CJVpass_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{CJVpass_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{CJVpass_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{CJVpass_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\clearpage
+\subsection{DPhiSIGNAL\_CJVpass}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_jpt_1}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+  \includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_jpt_2}
+\end{minipage}
+\caption{Left: Lead Jet $p_T$. Right: Sub-lead Jet $p_T$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_jeta_2}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_jeta_2}
+\end{minipage}
+\caption{Right:Lead Jet $eta$. Left: Sub-lead Jet $eta$}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_met}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_mjj}
+\end{minipage}
+\caption{Left: Missing Transverse Energy. Right: Dijet Invariant Mass}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_dphijj}
+\end{minipage}%
+\begin{minipage}[!h]{0.4\linewidth}
+\centering
+% \includegraphics[width=\linewidth]{DPhiSIGNAL_CJVpass_mjj}
+\end{minipage}
+\caption{Left: Delta phi jet-jet.}
+\end{figure}
+
+\end{document}
