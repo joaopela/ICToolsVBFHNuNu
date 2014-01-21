@@ -14,6 +14,23 @@
 
 \maketitle
 
+\section{QCD VBF-like samples}
+
+QCD are by far the most frequent processes in collisions at the LHC. The elevated cross sections of such processes mean it is normally impossible to generate samples big enough to simulate 
+significant amounts of of equivalent luminosity so they can be used in data analysis. 
+
+In order to overcome this problem and it was decided to generate a monte carlo sample with MET plus VBF-like jets. This type of event have a significantly smaller cross section and therefore
+it is possible to simulate the equivalent of a year of LHC data of this processes with a midsized sample.
+
+To produce such sample we started from the base CMSSW configuration files to produce inclusive QCD events with the Pythia6 generator. Two filters were implemented to select events at generator
+level in order to avoid the reconstruction process, which is the most time consuming part of the event production chain. 
+
+The first filter selected events where the vector sum of neutrinos $p_T$ was greater than 40 $GeV$. The second filter clustered stable generator level particles (not including neutring) with 
+the ak5 jet algorithm (the same used for the offline analysis), and check all possible resulting dijet combinations for at least a one pair that passed, $p_T>REPLACEME$ $GeV$, 
+$|eta|<5$, $|\Delta\eta|<REPLACEME$ and Tight $m_{jj} < REPLACEME$.
+
+This thresholds were chosen to obtain a good cross section reduction while still being under trigger parameters. 
+
 \section{Tables}
 
 \subsection{Weights}
@@ -26,6 +43,7 @@ Weights used on the normalization of each monte carlo sample to the total lumino
 \caption{Weights used to normalize each sample to to the integrated luminosity of 19500.3 $[pb^{-1}]$}
 \end{table}
 
+\clearpage
 \subsection{QCD Inclusive}
 
 \begin{table}[!h]
@@ -40,6 +58,7 @@ Weights used on the normalization of each monte carlo sample to the total lumino
 \caption{}
 \end{table}
 
+\clearpage
 \subsection{Comparison between QCD Inclusive and VBF-like samples}
 
 \begin{table}[!h]
@@ -66,11 +85,11 @@ Weights used on the normalization of each monte carlo sample to the total lumino
 \caption{Weighted number of events for summed QCD $p_T$ hats for 80 to 600 $[GeV]$ for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
 \end{table}
 
-\clearpage
 \section{Plots}
 
 For all plots blue is QCD Inclusive and red is QCD VBF samples. All plots are normalized to 1.
 
+\clearpage
 \subsection{HLTMetClean}
 
 \begin{figure}[!h]
