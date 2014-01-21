@@ -20,6 +20,15 @@
 
 using namespace std;
 
+ICLatexTabular get_tabXSec();
+ICLatexTabular get_tabEvAbsolute();
+ICLatexTabular get_tabEvTrig();
+ICLatexTabular get_tabEvWeighted();
+ICLatexTabular get_tabEvTotalWeighted();
+
+ICLatexTabular get_tabEvAllTrig();
+ICLatexTabular get_tabEvAllTotalWeighted();
+
 int main(int argc, char *argv[]){
 
   double lumi = 19500.3;
@@ -127,6 +136,20 @@ int main(int argc, char *argv[]){
   wgt["QCD_VBF-Pt-470to600"] = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD_VBF-Pt-470to600"];
 
   //_________________________________________    
+  vector<string> samplesQCDIncAll;
+  samplesQCDIncAll.push_back("QCD-Pt-30to50");
+  samplesQCDIncAll.push_back("QCD-Pt-50to80");    
+  samplesQCDIncAll.push_back("QCD-Pt-80to120");   
+  samplesQCDIncAll.push_back("QCD-Pt-120to170");  
+  samplesQCDIncAll.push_back("QCD-Pt-170to300"); 
+  samplesQCDIncAll.push_back("QCD-Pt-300to470"); 
+  samplesQCDIncAll.push_back("QCD-Pt-470to600"); 
+  samplesQCDIncAll.push_back("QCD-Pt-600to800"); 
+  samplesQCDIncAll.push_back("QCD-Pt-800to1000"); 
+  samplesQCDIncAll.push_back("QCD-Pt-1000to1400");
+  samplesQCDIncAll.push_back("QCD-Pt-1400to1800");
+  samplesQCDIncAll.push_back("QCD-Pt-1800");
+  
   vector<string> samplesQCDInc;
   samplesQCDInc.push_back("QCD-Pt-80to120"); 
   samplesQCDInc.push_back("QCD-Pt-120to170");
@@ -157,6 +180,7 @@ int main(int argc, char *argv[]){
   hists.push_back("jeta_2");
   hists.push_back("met");
   hists.push_back("mjj");
+  hists.push_back("dphijj");
   
   for(unsigned c=0; c<cuts.size(); c++){
     for(unsigned h=0; h<hists.size(); h++){
@@ -165,55 +189,55 @@ int main(int argc, char *argv[]){
       TCanvas *canv = new TCanvas();
 
       MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/%s",cuts[c].c_str(),hists[h].c_str()));
-      mPlots.Scale(wgt);  
+//      mPlots.Scale(wgt);  // removed since already included
       hInc = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samplesQCDInc);
       hVBF = mPlots.getMerged(Form("QCDVBF_%s_%s",cuts[c].c_str(),hists[h].c_str()),samplesQCDVBF);
 
       if(hInc->Integral()!=0){hInc->Scale(1/hInc->Integral());}
       if(hVBF->Integral()!=0){hVBF->Scale(1/hVBF->Integral());}      
       
-      if     (cuts[c]=="HLTMetClean"        && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="HLTMetClean"        && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="HLTMetClean"        && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="HLTMetClean"        && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="HLTMetClean"        && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      if     (cuts[c]=="HLTMetClean"        && hists[h]=="jpt_1") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="HLTMetClean"        && hists[h]=="jpt_2") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="HLTMetClean"        && hists[h]=="jeta_1"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="HLTMetClean"        && hists[h]=="jeta_2"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="HLTMetClean"        && hists[h]=="met")   {int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="HLTMetClean"        && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}
-      else if(cuts[c]=="JetPair"            && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="JetPair"            && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="JetPair"            && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="JetPair"            && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="JetPair"            && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      else if(cuts[c]=="JetPair"            && hists[h]=="jpt_1") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="JetPair"            && hists[h]=="jpt_2") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="JetPair"            && hists[h]=="jeta_1"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="JetPair"            && hists[h]=="jeta_2"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="JetPair"            && hists[h]=="met")   {int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="JetPair"            && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="DEta"               && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      else if(cuts[c]=="DEta"               && hists[h]=="jpt_1") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="DEta"               && hists[h]=="jpt_2") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="DEta"               && hists[h]=="jeta_1"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="DEta"               && hists[h]=="jeta_2"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="DEta"               && hists[h]=="met")   {int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="DEta"               && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
-      else if(cuts[c]=="MET"                && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="MET"                && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="MET"                && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="MET"                && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="MET"                && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
-      else if(cuts[c]=="MET"                && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
-      else if(cuts[c]=="TightMjj"           && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="TightMjj"           && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="TightMjj"           && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="TightMjj"           && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="TightMjj"           && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
-      else if(cuts[c]=="TightMjj"           && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}  
-      else if(cuts[c]=="CJVpass"            && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="CJVpass"            && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="CJVpass"            && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="CJVpass"            && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="CJVpass"            && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
-      else if(cuts[c]=="CJVpass"            && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
-      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jpt_1") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jpt_2") {int r=5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jeta_1"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jeta_2"){int r=2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="met")   {int r=4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
-      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);} 
+      else if(cuts[c]=="MET"                && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="MET"                && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="MET"                && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="MET"                && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="MET"                && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      else if(cuts[c]=="MET"                && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
+      else if(cuts[c]=="TightMjj"           && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="TightMjj"           && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="TightMjj"           && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="TightMjj"           && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="TightMjj"           && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      else if(cuts[c]=="TightMjj"           && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}  
+      else if(cuts[c]=="CJVpass"            && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="CJVpass"            && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="CJVpass"            && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="CJVpass"            && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="CJVpass"            && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      else if(cuts[c]=="CJVpass"            && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);} 
       
       hVBF->SetLineColor(kRed);
       hInc->Draw();
@@ -227,11 +251,7 @@ int main(int argc, char *argv[]){
   }
   
   //_________________________________________  
-  ICLatexTabular tabXSec(18,3);
-  
-  tabXSec.setCellContent(0,0,"Sample");
-  tabXSec.setCellContent(0,1,"Cross Section [pb]");
-  tabXSec.setCellContent(0,2,"Event Weight");
+  ICLatexTabular tabXSec = get_tabXSec();
   
   cout << "N Samples: " << samples.size() << endl;
   for(unsigned i=0; i<samples.size(); i++){
@@ -242,7 +262,140 @@ int main(int argc, char *argv[]){
     tabXSec.setCellContent(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
     tabXSec.setCellContent(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
   }
+
+  tabXSec.saveAs("table_xSec.tex");
+  tabXSec.print();
+         
+  //_____________________________________________________
+  ICLatexTabular tabEvAbsolute      = get_tabEvAbsolute();      // Initialization of absolute event yields table 
+  ICLatexTabular tabEvTrig          = get_tabEvTrig();          // Initialization of trigger weighted eventd
+  ICLatexTabular tabEvWeighted      = get_tabEvWeighted();      // Initialization of weighted event yields table
+  ICLatexTabular tabEvTotalWeighted = get_tabEvTotalWeighted(); // Initialization of merged table
+ 
+  ICLatexTabular tabEvAllTrig          = get_tabEvAllTrig(); // Initialization of merged table
+  ICLatexTabular tabEvAllTotalWeighted = get_tabEvAllTotalWeighted(); 
+  
+  //_________________________________________    
+  for(unsigned i=0; i<cuts.size(); i++){
+
+    MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/n_vtx",cuts[i].c_str()));
+
+    // Filling table absolute counts
+    tabEvAbsolute.setCellContent(i+2, 0,cuts[i]);
+    tabEvAbsolute.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->GetEntries());
+    tabEvAbsolute.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->GetEntries());    
+    tabEvAbsolute.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->GetEntries());
+    tabEvAbsolute.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->GetEntries());
+
+    // Filling table weighted events (trigger, pu)
+    tabEvTrig.setCellContent(i+2, 0,cuts[i]);
+    tabEvTrig.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
+    tabEvTrig.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
+    tabEvTrig.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
+   
+    // Filling table weighted events (trigger, pu) for All QCD Inclusive samples
+    tabEvAllTrig.setCellContent(i+1, 0,cuts[i]);
+    tabEvAllTrig.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->Integral(0,mPlots["QCD-Pt-120to170"]->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->Integral(0,mPlots["QCD-Pt-170to300"]->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->Integral(0,mPlots["QCD-Pt-300to470"]->GetNbinsX()+1));    
+    tabEvAllTrig.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->Integral(0,mPlots["QCD-Pt-470to600"]->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvAllTrig.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+
+    TH1F *hIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samplesQCDIncAll);
+    double intQCDIncAll = hIncAll->Integral(0,hIncAll->GetNbinsX()+1);
+   
+    tabEvAllTotalWeighted.setCellContent(i+1,0,cuts[i]);
+    tabEvAllTotalWeighted.setCellContent(i+1,1,intQCDIncAll);
     
+    delete hIncAll;
+
+    // Putting in normalization weights
+    mPlots.Scale(wgt);
+
+    // Filling table weighted events (trigger, pu and xsec)    
+    tabEvWeighted.setCellContent(i+2, 0,cuts[i]);
+    tabEvWeighted.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
+    tabEvWeighted.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
+    tabEvWeighted.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
+    
+    TH1F *hInc    = mPlots.getMerged(Form("QCDInc_%s_n_vtx",   cuts[i].c_str()),samplesQCDInc);
+    TH1F *hVBF    = mPlots.getMerged(Form("QCDVBF_%s_n_vtx",   cuts[i].c_str()),samplesQCDVBF);
+    
+    double intQCDInc    = hInc   ->Integral(0,hInc->GetNbinsX()+1);
+    double intQCDVBF    = hVBF   ->Integral(0,hVBF->GetNbinsX()+1);
+    
+    tabEvTotalWeighted.setCellContent(i+1,0,cuts[i]);
+    tabEvTotalWeighted.setCellContent(i+1,1,intQCDInc);
+    tabEvTotalWeighted.setCellContent(i+1,2,intQCDVBF);
+    
+    delete hInc;
+    delete hVBF;
+  }
+  
+  // Fixing the underscore
+  tabEvAbsolute        .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  tabEvTrig            .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  tabEvWeighted        .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  tabEvTotalWeighted   .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tabEvAllTrig         .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tabEvAllTotalWeighted.setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+
+  tabEvWeighted.saveAs("table_EvWeighted.tex");
+  tabEvWeighted.print();
+
+  tabEvTrig.saveAs("table_EvTrig.tex");
+  tabEvTrig.print();
+  
+  tabEvAbsolute.saveAs("table_EvAbsolute.tex");
+  tabEvWeighted.print();
+  
+  tabEvTotalWeighted.saveAs("table_EvTotalWeighted.tex");
+  tabEvTotalWeighted.print();
+
+  tabEvAllTrig.saveAs("table_EvAllTrig.tex");
+  tabEvAllTrig.print();
+
+  tabEvAllTotalWeighted.saveAs("table_EvAllTotalWeighted.tex");
+  tabEvAllTotalWeighted.print();
+  
+}
+
+//_____________________________________________________
+ICLatexTabular get_tabXSec(){
+  
+  ICLatexTabular tabXSec(18,3);
+  
+  tabXSec.setCellContent(0,0,"Sample");
+  tabXSec.setCellContent(0,1,"Cross Section [pb]");
+  tabXSec.setCellContent(0,2,"Event Weight");
+  
   tabXSec.setColumnDecorationBefore(0,"|");
   tabXSec.setColumnDecorationAfter (2,"|");
   
@@ -250,64 +403,12 @@ int main(int argc, char *argv[]){
   tabXSec.setRowDecorationBefore( 1,"\\hline \\hline");
   tabXSec.setRowDecorationAfter (17,"\\hline");
   
-  tabXSec.saveAs("table_xSec.tex");
-  tabXSec.print();
-    
-  //_________________________________________    
-  vector< map<string,TH1F*>* > steps;
-  
-  map<string,TH1F*> HLTMetClean_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("HLTMetClean/n_vtx");
-    HLTMetClean_n_vtx[f->first] = h; 
-  }
-  steps.push_back(&HLTMetClean_n_vtx);
-  
-  map<string,TH1F*> JetPair_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("JetPair/n_vtx");
-    JetPair_n_vtx[f->first] = h; 
-  }  
-  steps.push_back(&JetPair_n_vtx);
-  
-  map<string,TH1F*> DEta_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("DEta/n_vtx");
-    DEta_n_vtx[f->first] = h; 
-  }  
-  steps.push_back(&DEta_n_vtx);
-  
-  map<string,TH1F*> MET_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("MET/n_vtx");
-    MET_n_vtx[f->first] = h; 
-  }  
-  steps.push_back(&MET_n_vtx);
-  
-  map<string,TH1F*> TightMjj_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("TightMjj/n_vtx");
-    TightMjj_n_vtx[f->first] = h; 
-  }  
-  steps.push_back(&TightMjj_n_vtx);
-  
-  map<string,TH1F*> CJVpass_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("CJVpass/n_vtx");
-    CJVpass_n_vtx[f->first] = h; 
-  }  
-  steps.push_back(&CJVpass_n_vtx);
-  
-  map<string,TH1F*> DPhiSIGNAL_CJVpass_n_vtx;
-  for(map<string,TFile*>::iterator f=files.begin(); f!=files.end(); f++){
-    TH1F* h = (TH1F*) f->second->Get("DPhiSIGNAL_CJVpass/n_vtx");
-    DPhiSIGNAL_CJVpass_n_vtx[f->first] = h; 
-  }  
-  steps.push_back(&DPhiSIGNAL_CJVpass_n_vtx);
-  
-  //_____________________________________________________
-  // Initialization of absolute event yields table  
-  //_____________________________________________________
+  return tabXSec;
+}
+
+//_____________________________________________________
+ICLatexTabular get_tabEvAbsolute(){
+
   ICLatexTabular tabEvAbsolute(9,11);
   tabEvAbsolute.setTabularPrecision(".0");
   
@@ -335,18 +436,47 @@ int main(int argc, char *argv[]){
   tabEvAbsolute.setCellContent(0, 8,"300to470"); tabEvAbsolute.setCellContent(1, 8,"VBF");
   tabEvAbsolute.setCellContent(0, 9,"470to600"); tabEvAbsolute.setCellContent(1, 9,"Inc");
   tabEvAbsolute.setCellContent(0,10,"470to600"); tabEvAbsolute.setCellContent(1,10,"VBF");
-  
-  tabEvAbsolute.setCellContent(2, 0,"HLTMetClean");
-  tabEvAbsolute.setCellContent(3, 0,"JetPair");  
-  tabEvAbsolute.setCellContent(4, 0,"DEta");
-  tabEvAbsolute.setCellContent(5, 0,"MET");
-  tabEvAbsolute.setCellContent(6, 0,"TightMjj");
-  tabEvAbsolute.setCellContent(7, 0,"CJVpass");
-  tabEvAbsolute.setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+ 
+  return tabEvAbsolute;
+}
 
-  //_____________________________________________________
-  // Initialization of weighted event yields table  
-  //_____________________________________________________
+//_____________________________________________________
+ICLatexTabular get_tabEvTrig(){
+
+  ICLatexTabular tabEvTrig(9,11);
+  tabEvTrig.setTabularPrecision(".2");
+  
+  tabEvTrig.setColumnDecorationBefore( 0,"|");
+  tabEvTrig.setColumnDecorationAfter ( 0,"||");
+  tabEvTrig.setColumnDecorationAfter ( 2,"||");
+  tabEvTrig.setColumnDecorationAfter ( 4,"||");
+  tabEvTrig.setColumnDecorationAfter ( 6,"||");
+  tabEvTrig.setColumnDecorationAfter ( 8,"||");
+  tabEvTrig.setColumnDecorationAfter (10,"|");
+  
+  tabEvTrig.setRowDecorationBefore(0,"\\hline");
+  tabEvTrig.setRowDecorationBefore(1,"\\hline");
+  tabEvTrig.setRowDecorationBefore(2,"\\hline \\hline");
+  tabEvTrig.setRowDecorationAfter (8,"\\hline");
+  
+  tabEvTrig.setCellContent(1, 0,"Sample");
+  tabEvTrig.setCellContent(0, 1, "80to120"); tabEvTrig.setCellContent(1, 1,"Inc");
+  tabEvTrig.setCellContent(0, 2, "80to120"); tabEvTrig.setCellContent(1, 2,"VBF");
+  tabEvTrig.setCellContent(0, 3,"120to170"); tabEvTrig.setCellContent(1, 3,"Inc");
+  tabEvTrig.setCellContent(0, 4,"120to170"); tabEvTrig.setCellContent(1, 4,"VBF");
+  tabEvTrig.setCellContent(0, 5,"170to300"); tabEvTrig.setCellContent(1, 5,"Inc");
+  tabEvTrig.setCellContent(0, 6,"170to300"); tabEvTrig.setCellContent(1, 6,"VBF");
+  tabEvTrig.setCellContent(0, 7,"300to470"); tabEvTrig.setCellContent(1, 7,"Inc");
+  tabEvTrig.setCellContent(0, 8,"300to470"); tabEvTrig.setCellContent(1, 8,"VBF");
+  tabEvTrig.setCellContent(0, 9,"470to600"); tabEvTrig.setCellContent(1, 9,"Inc");
+  tabEvTrig.setCellContent(0,10,"470to600"); tabEvTrig.setCellContent(1,10,"VBF");
+ 
+  return tabEvTrig;
+}
+  
+//_____________________________________________________
+ICLatexTabular get_tabEvWeighted(){
+  
   ICLatexTabular tabEvWeighted(9,11);
   tabEvWeighted.setTabularPrecision(".2");
   
@@ -375,17 +505,12 @@ int main(int argc, char *argv[]){
   tabEvWeighted.setCellContent(0, 9,"470to600"); tabEvWeighted.setCellContent(1, 9,"Inc");
   tabEvWeighted.setCellContent(0,10,"470to600"); tabEvWeighted.setCellContent(1,10,"VBF");
   
-  tabEvWeighted.setCellContent(2, 0,"HLTMetClean");
-  tabEvWeighted.setCellContent(3, 0,"JetPair");  
-  tabEvWeighted.setCellContent(4, 0,"DEta");
-  tabEvWeighted.setCellContent(5, 0,"MET");
-  tabEvWeighted.setCellContent(6, 0,"TightMjj");
-  tabEvWeighted.setCellContent(7, 0,"CJVpass");
-  tabEvWeighted.setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-    
-  //_____________________________________________________
-  // Initialization of merged table
-  //_____________________________________________________
+  return tabEvWeighted;
+}
+  
+//_____________________________________________________
+ICLatexTabular get_tabEvTotalWeighted(){
+  
   ICLatexTabular tabEvTotalWeighted(8,3);
   tabEvTotalWeighted.setTabularPrecision(".2");
   
@@ -400,124 +525,57 @@ int main(int argc, char *argv[]){
   tabEvTotalWeighted.setCellContent(0, 0,"Sample");
   tabEvTotalWeighted.setCellContent(0, 1,"Inc");
   tabEvTotalWeighted.setCellContent(0, 2,"VBF");
- 
-  tabEvTotalWeighted.setCellContent(1, 0,"HLTMetClean");
-  tabEvTotalWeighted.setCellContent(2, 0,"JetPair");  
-  tabEvTotalWeighted.setCellContent(3, 0,"DEta");
-  tabEvTotalWeighted.setCellContent(4, 0,"MET");
-  tabEvTotalWeighted.setCellContent(5, 0,"TightMjj");
-  tabEvTotalWeighted.setCellContent(6, 0,"CJVpass");
-  tabEvTotalWeighted.setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");  
   
-  // Applying weights
-  for(unsigned i=0; i<steps.size(); i++){
-    
-    map<string,TH1F*>* plots = steps[i];
-    TH1F* h;
-    
-    h = (*plots)["QCD-Pt-80to120"];  
-    tabEvAbsolute.setCellContent(i+2,1,h->GetEntries());
-    h->Scale(wgt["QCD-Pt-80to120"]);  
-    tabEvWeighted.setCellContent(i+2,1,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD-Pt-120to170"]; 
-    tabEvAbsolute.setCellContent(i+2,3,h->GetEntries());
-    h->Scale(wgt["QCD-Pt-120to170"]); 
-    tabEvWeighted.setCellContent(i+2,3,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD-Pt-170to300"]; 
-    tabEvAbsolute.setCellContent(i+2,5,h->GetEntries());
-    h->Scale(wgt["QCD-Pt-170to300"]); 
-    tabEvWeighted.setCellContent(i+2,5,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD-Pt-300to470"]; 
-    tabEvAbsolute.setCellContent(i+2,7,h->GetEntries());
-    h->Scale(wgt["QCD-Pt-300to470"]); 
-    tabEvWeighted.setCellContent(i+2,7,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD-Pt-470to600"]; 
-    tabEvAbsolute.setCellContent(i+2,9,h->GetEntries());
-    h->Scale(wgt["QCD-Pt-470to600"]); 
-    tabEvWeighted.setCellContent(i+2,9,h->Integral(0,h->GetNbinsX()+1));
-    
-    
-    
-    h = (*plots)["QCD_VBF-Pt-80to120"];
-    tabEvAbsolute.setCellContent(i+2,2,h->GetEntries());
-    h->Scale(wgt["QCD_VBF-Pt-80to120"]);  
-    tabEvWeighted.setCellContent(i+2, 2,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD_VBF-Pt-120to170"];
-    tabEvAbsolute.setCellContent(i+2,4,h->GetEntries());
-    h->Scale(wgt["QCD_VBF-Pt-120to170"]); 
-    tabEvWeighted.setCellContent(i+2, 4,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD_VBF-Pt-170to300"]; 
-    tabEvAbsolute.setCellContent(i+2,6,h->GetEntries());
-    h->Scale(wgt["QCD_VBF-Pt-170to300"]); 
-    tabEvWeighted.setCellContent(i+2, 6,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD_VBF-Pt-300to470"]; 
-    tabEvAbsolute.setCellContent(i+2,8,h->GetEntries());
-    h->Scale(wgt["QCD_VBF-Pt-300to470"]); 
-    tabEvWeighted.setCellContent(i+2, 8,h->Integral(0,h->GetNbinsX()+1));
-    
-    h = (*plots)["QCD_VBF-Pt-470to600"];
-    tabEvAbsolute.setCellContent(i+2,10,h->GetEntries());
-    h->Scale(wgt["QCD_VBF-Pt-470to600"]); 
-    tabEvWeighted.setCellContent(i+2,10,h->Integral(0,h->GetNbinsX()+1));   
-    
-  }
+  return tabEvTotalWeighted;
+}
+
+//_____________________________________________________
+ICLatexTabular get_tabEvAllTrig(){
   
-  tabEvWeighted.saveAs("table_EvWeighted.tex");
-  tabEvWeighted.print();
-
-  tabEvAbsolute.saveAs("table_EvAbsolute.tex");
-  tabEvWeighted.print();
+  ICLatexTabular tabEvAllTrig(8,13);
+  tabEvAllTrig.setTabularPrecision(".2");
   
-  // 
-  for(unsigned i=0; i<steps.size(); i++){
+  tabEvAllTrig.setTabularColumnDecoration("|");
+  tabEvAllTrig.setColumnDecorationAfter(0,"||");
   
-    map<string,TH1F*>* plots = steps[i];
-    
-    TH1F* QCDInc = (TH1F*) (*plots)["QCD-Pt-80to120"]->Clone("QCDInc");
-    QCDInc->Add((*plots)["QCD-Pt-120to170"]);
-    QCDInc->Add((*plots)["QCD-Pt-170to300"]);
-    QCDInc->Add((*plots)["QCD-Pt-300to470"]);
-    QCDInc->Add((*plots)["QCD-Pt-470to600"]);
-
-    
-    TH1F* QCDVBF = (TH1F*) (*plots)["QCD_VBF-Pt-80to120"]->Clone("QCDVBF");
-    QCDVBF->Add((*plots)["QCD_VBF-Pt-120to170"]);
-    QCDVBF->Add((*plots)["QCD_VBF-Pt-170to300"]);
-    QCDVBF->Add((*plots)["QCD_VBF-Pt-300to470"]);
-    QCDVBF->Add((*plots)["QCD_VBF-Pt-470to600"]);    
-
-    double intQCDInc = QCDInc->Integral(0,QCDInc->GetNbinsX()+1);    
-    double intQCDVBF = QCDVBF->Integral(0,QCDVBF->GetNbinsX()+1);
-    
-    tabEvTotalWeighted.setCellContent(i+1,1,intQCDInc);
-    tabEvTotalWeighted.setCellContent(i+1,2,intQCDVBF);      
-    
-  }
+  tabEvAllTrig.setRowDecorationBefore(0,"\\hline");
+  tabEvAllTrig.setRowDecorationBefore(1,"\\hline \\hline");
+  tabEvAllTrig.setRowDecorationAfter (7,"\\hline");
   
-  tabEvTotalWeighted.saveAs("table_EvTotalWeighted.tex");
-  tabEvTotalWeighted.print();
+  tabEvAllTrig.setCellContent(0, 0,    "Sample");
+  tabEvAllTrig.setCellContent(0, 1,    "30to50");
+  tabEvAllTrig.setCellContent(0, 2,    "50to80");  
+  tabEvAllTrig.setCellContent(0, 3,   "80to120");
+  tabEvAllTrig.setCellContent(0, 4,"  120to170");
+  tabEvAllTrig.setCellContent(0, 5,"  170to300");
+  tabEvAllTrig.setCellContent(0, 6,"  300to470");
+  tabEvAllTrig.setCellContent(0, 7,"  470to600"); 
+  tabEvAllTrig.setCellContent(0, 8,"  600to800"); 
+  tabEvAllTrig.setCellContent(0, 9," 800to1000"); 
+  tabEvAllTrig.setCellContent(0,10,"1000to1400");
+  tabEvAllTrig.setCellContent(0,11,"1400to1800");
+  tabEvAllTrig.setCellContent(0,12,      "1800");
   
-  //_________________________________________  
-  cout << "Entries" << endl;
-  for(unsigned i=0; i<samples.size() ; i++){
-    
-    string s=samples[i];
-    TH1F* h = JetPair_n_vtx[s];
+  return tabEvAllTrig;
+  
+}
 
-    double entries  = h->GetEntries();
-    double integral = h->Integral(0,h->GetNbinsX()+1);
-    double intWgt   = integral*wgt[s];
-    
-    printf("%20s : %8.0f : %10.2f : %10.2f\n",s.c_str(),entries,integral,intWgt);    
-  } 
-
-  return 0;
-
+//_____________________________________________________
+ICLatexTabular get_tabEvAllTotalWeighted(){
+  
+  ICLatexTabular tabEvTotalWeighted(8,3);
+  tabEvTotalWeighted.setTabularPrecision(".2");
+  
+  tabEvTotalWeighted.setColumnDecorationBefore( 0,"|");
+  tabEvTotalWeighted.setColumnDecorationAfter ( 0,"||");
+  tabEvTotalWeighted.setColumnDecorationAfter ( 2,"|");
+  
+  tabEvTotalWeighted.setRowDecorationBefore(0,"\\hline");
+  tabEvTotalWeighted.setRowDecorationBefore(1,"\\hline \\hline");
+  tabEvTotalWeighted.setRowDecorationAfter (7,"\\hline");
+  
+  tabEvTotalWeighted.setCellContent(0, 0,"Sample");
+  tabEvTotalWeighted.setCellContent(0, 1,"Inc");
+  
+  return tabEvTotalWeighted;
 }
