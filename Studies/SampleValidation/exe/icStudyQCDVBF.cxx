@@ -35,25 +35,23 @@ int main(int argc, char *argv[]){
 
   //_________________________________________
   map<string,TFile*> files;
-  files["QCD-Pt-30to50"]     = new TFile("MC_QCD-Pt-30to50-pythia6.root");
-  files["QCD-Pt-50to80"]     = new TFile("MC_QCD-Pt-50to80-pythia6.root");
-  files["QCD-Pt-80to120"]    = new TFile("MC_QCD-Pt-80to120-pythia6.root");
-  files["QCD-Pt-120to170"]   = new TFile("MC_QCD-Pt-120to170-pythia6.root");
-  files["QCD-Pt-170to300"]   = new TFile("MC_QCD-Pt-170to300-pythia6.root");
-  files["QCD-Pt-300to470"]   = new TFile("MC_QCD-Pt-300to470-pythia6.root");
-  files["QCD-Pt-470to600"]   = new TFile("MC_QCD-Pt-470to600-pythia6.root");
-  files["QCD-Pt-600to800"]   = new TFile("MC_QCD-Pt-600to800-pythia6.root");
-  files["QCD-Pt-800to1000"]  = new TFile("MC_QCD-Pt-800to1000-pythia6.root");  
-  files["QCD-Pt-1000to1400"] = new TFile("MC_QCD-Pt-1000to1400-pythia6.root");  
-  files["QCD-Pt-1400to1800"] = new TFile("MC_QCD-Pt-1400to1800-pythia6.root");
-  files["QCD-Pt-1800"]       = new TFile("MC_QCD-Pt-1800-pythia6.root");  
-
+  files["QCD-Pt-30to50"]       = new TFile("MC_QCD-Pt-30to50-pythia6.root");
+  files["QCD-Pt-50to80"]       = new TFile("MC_QCD-Pt-50to80-pythia6.root");
+  files["QCD-Pt-80to120"]      = new TFile("MC_QCD-Pt-80to120-pythia6.root");
+  files["QCD-Pt-120to170"]     = new TFile("MC_QCD-Pt-120to170-pythia6.root");
+  files["QCD-Pt-170to300"]     = new TFile("MC_QCD-Pt-170to300-pythia6.root");
+  files["QCD-Pt-300to470"]     = new TFile("MC_QCD-Pt-300to470-pythia6.root");
+  files["QCD-Pt-470to600"]     = new TFile("MC_QCD-Pt-470to600-pythia6.root");
+  files["QCD-Pt-600to800"]     = new TFile("MC_QCD-Pt-600to800-pythia6.root");
+  files["QCD-Pt-800to1000"]    = new TFile("MC_QCD-Pt-800to1000-pythia6.root");  
+  files["QCD-Pt-1000to1400"]   = new TFile("MC_QCD-Pt-1000to1400-pythia6.root");  
+  files["QCD-Pt-1400to1800"]   = new TFile("MC_QCD-Pt-1400to1800-pythia6.root");
+  files["QCD-Pt-1800"]         = new TFile("MC_QCD-Pt-1800-pythia6.root");  
   files["QCD_VBF-Pt-80to120"]  = new TFile("MC_QCD-Pt-80to120_VBF-MET40.root");
   files["QCD_VBF-Pt-120to170"] = new TFile("MC_QCD-Pt-120to170_VBF-MET40.root");
   files["QCD_VBF-Pt-170to300"] = new TFile("MC_QCD-Pt-170to300_VBF-MET40.root");
   files["QCD_VBF-Pt-300to470"] = new TFile("MC_QCD-Pt-300to470_VBF-MET40.root");
   files["QCD_VBF-Pt-470to600"] = new TFile("MC_QCD-Pt-470to600_VBF-MET40.root");
-
   
   //_________________________________________
   map<string,double> xsec;
@@ -69,7 +67,6 @@ int main(int argc, char *argv[]){
   xsec["QCD-Pt-1000to1400"]   =        0.737844;
   xsec["QCD-Pt-1400to1800"]   =        0.03352235;
   xsec["QCD-Pt-1800"]         =        0.001829005;
-
   xsec["QCD_VBF-Pt-80to120"]  =  1033680.0;
   xsec["QCD_VBF-Pt-120to170"] =   156293.3;
   xsec["QCD_VBF-Pt-170to300"] =    34138.15;
@@ -89,13 +86,13 @@ int main(int argc, char *argv[]){
   events["QCD-Pt-800to1000"]  = 3998563.0;
   events["QCD-Pt-1000to1400"] = 1904088.0;
   events["QCD-Pt-1400to1800"] = 1910062.0;
-  events["QCD-Pt-1800"]       = 947586.0;
+  events["QCD-Pt-1800"]       =  947586.0;
    
   events["QCD_VBF-Pt-80to120"]  = 39376000000;
-  events["QCD_VBF-Pt-120to170"] = 7000000000;
-  events["QCD_VBF-Pt-170to300"] = 1375000000;
-  events["QCD_VBF-Pt-300to470"] = 80000000;
-  events["QCD_VBF-Pt-470to600"] = 25000000;
+  events["QCD_VBF-Pt-120to170"] =  7000000000;
+  events["QCD_VBF-Pt-170to300"] =  1375000000;
+  events["QCD_VBF-Pt-300to470"] =    80000000;
+  events["QCD_VBF-Pt-470to600"] =    25000000;
 
   vector<string> samples;
   samples.push_back("QCD-Pt-30to50");     
@@ -189,7 +186,7 @@ int main(int argc, char *argv[]){
       TCanvas *canv = new TCanvas();
 
       MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/%s",cuts[c].c_str(),hists[h].c_str()));
-//      mPlots.Scale(wgt);  // removed since already included
+      mPlots.Scale(wgt);  // removed since already included
       hInc = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samplesQCDInc);
       hVBF = mPlots.getMerged(Form("QCDVBF_%s_%s",cuts[c].c_str(),hists[h].c_str()),samplesQCDVBF);
 
@@ -321,6 +318,9 @@ int main(int argc, char *argv[]){
     tabEvAllTrig.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
     tabEvAllTrig.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
 
+    // Putting in normalization weights
+    mPlots.Scale(wgt);
+
     TH1F *hIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samplesQCDIncAll);
     double intQCDIncAll = hIncAll->Integral(0,hIncAll->GetNbinsX()+1);
    
@@ -328,9 +328,6 @@ int main(int argc, char *argv[]){
     tabEvAllTotalWeighted.setCellContent(i+1,1,intQCDIncAll);
     
     delete hIncAll;
-
-    // Putting in normalization weights
-    mPlots.Scale(wgt);
 
     // Filling table weighted events (trigger, pu and xsec)    
     tabEvWeighted.setCellContent(i+2, 0,cuts[i]);
