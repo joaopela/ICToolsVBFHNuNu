@@ -34,7 +34,17 @@ int main(int argc, char *argv[]){
   double lumi = 19500.3;
 
   //_________________________________________
+  // Samples to be used
+  //_________________________________________
   map<string,TFile*> files;
+  files["Data_MET-2012A-13Jul2012-v1"]  = new TFile("Data_MET-2012A-13Jul2012-v1.root");
+  files["Data_MET-2012A-06Aug2012-v1"]  = new TFile("Data_MET-2012A-06Aug2012-v1.root");
+  files["Data_MET-2012B-13Jul2012-v1"]  = new TFile("Data_MET-2012B-13Jul2012-v1.root");
+  files["Data_MET-2012C-24Aug2012-v1"]  = new TFile("Data_MET-2012C-24Aug2012-v1.root");
+  files["Data_MET-2012C-11Dec2012-v1"]  = new TFile("Data_MET-2012C-11Dec2012-v1.root");
+  files["Data_MET-2012C-PromptReco-v2"] = new TFile("Data_MET-2012C-PromptReco-v2.root");
+  files["Data_MET-2012D-PromptReco-v1"] = new TFile("Data_MET-2012D-PromptReco-v1.root");
+
   files["QCD-Pt-30to50"]       = new TFile("MC_QCD-Pt-30to50-pythia6.root");
   files["QCD-Pt-50to80"]       = new TFile("MC_QCD-Pt-50to80-pythia6.root");
   files["QCD-Pt-80to120"]      = new TFile("MC_QCD-Pt-80to120-pythia6.root");
@@ -46,12 +56,70 @@ int main(int argc, char *argv[]){
   files["QCD-Pt-800to1000"]    = new TFile("MC_QCD-Pt-800to1000-pythia6.root");  
   files["QCD-Pt-1000to1400"]   = new TFile("MC_QCD-Pt-1000to1400-pythia6.root");  
   files["QCD-Pt-1400to1800"]   = new TFile("MC_QCD-Pt-1400to1800-pythia6.root");
-  files["QCD-Pt-1800"]         = new TFile("MC_QCD-Pt-1800-pythia6.root");  
+  files["QCD-Pt-1800"]         = new TFile("MC_QCD-Pt-1800-pythia6.root");
+  
   files["QCD_VBF-Pt-80to120"]  = new TFile("MC_QCD-Pt-80to120_VBF-MET40.root");
   files["QCD_VBF-Pt-120to170"] = new TFile("MC_QCD-Pt-120to170_VBF-MET40.root");
   files["QCD_VBF-Pt-170to300"] = new TFile("MC_QCD-Pt-170to300_VBF-MET40.root");
   files["QCD_VBF-Pt-300to470"] = new TFile("MC_QCD-Pt-300to470_VBF-MET40.root");
   files["QCD_VBF-Pt-470to600"] = new TFile("MC_QCD-Pt-470to600_VBF-MET40.root");
+  
+  // TT
+  files["TTJets"] = new TFile("MC_TTJets");
+
+  //powheg samples
+  files["TT-v1"] = new TFile("MC_TT-v1");
+  files["TT-v2"] = new TFile("MC_TT-v2");
+
+  //
+  files["T-tW"]                       = new TFile("MC_T-tW.root");
+  files["Tbar-tW"]                    = new TFile("MC_Tbar-tW.root");
+  files["SingleT-s-powheg-tauola"]    = new TFile("MC_SingleT-s-powheg-tauola.root");
+  files["SingleTBar-s-powheg-tauola"] = new TFile("MC_SingleTBar-s-powheg-tauola.root");
+  files["SingleT-t-powheg-tauola"]    = new TFile("MC_SingleT-t-powheg-tauola.root");
+  files["SingleTBar-t-powheg-tauola"] = new TFile("MC_SingleTBar-t-powheg-tauola.root");
+  files["WW-pythia6-tauola"]          = new TFile("MC_WW-pythia6-tauola.root");       
+  files["WZ-pythia6-tauola"]          = new TFile("MC_WZ-pythia6-tauola.root");       
+  files["ZZ-pythia6-tauola"]          = new TFile("MC_ZZ-pythia6-tauola.root");        
+  files["W1JetsToLNu_enu"]            = new TFile("MC_W1JetsToLNu_enu.root");         
+  files["W2JetsToLNu_enu"]            = new TFile("MC_W2JetsToLNu_enu.root");         
+  files["W3JetsToLNu_enu"]            = new TFile("MC_W3JetsToLNu_enu.root");         
+  files["W4JetsToLNu_enu"]            = new TFile("MC_W4JetsToLNu_enu.root");       
+  files["WJetsToLNu-v1_enu"]          = new TFile("MC_WJetsToLNu-v1_enu.root");       
+  files["WJetsToLNu-v2_enu"]          = new TFile("MC_WJetsToLNu-v2_enu.root");        
+  files["W1JetsToLNu_munu"]           = new TFile("MC_W1JetsToLNu_munu.root");        
+  files["W2JetsToLNu_munu"]           = new TFile("MC_W2JetsToLNu_munu.root");        
+  files["W3JetsToLNu_munu"]           = new TFile("MC_W3JetsToLNu_munu.root");        
+  files["W4JetsToLNu_munu"]           = new TFile("MC_W4JetsToLNu_munu.root");      
+  files["WJetsToLNu-v1_munu"]         = new TFile("MC_WJetsToLNu-v1_munu.root");      
+  files["WJetsToLNu-v2_munu"]         = new TFile("MC_WJetsToLNu-v2_munu.root");       
+  files["W1JetsToLNu_taunu"]          = new TFile("MC_W1JetsToLNu_taunu.root");       
+  files["W2JetsToLNu_taunu"]          = new TFile("MC_W2JetsToLNu_taunu.root");       
+  files["W3JetsToLNu_taunu"]          = new TFile("MC_W3JetsToLNu_taunu.root");       
+  files["W4JetsToLNu_taunu"]          = new TFile("MC_W4JetsToLNu_taunu.root");     
+  files["WJetsToLNu-v1_taunu"]        = new TFile("MC_WJetsToLNu-v1_taunu.root");     
+  files["WJetsToLNu-v2_taunu"]        = new TFile("MC_WJetsToLNu-v2_taunu.root");    
+  files["DYJetsToLL"]                 = new TFile("MC_DYJetsToLL.root");             
+  files["DY1JetsToLL"]                = new TFile("MC_DY1JetsToLL.root");             
+  files["DY2JetsToLL"]                = new TFile("MC_DY2JetsToLL.root");             
+  files["DY3JetsToLL"]                = new TFile("MC_DY3JetsToLL.root");             
+  files["DY4JetsToLL"]                = new TFile("MC_DY4JetsToLL.root");  
+  files["ZJetsToNuNu_100_HT_200"]     = new TFile("MC_ZJetsToNuNu_100_HT_200.root");  
+  files["ZJetsToNuNu_200_HT_400"]     = new TFile("MC_ZJetsToNuNu_200_HT_400.root");  
+  files["ZJetsToNuNu_400_HT_inf"]     = new TFile("MC_ZJetsToNuNu_400_HT_inf.root");   
+  files["ZJetsToNuNu_50_HT_100"]      = new TFile("MC_ZJetsToNuNu_50_HT_100.root");
+  files["GJets-HT-200To400-madgraph"] = new TFile("MC_GJets-HT-200To400-madgraph.root");
+  files["GJets-HT-400ToInf-madgraph"] = new TFile("MC_GJets-HT-400ToInf-madgraph.root");
+  files["VBF_HToZZTo4Nu_M-120"]       = new TFile("MC_VBF_HToZZTo4Nu_M-120.root");    
+  files["EWK-Z2j"]                    = new TFile("MC_EWK-Z2j.root");            
+  files["EWK-Z2jiglep"]               = new TFile("MC_EWK-Z2jiglep.root");             
+  files["EWK-W2jminus_enu"]           = new TFile("MC_EWK-W2jminus_enu.root");         
+  files["EWK-W2jplus_enu"]            = new TFile("MC_EWK-W2jplus_enu.root");          
+  files["EWK-W2jminus_munu"]          = new TFile("MC_EWK-W2jminus_munu.root");        
+  files["EWK-W2jplus_munu"]           = new TFile("MC_EWK-W2jplus_munu.root");         
+  files["EWK-W2jminus_taunu"]         = new TFile("MC_EWK-W2jminus_taunu.root");       
+  files["EWK-W2jplus_taunu"]          = new TFile("MC_EWK-W2jplus_taunu.root");        
+  files["WGamma"]                     = new TFile("MC_WGamma.root");                   
   
   //_________________________________________
   map<string,double> xsec;
@@ -67,11 +135,96 @@ int main(int argc, char *argv[]){
   xsec["QCD-Pt-1000to1400"]   =        0.737844;
   xsec["QCD-Pt-1400to1800"]   =        0.03352235;
   xsec["QCD-Pt-1800"]         =        0.001829005;
+  
   xsec["QCD_VBF-Pt-80to120"]  =  1033680.0;
   xsec["QCD_VBF-Pt-120to170"] =   156293.3;
   xsec["QCD_VBF-Pt-170to300"] =    34138.15;
   xsec["QCD_VBF-Pt-300to470"] =     1759.549;
   xsec["QCD_VBF-Pt-470to600"] =      113.8791;
+
+  xsec["TTJets"]                      =  245.8;
+  xsec["TT-v1"]                       =  211.0;
+  xsec["TT-v2"]                       =  211.0;
+  xsec["T-tW"]                        =  11.1;
+  xsec["Tbar-tW"]                     =  11.1;
+  xsec["SingleT-s-powheg-tauola"]     =  3.79;
+  xsec["SingleTBar-s-powheg-tauola"]  =  1.76;
+  xsec["SingleT-t-powheg-tauola"]     =  56.4;
+  xsec["SingleTBar-t-powheg-tauola"]  =  30.7;
+  xsec["WW-pythia6-tauola"]           =  54.838;
+  xsec["WZ-pythia6-tauola"]           =  33.21;
+  xsec["ZZ-pythia6-tauola"]           =  17.654;
+  xsec["DYJJ01JetsToLL_M-50_MJJ-200"] =  1.4;
+  xsec["W1JetsToLNu"]                 =  37509;
+  xsec["W2JetsToLNu"]                 =  37509;
+  xsec["W3JetsToLNu"]                 =  37509;
+  xsec["W4JetsToLNu"]  =  37509;
+  xsec["WJetsToLNu-v1"]  =  37509;
+  xsec["WJetsToLNu-v2"]  =  37509;
+  xsec["W1JetsToLNu_enu"]  =  37509;
+  xsec["W2JetsToLNu_enu"]  =  37509;
+  xsec["W3JetsToLNu_enu"]  =  37509;
+  xsec["W4JetsToLNu_enu"]  =  37509;
+  xsec["WJetsToLNu-v1_enu"]  =  37509;
+  xsec["WJetsToLNu-v2_enu"]  =  37509;
+  xsec["W1JetsToLNu_munu"]  =  37509;
+  xsec["W2JetsToLNu_munu"]  =  37509;
+  xsec["W3JetsToLNu_munu"]  =  37509;
+  xsec["W4JetsToLNu_munu"]  =  37509;
+  xsec["WJetsToLNu-v1_munu"]  =  37509;
+  xsec["WJetsToLNu-v2_munu"]  =  37509;
+  xsec["W1JetsToLNu_taunu"]  =  37509;
+  xsec["W2JetsToLNu_taunu"]  =  37509;
+  xsec["W3JetsToLNu_taunu"]  =  37509;
+  xsec["W4JetsToLNu_taunu"]  =  37509;
+  xsec["WJetsToLNu-v1_taunu"]  =  37509;
+  xsec["WJetsToLNu-v2_taunu"]  =  37509;
+  xsec["DYJetsToLL"]  =  3503.7;
+  xsec["DY1JetsToLL"]  =  3503.7;
+  xsec["DY2JetsToLL"]  =  3503.7;
+  xsec["DY3JetsToLL"]  =  3503.7;
+  xsec["DY4JetsToLL"]  =  3503.7;
+  xsec["DYJetsToLL_PtZ-100-madgraph"] =  40.5;
+  xsec["ZJetsToNuNu_50_HT_100"]       =  381.2;
+  xsec["ZJetsToNuNu_100_HT_200"]      =  160.3;
+  xsec["ZJetsToNuNu_200_HT_400"]      =  41.49;
+  xsec["ZJetsToNuNu_400_HT_inf"]      =  5.274;
+  xsec["GJets-HT-200To400-madgraph"]  =  960.5;
+  xsec["GJets-HT-400ToInf-madgraph"]  =  107.5;
+  xsec["QCD-Pt-30to50-pythia6"]       =  66285328;
+  xsec["QCD-Pt-50to80-pythia6"]       =  8148778.0;
+  xsec["QCD-Pt-80to120-pythia6"]  =  1033680.0;
+  xsec["QCD-Pt-120to170-pythia6"]  =  156293.3;
+  xsec["QCD-Pt-170to300-pythia6"]  =  34138.15;
+  xsec["QCD-Pt-300to470-pythia6"]  =  1759.549;
+  xsec["QCD-Pt-470to600-pythia6"]  =  113.8791;
+  xsec["QCD-Pt-600to800-pythia6"]  =  26.9921;
+  xsec["QCD-Pt-800to1000-pythia6"]  =  3.550036;
+  xsec["QCD-Pt-1000to1400-pythia6"]  =  0.737844;
+  xsec["QCD-Pt-1400to1800-pythia6"]  =  0.03352235;
+  xsec["QCD-Pt-1800-pythia6"]  =  0.001829005;
+  xsec["VBF_HToZZTo4Nu_M-120"]  =  1.649;
+  xsec["VBF_HToZZTo4Nu_M-150"]  =  1.280;
+  xsec["VBF_HToZZTo4Nu_M-200"]  =  0.8685;
+  xsec["VBF_HToZZTo4Nu_M-300"]  =  0.4408;
+  xsec["VBF_HToZZTo4Nu_M-400"]  =  0.2543;
+  xsec["Powheg-Htoinv-mH110"]  =  1.809;
+  xsec["Powheg-Htoinv-mH125"]  =  1.578;
+  xsec["Powheg-Htoinv-mH150"]  =  1.280;
+  xsec["Powheg-Htoinv-mH200"]  =  0.8685;
+  xsec["Powheg-Htoinv-mH300"]  =  0.4408;
+  xsec["Powheg-Htoinv-mH400"]  =  0.2543;
+  xsec["EWK-W2jminus"]  =  4.09;
+  xsec["EWK-W2jplus"]  =  6.48;
+  xsec["EWK-W2jminus_enu"]  =  4.09;
+  xsec["EWK-W2jplus_enu"]  =  6.48;
+  xsec["EWK-W2jminus_munu"]  =  4.09;
+  xsec["EWK-W2jplus_munu"]  =  6.48;
+  xsec["EWK-W2jminus_taunu"]  =  4.09;
+  xsec["EWK-W2jplus_taunu"]  =  6.48;
+  xsec["EWK-Z2j"]  =  0.888;
+  xsec["EWK-Z2jiglep"]  =  1.776;
+  xsec["WGamma"]  =  461.6;
   
   //_________________________________________
   map<string,double> events;  
@@ -94,6 +247,90 @@ int main(int argc, char *argv[]){
   events["QCD_VBF-Pt-300to470"] =    80000000;
   events["QCD_VBF-Pt-470to600"] =    25000000;
 
+  events["TTJets"] =  6923750.0;
+  events["TT-v1"]  =  28150723;
+  events["TT-v2"]  =  28150723;
+
+  events["T-tW"]    =  497658.0;
+  events["Tbar-tW"] =  493460.0;
+  
+  events["SingleT-s-powheg-tauola"]    =  259961.0;
+  events["SingleT-t-powheg-tauola"]    =  3758227.0;
+  events["SingleTBar-s-powheg-tauola"] =  139974.0;
+  events["SingleTBar-t-powheg-tauola"] =  1935072.0;
+
+  events["WW-pythia6-tauola"]           =  10000431.0;
+  events["WZ-pythia6-tauola"]           =  10000283.0;
+  events["ZZ-pythia6-tauola"]           =  9799908.0;
+  events["DYJJ01JetsToLL_M-50_MJJ-200"] =  510501.0;
+
+  events["W1JetsToLNu"]         =  76102995.0;
+  events["W2JetsToLNu"]         =  76102995.0;
+  events["W3JetsToLNu"]         =  76102995.0;
+  events["W4JetsToLNu"]         =  76102995.0;
+  events["WJetsToLNu-v1"]       =  76102995.0;
+  events["WJetsToLNu-v2"]       =  76102995.0;
+  events["W1JetsToLNu_enu"]     =  76102995.0;
+  events["W2JetsToLNu_enu"]     =  76102995.0;
+  events["W3JetsToLNu_enu"]     =  76102995.0;
+  events["W4JetsToLNu_enu"]     =  76102995.0;
+  events["WJetsToLNu-v1_enu"]   =  76102995.0;
+  events["WJetsToLNu-v2_enu"]   =  76102995.0;
+  events["W1JetsToLNu_munu"]    =  76102995.0;
+  events["W2JetsToLNu_munu"]    =  76102995.0;
+  events["W3JetsToLNu_munu"]    =  76102995.0;
+  events["W4JetsToLNu_munu"]    =  76102995.0;
+  events["WJetsToLNu-v1_munu"]  =  76102995.0;
+  events["WJetsToLNu-v2_munu"]  =  76102995.0;
+  events["W1JetsToLNu_taunu"]   =  76102995.0;
+  events["W2JetsToLNu_taunu"]   =  76102995.0;
+  events["W3JetsToLNu_taunu"]   =  76102995.0;
+  events["W4JetsToLNu_taunu"]   =  76102995.0;
+  events["WJetsToLNu-v1_taunu"] =  76102995.0;
+  events["WJetsToLNu-v2_taunu"] =  76102995.0;
+  
+  events["DYJetsToLL"]                  =  30459503.0;
+  events["DY1JetsToLL"]                 =  30459503.0;
+  events["DY2JetsToLL"]                 =  30459503.0;
+  events["DY3JetsToLL"]                 =  30459503.0;
+  events["DY4JetsToLL"]                 =  30459503.0;
+  events["DYJetsToLL_PtZ-100-madgraph"] =  2632137.0;
+  
+  events["ZJetsToNuNu_50_HT_100"]  =  4040980.0;
+  events["ZJetsToNuNu_100_HT_200"] =  4416646.0;
+  events["ZJetsToNuNu_200_HT_400"] =  5055885.0;
+  events["ZJetsToNuNu_400_HT_inf"] =  1006928.0;
+
+  events["GJets-HT-200To400-madgraph"] =  58597147.0;
+  events["GJets-HT-400ToInf-madgraph"] =  42391678.0;
+
+  events["VBF_HToZZTo4Nu_M-120"] =  100118.0;
+  events["VBF_HToZZTo4Nu_M-150"] =  100280.0;
+  events["VBF_HToZZTo4Nu_M-200"] =  100118.0;
+  events["VBF_HToZZTo4Nu_M-300"] =  100076.0;
+  events["VBF_HToZZTo4Nu_M-400"] =  100083.0;
+
+  events["Powheg-Htoinv-mH110"] =  99885.0;
+  events["Powheg-Htoinv-mH125"] =  99885.0;
+  events["Powheg-Htoinv-mH150"] =  99874.0;
+  events["Powheg-Htoinv-mH200"] =  49922.0;
+  events["Powheg-Htoinv-mH300"] =  49945.0;
+  events["Powheg-Htoinv-mH400"] =  49964.0;
+
+  events["EWK-W2jminus"]       =  4696648;
+  events["EWK-W2jplus"]        =  6776164;
+  events["EWK-W2jminus_enu"]   =  4696648;
+  events["EWK-W2jplus_enu"]    =  6776164;
+  events["EWK-W2jminus_munu"]  =  4696648;
+  events["EWK-W2jplus_munu"]   =  6776164;
+  events["EWK-W2jminus_taunu"] =  4696648;
+  events["EWK-W2jplus_taunu"]  =  6776164;
+  events["EWK-Z2j"]            =  2978717;
+  events["EWK-Z2jiglep"]       =  2978717;
+  
+  events["WGamma"] =  4772358;
+  
+  
   vector<string> samples;
   samples.push_back("QCD-Pt-30to50");     
   samples.push_back("QCD-Pt-50to80");     
@@ -113,24 +350,39 @@ int main(int argc, char *argv[]){
   samples.push_back("QCD_VBF-Pt-300to470");
   samples.push_back("QCD_VBF-Pt-470to600");
   
-  map<string,double> wgt;
-  wgt["QCD-Pt-30to50"]       = (lumi*xsec["QCD-Pt-30to50"])    /events["QCD-Pt-30to50"];
-  wgt["QCD-Pt-50to80"]       = (lumi*xsec["QCD-Pt-50to80"])    /events["QCD-Pt-50to80"];
-  wgt["QCD-Pt-80to120"]      = (lumi*xsec["QCD-Pt-80to120"])   /events["QCD-Pt-80to120"];
-  wgt["QCD-Pt-120to170"]     = (lumi*xsec["QCD-Pt-120to170"])  /events["QCD-Pt-120to170"];
-  wgt["QCD-Pt-170to300"]     = (lumi*xsec["QCD-Pt-170to300"])  /events["QCD-Pt-170to300"];
-  wgt["QCD-Pt-300to470"]     = (lumi*xsec["QCD-Pt-300to470"])  /events["QCD-Pt-300to470"];
-  wgt["QCD-Pt-470to600"]     = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD-Pt-470to600"];
-  wgt["QCD-Pt-600to800"]     = (lumi*xsec["QCD-Pt-600to800"])  /events["QCD-Pt-600to800"];
-  wgt["QCD-Pt-800to1000"]    = (lumi*xsec["QCD-Pt-800to1000"]) /events["QCD-Pt-800to1000"];
-  wgt["QCD-Pt-1000to1400"]   = (lumi*xsec["QCD-Pt-1000to1400"])/events["QCD-Pt-1000to1400"];
-  wgt["QCD-Pt-1400to1800"]   = (lumi*xsec["QCD-Pt-1400to1800"])/events["QCD-Pt-1400to1800"];
-  wgt["QCD-Pt-1800"]         = (lumi*xsec["QCD-Pt-1800"])      /events["QCD-Pt-1800"];
-  wgt["QCD_VBF-Pt-80to120"]  = (lumi*xsec["QCD-Pt-80to120"])   /events["QCD_VBF-Pt-80to120"];
-  wgt["QCD_VBF-Pt-120to170"] = (lumi*xsec["QCD-Pt-120to170"])  /events["QCD_VBF-Pt-120to170"];
-  wgt["QCD_VBF-Pt-170to300"] = (lumi*xsec["QCD-Pt-170to300"])  /events["QCD_VBF-Pt-170to300"];
-  wgt["QCD_VBF-Pt-300to470"] = (lumi*xsec["QCD-Pt-300to470"])  /events["QCD_VBF-Pt-300to470"];
-  wgt["QCD_VBF-Pt-470to600"] = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD_VBF-Pt-470to600"];
+  map<string,double> wgt; 
+  for(map<string,TFile*>::iterator i=files.begin(); i!=files.end(); i++){
+    
+    string s = i->first;
+    if(xsec.find(s) == xsec.end()){
+      cout << "Warning: Did not find xsec for weight calculation: " << s << endl;
+      continue;
+    } 
+    if(events.find(s) == events.end()){
+      cout << "Warning: Did not find event count for weight calculation: " << s << endl;
+      continue;
+    } 
+    
+    wgt[s] = (lumi*xsec[s])/events[s];    
+  }
+  
+//   wgt["QCD-Pt-30to50"]       = (lumi*xsec["QCD-Pt-30to50"])    /events["QCD-Pt-30to50"];
+//   wgt["QCD-Pt-50to80"]       = (lumi*xsec["QCD-Pt-50to80"])    /events["QCD-Pt-50to80"];
+//   wgt["QCD-Pt-80to120"]      = (lumi*xsec["QCD-Pt-80to120"])   /events["QCD-Pt-80to120"];
+//   wgt["QCD-Pt-120to170"]     = (lumi*xsec["QCD-Pt-120to170"])  /events["QCD-Pt-120to170"];
+//   wgt["QCD-Pt-170to300"]     = (lumi*xsec["QCD-Pt-170to300"])  /events["QCD-Pt-170to300"];
+//   wgt["QCD-Pt-300to470"]     = (lumi*xsec["QCD-Pt-300to470"])  /events["QCD-Pt-300to470"];
+//   wgt["QCD-Pt-470to600"]     = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD-Pt-470to600"];
+//   wgt["QCD-Pt-600to800"]     = (lumi*xsec["QCD-Pt-600to800"])  /events["QCD-Pt-600to800"];
+//   wgt["QCD-Pt-800to1000"]    = (lumi*xsec["QCD-Pt-800to1000"]) /events["QCD-Pt-800to1000"];
+//   wgt["QCD-Pt-1000to1400"]   = (lumi*xsec["QCD-Pt-1000to1400"])/events["QCD-Pt-1000to1400"];
+//   wgt["QCD-Pt-1400to1800"]   = (lumi*xsec["QCD-Pt-1400to1800"])/events["QCD-Pt-1400to1800"];
+//   wgt["QCD-Pt-1800"]         = (lumi*xsec["QCD-Pt-1800"])      /events["QCD-Pt-1800"];
+//   wgt["QCD_VBF-Pt-80to120"]  = (lumi*xsec["QCD-Pt-80to120"])   /events["QCD_VBF-Pt-80to120"];
+//   wgt["QCD_VBF-Pt-120to170"] = (lumi*xsec["QCD-Pt-120to170"])  /events["QCD_VBF-Pt-120to170"];
+//   wgt["QCD_VBF-Pt-170to300"] = (lumi*xsec["QCD-Pt-170to300"])  /events["QCD_VBF-Pt-170to300"];
+//   wgt["QCD_VBF-Pt-300to470"] = (lumi*xsec["QCD-Pt-300to470"])  /events["QCD_VBF-Pt-300to470"];
+//   wgt["QCD_VBF-Pt-470to600"] = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD_VBF-Pt-470to600"];
 
   //_________________________________________    
   vector<string> samplesQCDIncAll;
