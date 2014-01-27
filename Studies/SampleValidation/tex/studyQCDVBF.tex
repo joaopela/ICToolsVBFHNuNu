@@ -1,6 +1,6 @@
 \documentclass[a4paper,10pt]{article}
 
-\usepackage[margin=1.0cm]{geometry}
+\usepackage[cm]{fullpage}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 
@@ -25,11 +25,34 @@ it is possible to simulate the equivalent of a year of LHC data of this processe
 To produce such sample we started from the base CMSSW configuration files to produce inclusive QCD events with the Pythia6 generator. Two filters were implemented to select events at generator
 level in order to avoid the reconstruction process, which is the most time consuming part of the event production chain. 
 
-The first filter selected events where the vector sum of neutrinos $p_T$ was greater than 40 $GeV$. The second filter clustered stable generator level particles (not including neutring) with 
-the ak5 jet algorithm (the same used for the offline analysis), and check all possible resulting dijet combinations for at least a one pair that passed, $p_T>REPLACEME$ $GeV$, 
-$|eta|<5$, $|\Delta\eta|<REPLACEME$ and Tight $m_{jj} < REPLACEME$.
+The first filter selected events based on the vector sum of neutrinos $p_\perp$, while the second filter choose events based on dijet characteristics.
 
-This thresholds were chosen to obtain a good cross section reduction while still being under trigger parameters. 
+\begin{itemize}
+  \item MC Filter: Vectorial sum of neutrino $E_T$
+  \begin{itemize}
+     \item $\sum E_\perp(\vec{\nu}) > 40$ $GeV$
+  \end{itemize}
+
+  
+  \item MC Filter: Dijet Filter
+  \begin{itemize}
+    \item Select jets with:
+    \begin{itemize}
+      \item $p_\perp>20$ $GeV$
+      \item $|\eta|<5.0$
+    \end{itemize}
+    \item From selected jets at least one pair with:
+    \begin{itemize}
+      \item $m_{jj}>700$ $GeV$
+      \item $\Delta\eta>3.2$
+    \end{itemize}    
+  \end{itemize}
+  
+\end{itemize}
+
+This thresholds were chosen to obtain a good cross section reduction while still being under trigger parameters. The relevant triggers are:
+
+
 
 \section{Tables}
 
