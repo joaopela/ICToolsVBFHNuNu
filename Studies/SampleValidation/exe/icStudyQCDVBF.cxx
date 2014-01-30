@@ -34,275 +34,296 @@ ICLatexTabular get_tabEvAllTotalWeighted();
 
 int main(int argc, char *argv[]){
 
-  double lumi = 19500.3;
-
+  double lumi          = 19500.3;
+  string pathRootFiles = "";
+  string pathOutput    = "";
+  
+  // If there are arguments process them
+  if(argc>1){
+    
+    for (int i = 1; i < argc; i++){
+      if(string(argv[i])=="-i" || string(argv[i])=="--inputDir"){
+        pathRootFiles = argv[i+1]; i++;
+      }
+      else if(string(argv[i])=="-o" || string(argv[i])=="--outputDir"){
+        pathOutput = argv[i+1]; i++;
+      }
+    }
+  }
+  
   //_________________________________________
   // Samples to be used
   //_________________________________________
-  map<string,TFile*> files;
-  files["Data_MET-2012A-13Jul2012-v1"]  = new TFile("Data_MET-2012A-13Jul2012-v1.root");
-  files["Data_MET-2012A-06Aug2012-v1"]  = new TFile("Data_MET-2012A-06Aug2012-v1.root");
-  files["Data_MET-2012B-13Jul2012-v1"]  = new TFile("Data_MET-2012B-13Jul2012-v1.root");
-  files["Data_MET-2012C-24Aug2012-v1"]  = new TFile("Data_MET-2012C-24Aug2012-v1.root");
-  files["Data_MET-2012C-11Dec2012-v1"]  = new TFile("Data_MET-2012C-11Dec2012-v1.root");
-  files["Data_MET-2012C-PromptReco-v2"] = new TFile("Data_MET-2012C-PromptReco-v2.root");
-  files["Data_MET-2012D-PromptReco-v1"] = new TFile("Data_MET-2012D-PromptReco-v1.root");
+  vector<string> sampleID;
 
-  files["QCD-Pt-30to50"]       = new TFile("MC_QCD-Pt-30to50-pythia6.root");
-  files["QCD-Pt-50to80"]       = new TFile("MC_QCD-Pt-50to80-pythia6.root");
-  files["QCD-Pt-80to120"]      = new TFile("MC_QCD-Pt-80to120-pythia6.root");
-  files["QCD-Pt-120to170"]     = new TFile("MC_QCD-Pt-120to170-pythia6.root");
-  files["QCD-Pt-170to300"]     = new TFile("MC_QCD-Pt-170to300-pythia6.root");
-  files["QCD-Pt-300to470"]     = new TFile("MC_QCD-Pt-300to470-pythia6.root");
-  files["QCD-Pt-470to600"]     = new TFile("MC_QCD-Pt-470to600-pythia6.root");
-  files["QCD-Pt-600to800"]     = new TFile("MC_QCD-Pt-600to800-pythia6.root");
-  files["QCD-Pt-800to1000"]    = new TFile("MC_QCD-Pt-800to1000-pythia6.root");  
-  files["QCD-Pt-1000to1400"]   = new TFile("MC_QCD-Pt-1000to1400-pythia6.root");  
-  files["QCD-Pt-1400to1800"]   = new TFile("MC_QCD-Pt-1400to1800-pythia6.root");
-  files["QCD-Pt-1800"]         = new TFile("MC_QCD-Pt-1800-pythia6.root");
+  sampleID.push_back("Data_MET-2012A-13Jul2012-v1");
+  sampleID.push_back("Data_MET-2012A-06Aug2012-v1");
+  sampleID.push_back("Data_MET-2012B-13Jul2012-v1");
+  sampleID.push_back("Data_MET-2012C-24Aug2012-v1");
+  sampleID.push_back("Data_MET-2012C-11Dec2012-v1");
+  sampleID.push_back("Data_MET-2012C-PromptReco-v2");
+  sampleID.push_back("Data_MET-2012D-PromptReco-v1");
+
+  sampleID.push_back("MC_QCD-Pt-30to50-pythia6");
+  sampleID.push_back("MC_QCD-Pt-50to80-pythia6");
+  sampleID.push_back("MC_QCD-Pt-80to120-pythia6");
+  sampleID.push_back("MC_QCD-Pt-120to170-pythia6");
+  sampleID.push_back("MC_QCD-Pt-170to300-pythia6");
+  sampleID.push_back("MC_QCD-Pt-300to470-pythia6");
+  sampleID.push_back("MC_QCD-Pt-470to600-pythia6");
+  sampleID.push_back("MC_QCD-Pt-600to800-pythia6");
+  sampleID.push_back("MC_QCD-Pt-800to1000-pythia6");  
+  sampleID.push_back("MC_QCD-Pt-1000to1400-pythia6");  
+  sampleID.push_back("MC_QCD-Pt-1400to1800-pythia6");
+  sampleID.push_back("MC_QCD-Pt-1800-pythia6");
   
-  files["QCD_VBF-Pt-80to120"]  = new TFile("MC_QCD-Pt-80to120_VBF-MET40.root");
-  files["QCD_VBF-Pt-120to170"] = new TFile("MC_QCD-Pt-120to170_VBF-MET40.root");
-  files["QCD_VBF-Pt-170to300"] = new TFile("MC_QCD-Pt-170to300_VBF-MET40.root");
-  files["QCD_VBF-Pt-300to470"] = new TFile("MC_QCD-Pt-300to470_VBF-MET40.root");
-  files["QCD_VBF-Pt-470to600"] = new TFile("MC_QCD-Pt-470to600_VBF-MET40.root");
+  sampleID.push_back("MC_QCD-Pt-80to120_VBF-MET40");
+  sampleID.push_back("MC_QCD-Pt-120to170_VBF-MET40");
+  sampleID.push_back("MC_QCD-Pt-170to300_VBF-MET40");
+  sampleID.push_back("MC_QCD-Pt-300to470_VBF-MET40");
+  sampleID.push_back("MC_QCD-Pt-470to600_VBF-MET40");
   
   // TT
-  files["TTJets"] = new TFile("MC_TTJets.root");
+  sampleID.push_back("MC_TTJets");
 
   //powheg samples
-  files["TT-v1"] = new TFile("MC_TT-v1.root");
-  files["TT-v2"] = new TFile("MC_TT-v2.root");
+  sampleID.push_back("MC_TT-v1");
+  sampleID.push_back("MC_TT-v2");
 
   //
-  files["T-tW"]                       = new TFile("MC_T-tW.root");
-  files["Tbar-tW"]                    = new TFile("MC_Tbar-tW.root");
-  files["SingleT-s-powheg-tauola"]    = new TFile("MC_SingleT-s-powheg-tauola.root");
-  files["SingleTBar-s-powheg-tauola"] = new TFile("MC_SingleTBar-s-powheg-tauola.root");
-  files["SingleT-t-powheg-tauola"]    = new TFile("MC_SingleT-t-powheg-tauola.root");
-  files["SingleTBar-t-powheg-tauola"] = new TFile("MC_SingleTBar-t-powheg-tauola.root");
-  files["WW-pythia6-tauola"]          = new TFile("MC_WW-pythia6-tauola.root");       
-  files["WZ-pythia6-tauola"]          = new TFile("MC_WZ-pythia6-tauola.root");       
-  files["ZZ-pythia6-tauola"]          = new TFile("MC_ZZ-pythia6-tauola.root");        
-  files["W1JetsToLNu_enu"]            = new TFile("MC_W1JetsToLNu_enu.root");         
-  files["W2JetsToLNu_enu"]            = new TFile("MC_W2JetsToLNu_enu.root");         
-  files["W3JetsToLNu_enu"]            = new TFile("MC_W3JetsToLNu_enu.root");         
-  files["W4JetsToLNu_enu"]            = new TFile("MC_W4JetsToLNu_enu.root");       
-  files["WJetsToLNu-v1_enu"]          = new TFile("MC_WJetsToLNu-v1_enu.root");       
-  files["WJetsToLNu-v2_enu"]          = new TFile("MC_WJetsToLNu-v2_enu.root");        
-  files["W1JetsToLNu_munu"]           = new TFile("MC_W1JetsToLNu_munu.root");        
-  files["W2JetsToLNu_munu"]           = new TFile("MC_W2JetsToLNu_munu.root");        
-  files["W3JetsToLNu_munu"]           = new TFile("MC_W3JetsToLNu_munu.root");        
-  files["W4JetsToLNu_munu"]           = new TFile("MC_W4JetsToLNu_munu.root");      
-  files["WJetsToLNu-v1_munu"]         = new TFile("MC_WJetsToLNu-v1_munu.root");      
-  files["WJetsToLNu-v2_munu"]         = new TFile("MC_WJetsToLNu-v2_munu.root");       
-  files["W1JetsToLNu_taunu"]          = new TFile("MC_W1JetsToLNu_taunu.root");       
-  files["W2JetsToLNu_taunu"]          = new TFile("MC_W2JetsToLNu_taunu.root");       
-  files["W3JetsToLNu_taunu"]          = new TFile("MC_W3JetsToLNu_taunu.root");       
-  files["W4JetsToLNu_taunu"]          = new TFile("MC_W4JetsToLNu_taunu.root");     
-  files["WJetsToLNu-v1_taunu"]        = new TFile("MC_WJetsToLNu-v1_taunu.root");     
-  files["WJetsToLNu-v2_taunu"]        = new TFile("MC_WJetsToLNu-v2_taunu.root");    
-  files["DYJetsToLL"]                 = new TFile("MC_DYJetsToLL.root");             
-  files["DY1JetsToLL"]                = new TFile("MC_DY1JetsToLL.root");             
-  files["DY2JetsToLL"]                = new TFile("MC_DY2JetsToLL.root");             
-  files["DY3JetsToLL"]                = new TFile("MC_DY3JetsToLL.root");             
-  files["DY4JetsToLL"]                = new TFile("MC_DY4JetsToLL.root");  
-  files["ZJetsToNuNu_100_HT_200"]     = new TFile("MC_ZJetsToNuNu_100_HT_200.root");  
-  files["ZJetsToNuNu_200_HT_400"]     = new TFile("MC_ZJetsToNuNu_200_HT_400.root");  
-  files["ZJetsToNuNu_400_HT_inf"]     = new TFile("MC_ZJetsToNuNu_400_HT_inf.root");   
-  files["ZJetsToNuNu_50_HT_100"]      = new TFile("MC_ZJetsToNuNu_50_HT_100.root");
-  files["GJets-HT-200To400-madgraph"] = new TFile("MC_GJets-HT-200To400-madgraph.root");
-  files["GJets-HT-400ToInf-madgraph"] = new TFile("MC_GJets-HT-400ToInf-madgraph.root");
-  files["VBF_HToZZTo4Nu_M-120"]       = new TFile("MC_VBF_HToZZTo4Nu_M-120.root");    
-  files["EWK-Z2j"]                    = new TFile("MC_EWK-Z2j.root");            
-  files["EWK-Z2jiglep"]               = new TFile("MC_EWK-Z2jiglep.root");             
-  files["EWK-W2jminus_enu"]           = new TFile("MC_EWK-W2jminus_enu.root");         
-  files["EWK-W2jplus_enu"]            = new TFile("MC_EWK-W2jplus_enu.root");          
-  files["EWK-W2jminus_munu"]          = new TFile("MC_EWK-W2jminus_munu.root");        
-  files["EWK-W2jplus_munu"]           = new TFile("MC_EWK-W2jplus_munu.root");         
-  files["EWK-W2jminus_taunu"]         = new TFile("MC_EWK-W2jminus_taunu.root");       
-  files["EWK-W2jplus_taunu"]          = new TFile("MC_EWK-W2jplus_taunu.root");        
-  files["WGamma"]                     = new TFile("MC_WGamma.root");                   
+  sampleID.push_back("MC_T-tW");
+  sampleID.push_back("MC_Tbar-tW");
+  sampleID.push_back("MC_SingleT-s-powheg-tauola");
+  sampleID.push_back("MC_SingleTBar-s-powheg-tauola");
+  sampleID.push_back("MC_SingleT-t-powheg-tauola");
+  sampleID.push_back("MC_SingleTBar-t-powheg-tauola");
+  sampleID.push_back("MC_WW-pythia6-tauola");       
+  sampleID.push_back("MC_WZ-pythia6-tauola");       
+  sampleID.push_back("MC_ZZ-pythia6-tauola");        
+  sampleID.push_back("MC_W1JetsToLNu_enu");         
+  sampleID.push_back("MC_W2JetsToLNu_enu");         
+  sampleID.push_back("MC_W3JetsToLNu_enu");         
+  sampleID.push_back("MC_W4JetsToLNu_enu");       
+  sampleID.push_back("MC_WJetsToLNu-v1_enu");       
+  sampleID.push_back("MC_WJetsToLNu-v2_enu");        
+  sampleID.push_back("MC_W1JetsToLNu_munu");        
+  sampleID.push_back("MC_W2JetsToLNu_munu");        
+  sampleID.push_back("MC_W3JetsToLNu_munu");        
+  sampleID.push_back("MC_W4JetsToLNu_munu");      
+  sampleID.push_back("MC_WJetsToLNu-v1_munu");      
+  sampleID.push_back("MC_WJetsToLNu-v2_munu");       
+  sampleID.push_back("MC_W1JetsToLNu_taunu");       
+  sampleID.push_back("MC_W2JetsToLNu_taunu");       
+  sampleID.push_back("MC_W3JetsToLNu_taunu");       
+  sampleID.push_back("MC_W4JetsToLNu_taunu");     
+  sampleID.push_back("MC_WJetsToLNu-v1_taunu");     
+  sampleID.push_back("MC_WJetsToLNu-v2_taunu");    
+  sampleID.push_back("MC_DYJetsToLL");             
+  sampleID.push_back("MC_DY1JetsToLL");             
+  sampleID.push_back("MC_DY2JetsToLL");             
+  sampleID.push_back("MC_DY3JetsToLL");             
+  sampleID.push_back("MC_DY4JetsToLL");  
+  sampleID.push_back("MC_ZJetsToNuNu_100_HT_200");  
+  sampleID.push_back("MC_ZJetsToNuNu_200_HT_400");  
+  sampleID.push_back("MC_ZJetsToNuNu_400_HT_inf");   
+  sampleID.push_back("MC_ZJetsToNuNu_50_HT_100");
+  sampleID.push_back("MC_GJets-HT-200To400-madgraph");
+  sampleID.push_back("MC_GJets-HT-400ToInf-madgraph");
+  sampleID.push_back("MC_VBF_HToZZTo4Nu_M-120");    
+  sampleID.push_back("MC_EWK-Z2j");            
+  sampleID.push_back("MC_EWK-Z2jiglep");             
+  sampleID.push_back("MC_EWK-W2jminus_enu");         
+  sampleID.push_back("MC_EWK-W2jplus_enu");          
+  sampleID.push_back("MC_EWK-W2jminus_munu");        
+  sampleID.push_back("MC_EWK-W2jplus_munu");         
+  sampleID.push_back("MC_EWK-W2jminus_taunu");       
+  sampleID.push_back("MC_EWK-W2jplus_taunu");        
+  sampleID.push_back("MC_WGamma");                   
   
+  map<string,TFile*> files;
+  for(unsigned i=0; i<sampleID.size(); i++){
+    files[sampleID[i]] = new TFile(Form("%s/%s.root",pathRootFiles.c_str(),sampleID[i].c_str()));
+  }
+      
   //_________________________________________
   map<string,double> xsec;
-  xsec["QCD-Pt-30to50"]       = 66285328;
-  xsec["QCD-Pt-50to80"]       =  8148778.0;
-  xsec["QCD-Pt-80to120"]      =  1033680.0;
-  xsec["QCD-Pt-120to170"]     =   156293.3;
-  xsec["QCD-Pt-170to300"]     =    34138.15;
-  xsec["QCD-Pt-300to470"]     =     1759.549;
-  xsec["QCD-Pt-470to600"]     =      113.8791;
-  xsec["QCD-Pt-600to800"]     =       26.9921;
-  xsec["QCD-Pt-800to1000"]    =        3.550036;
-  xsec["QCD-Pt-1000to1400"]   =        0.737844;
-  xsec["QCD-Pt-1400to1800"]   =        0.03352235;
-  xsec["QCD-Pt-1800"]         =        0.001829005;
+  xsec["MC_QCD-Pt-30to50-pythia6"]     = 66285328;
+  xsec["MC_QCD-Pt-50to80-pythia6"]     =  8148778.0;
+  xsec["MC_QCD-Pt-80to120-pythia6"]    =  1033680.0;
+  xsec["MC_QCD-Pt-120to170-pythia6"]   =   156293.3;
+  xsec["MC_QCD-Pt-170to300-pythia6"]   =    34138.15;
+  xsec["MC_QCD-Pt-300to470-pythia6"]   =     1759.549;
+  xsec["MC_QCD-Pt-470to600-pythia6"]   =      113.8791;
+  xsec["MC_QCD-Pt-600to800-pythia6"]   =       26.9921;
+  xsec["MC_QCD-Pt-800to1000-pythia6"]  =        3.550036;
+  xsec["MC_QCD-Pt-1000to1400-pythia6"] =        0.737844;
+  xsec["MC_QCD-Pt-1400to1800-pythia6"] =        0.03352235;
+  xsec["MC_QCD-Pt-1800-pythia6"]       =        0.001829005;
   
-  xsec["QCD_VBF-Pt-80to120"]  =  1033680.0;
-  xsec["QCD_VBF-Pt-120to170"] =   156293.3;
-  xsec["QCD_VBF-Pt-170to300"] =    34138.15;
-  xsec["QCD_VBF-Pt-300to470"] =     1759.549;
-  xsec["QCD_VBF-Pt-470to600"] =      113.8791;
+  xsec["MC_QCD-Pt-80to120_VBF-MET40"]  =  1033680.0;
+  xsec["MC_QCD-Pt-120to170_VBF-MET40"] =   156293.3;
+  xsec["MC_QCD-Pt-170to300_VBF-MET40"] =    34138.15;
+  xsec["MC_QCD-Pt-300to470_VBF-MET40"] =     1759.549;
+  xsec["MC_QCD-Pt-470to600_VBF-MET40"] =      113.8791;
 
   // MC TTbar
-  xsec["TTJets"]                      =  245.8;
-  xsec["TT-v1"]                       =  211.0;
-  xsec["TT-v2"]                       =  211.0;
+  xsec["MC_TTJets"]                      =  245.8;
+  xsec["MC_TT-v1"]                       =  211.0;
+  xsec["MC_TT-v2"]                       =  211.0;
   
   // Single top
-  xsec["T-tW"]                        =  11.1;
-  xsec["Tbar-tW"]                     =  11.1;
-  xsec["SingleT-s-powheg-tauola"]     =  3.79;
-  xsec["SingleTBar-s-powheg-tauola"]  =  1.76;
-  xsec["SingleT-t-powheg-tauola"]     =  56.4;
-  xsec["SingleTBar-t-powheg-tauola"]  =  30.7;
+  xsec["MC_T-tW"]                        =  11.1;
+  xsec["MC_Tbar-tW"]                     =  11.1;
+  xsec["MC_SingleT-s-powheg-tauola"]     =  3.79;
+  xsec["MC_SingleTBar-s-powheg-tauola"]  =  1.76;
+  xsec["MC_SingleT-t-powheg-tauola"]     =  56.4;
+  xsec["MC_SingleTBar-t-powheg-tauola"]  =  30.7;
   
   // MC Dibosons
-  xsec["WW-pythia6-tauola"] = 54.838;
-  xsec["WZ-pythia6-tauola"] = 33.21;
-  xsec["ZZ-pythia6-tauola"] = 17.654;
-  xsec["WGamma"]            = 461.6;
+  xsec["MC_WW-pythia6-tauola"] = 54.838;
+  xsec["MC_WZ-pythia6-tauola"] = 33.21;
+  xsec["MC_ZZ-pythia6-tauola"] = 17.654;
+  xsec["MC_WGamma"]            = 461.6;
   
   xsec["DYJJ01JetsToLL_M-50_MJJ-200"] =  1.4;
 
-  xsec["W1JetsToLNu_enu"]     = 37509;
-  xsec["W2JetsToLNu_enu"]     = 37509;
-  xsec["W3JetsToLNu_enu"]     = 37509;
-  xsec["W4JetsToLNu_enu"]     = 37509;
-  xsec["WJetsToLNu-v1_enu"]   = 37509;
-  xsec["WJetsToLNu-v2_enu"]   = 37509;
-  xsec["W1JetsToLNu_munu"]    = 37509;
-  xsec["W2JetsToLNu_munu"]    = 37509;
-  xsec["W3JetsToLNu_munu"]    = 37509;
-  xsec["W4JetsToLNu_munu"]    = 37509;
-  xsec["WJetsToLNu-v1_munu"]  = 37509;
-  xsec["WJetsToLNu-v2_munu"]  = 37509;
-  xsec["W1JetsToLNu_taunu"]   = 37509;
-  xsec["W2JetsToLNu_taunu"]   = 37509;
-  xsec["W3JetsToLNu_taunu"]   = 37509;
-  xsec["W4JetsToLNu_taunu"]   = 37509;
-  xsec["WJetsToLNu-v1_taunu"] = 37509;
-  xsec["WJetsToLNu-v2_taunu"] = 37509;
+  xsec["MC_W1JetsToLNu_enu"]     = 37509;
+  xsec["MC_W2JetsToLNu_enu"]     = 37509;
+  xsec["MC_W3JetsToLNu_enu"]     = 37509;
+  xsec["MC_W4JetsToLNu_enu"]     = 37509;
+  xsec["MC_WJetsToLNu-v1_enu"]   = 37509;
+  xsec["MC_WJetsToLNu-v2_enu"]   = 37509;
+  xsec["MC_W1JetsToLNu_munu"]    = 37509;
+  xsec["MC_W2JetsToLNu_munu"]    = 37509;
+  xsec["MC_W3JetsToLNu_munu"]    = 37509;
+  xsec["MC_W4JetsToLNu_munu"]    = 37509;
+  xsec["MC_WJetsToLNu-v1_munu"]  = 37509;
+  xsec["MC_WJetsToLNu-v2_munu"]  = 37509;
+  xsec["MC_W1JetsToLNu_taunu"]   = 37509;
+  xsec["MC_W2JetsToLNu_taunu"]   = 37509;
+  xsec["MC_W3JetsToLNu_taunu"]   = 37509;
+  xsec["MC_W4JetsToLNu_taunu"]   = 37509;
+  xsec["MC_WJetsToLNu-v1_taunu"] = 37509;
+  xsec["MC_WJetsToLNu-v2_taunu"] = 37509;
 
-  xsec["DYJetsToLL"]  =  3503.7;
-  xsec["DY1JetsToLL"]  =  3503.7;
-  xsec["DY2JetsToLL"]  =  3503.7;
-  xsec["DY3JetsToLL"]  =  3503.7;
-  xsec["DY4JetsToLL"]  =  3503.7;
-  xsec["DYJetsToLL_PtZ-100-madgraph"] =  40.5;
+  xsec["MC_DYJetsToLL"]   =  3503.7;
+  xsec["MC_DY1JetsToLL"]  =  3503.7;
+  xsec["MC_DY2JetsToLL"]  =  3503.7;
+  xsec["MC_DY3JetsToLL"]  =  3503.7;
+  xsec["MC_DY4JetsToLL"]  =  3503.7;
+  xsec["MC_DYJetsToLL_PtZ-100-madgraph"] =  40.5;
 
-  xsec["ZJetsToNuNu_50_HT_100"]       =  381.2;
-  xsec["ZJetsToNuNu_100_HT_200"]      =  160.3;
-  xsec["ZJetsToNuNu_200_HT_400"]      =  41.49;
-  xsec["ZJetsToNuNu_400_HT_inf"]      =  5.274;
+  xsec["MC_ZJetsToNuNu_50_HT_100"]       =  381.2;
+  xsec["MC_ZJetsToNuNu_100_HT_200"]      =  160.3;
+  xsec["MC_ZJetsToNuNu_200_HT_400"]      =  41.49;
+  xsec["MC_ZJetsToNuNu_400_HT_inf"]      =  5.274;
   
-  xsec["GJets-HT-200To400-madgraph"]  =  960.5;
-  xsec["GJets-HT-400ToInf-madgraph"]  =  107.5;
+  xsec["MC_GJets-HT-200To400-madgraph"]  =  960.5;
+  xsec["MC_GJets-HT-400ToInf-madgraph"]  =  107.5;
 
   // MC VBF Higgs to invisible (signal)
-  xsec["VBF_HToZZTo4Nu_M-120"]  =  1.649;
-  xsec["VBF_HToZZTo4Nu_M-150"]  =  1.280;
-  xsec["VBF_HToZZTo4Nu_M-200"]  =  0.8685;
-  xsec["VBF_HToZZTo4Nu_M-300"]  =  0.4408;
-  xsec["VBF_HToZZTo4Nu_M-400"]  =  0.2543;
+  xsec["MC_VBF_HToZZTo4Nu_M-120"]  =  1.649;
+  xsec["MC_VBF_HToZZTo4Nu_M-150"]  =  1.280;
+  xsec["MC_VBF_HToZZTo4Nu_M-200"]  =  0.8685;
+  xsec["MC_VBF_HToZZTo4Nu_M-300"]  =  0.4408;
+  xsec["MC_VBF_HToZZTo4Nu_M-400"]  =  0.2543;
 
   // MC VBF Higgs to invisible POWHEG (signal)
-  xsec["Powheg-Htoinv-mH110"]  =  1.809;
-  xsec["Powheg-Htoinv-mH125"]  =  1.578;
-  xsec["Powheg-Htoinv-mH150"]  =  1.280;
-  xsec["Powheg-Htoinv-mH200"]  =  0.8685;
-  xsec["Powheg-Htoinv-mH300"]  =  0.4408;
-  xsec["Powheg-Htoinv-mH400"]  =  0.2543;
+  xsec["MC_Powheg-Htoinv-mH110"]  =  1.809;
+  xsec["MC_Powheg-Htoinv-mH125"]  =  1.578;
+  xsec["MC_Powheg-Htoinv-mH150"]  =  1.280;
+  xsec["MC_Powheg-Htoinv-mH200"]  =  0.8685;
+  xsec["MC_Powheg-Htoinv-mH300"]  =  0.4408;
+  xsec["MC_Powheg-Htoinv-mH400"]  =  0.2543;
 
-  xsec["EWK-Z2j"]            =  0.888;
-  xsec["EWK-Z2jiglep"]       =  1.776;
-  xsec["EWK-W2jminus"]       =  4.09;
-  xsec["EWK-W2jplus"]        =  6.48;
-  xsec["EWK-W2jminus_enu"]   =  4.09;
-  xsec["EWK-W2jplus_enu"]    =  6.48;
-  xsec["EWK-W2jminus_munu"]  =  4.09;
-  xsec["EWK-W2jplus_munu"]   =  6.48;
-  xsec["EWK-W2jminus_taunu"] =  4.09;
-  xsec["EWK-W2jplus_taunu"]  =  6.48;  
+  xsec["MC_EWK-Z2j"]            =  0.888;
+  xsec["MC_EWK-Z2jiglep"]       =  1.776;
+  xsec["MC_EWK-W2jminus"]       =  4.09;
+  xsec["MC_EWK-W2jplus"]        =  6.48;
+  xsec["MC_EWK-W2jminus_enu"]   =  4.09;
+  xsec["MC_EWK-W2jplus_enu"]    =  6.48;
+  xsec["MC_EWK-W2jminus_munu"]  =  4.09;
+  xsec["MC_EWK-W2jplus_munu"]   =  6.48;
+  xsec["MC_EWK-W2jminus_taunu"] =  4.09;
+  xsec["MC_EWK-W2jplus_taunu"]  =  6.48;  
   
   //_________________________________________
   map<string,double> events;  
-  events["QCD-Pt-30to50"]     = 5910000.0;
-  events["QCD-Pt-50to80"]     = 5998860.0;
-  events["QCD-Pt-80to120"]    = 5994864.0;
-  events["QCD-Pt-120to170"]   = 5955732.0;
-  events["QCD-Pt-170to300"]   = 5814398.0;
-  events["QCD-Pt-300to470"]   = 5978500.0;
-  events["QCD-Pt-470to600"]   = 3964848.0;
-  events["QCD-Pt-600to800"]   = 3996864.0;
-  events["QCD-Pt-800to1000"]  = 3998563.0;
-  events["QCD-Pt-1000to1400"] = 1904088.0;
-  events["QCD-Pt-1400to1800"] = 1910062.0;
-  events["QCD-Pt-1800"]       =  947586.0;
+  events["MC_QCD-Pt-30to50-pythia6"]     = 5910000.0;
+  events["MC_QCD-Pt-50to80-pythia6"]     = 5998860.0;
+  events["MC_QCD-Pt-80to120-pythia6"]    = 5994864.0;
+  events["MC_QCD-Pt-120to170-pythia6"]   = 5955732.0;
+  events["MC_QCD-Pt-170to300-pythia6"]   = 5814398.0;
+  events["MC_QCD-Pt-300to470-pythia6"]   = 5978500.0;
+  events["MC_QCD-Pt-470to600-pythia6"]   = 3964848.0;
+  events["MC_QCD-Pt-600to800-pythia6"]   = 3996864.0;
+  events["MC_QCD-Pt-800to1000-pythia6"]  = 3998563.0;
+  events["MC_QCD-Pt-1000to1400-pythia6"] = 1904088.0;
+  events["MC_QCD-Pt-1400to1800-pythia6"] = 1910062.0;
+  events["MC_QCD-Pt-1800-pythia6"]       =  947586.0;
    
-  events["QCD_VBF-Pt-80to120"]  = 39376000000;
-  events["QCD_VBF-Pt-120to170"] =  7000000000;
-  events["QCD_VBF-Pt-170to300"] =  1375000000;
-  events["QCD_VBF-Pt-300to470"] =    80000000;
-  events["QCD_VBF-Pt-470to600"] =    25000000;
+  events["MC_QCD-Pt-80to120_VBF-MET40"]  = 39376000000;
+  events["MC_QCD-Pt-120to170_VBF-MET40"] =  7000000000;
+  events["MC_QCD-Pt-170to300_VBF-MET40"] =  1375000000;
+  events["MC_QCD-Pt-300to470_VBF-MET40"] =    80000000;
+  events["MC_QCD-Pt-470to600_VBF-MET40"] =    25000000;
 
-  events["TTJets"] =  6923750.0;
-  events["TT-v1"]  =  28150723;
-  events["TT-v2"]  =  28150723;
+  events["MC_TTJets"] =  6923750.0;
+  events["MC_TT-v1"]  =  28150723;
+  events["MC_TT-v2"]  =  28150723;
 
-  events["T-tW"]    =  497658.0;
-  events["Tbar-tW"] =  493460.0;
+  events["MC_T-tW"]    =  497658.0;
+  events["MC_Tbar-tW"] =  493460.0;
   
-  events["SingleT-s-powheg-tauola"]    =  259961.0;
-  events["SingleT-t-powheg-tauola"]    =  3758227.0;
-  events["SingleTBar-s-powheg-tauola"] =  139974.0;
-  events["SingleTBar-t-powheg-tauola"] =  1935072.0;
+  events["MC_SingleT-s-powheg-tauola"]    =  259961.0;
+  events["MC_SingleT-t-powheg-tauola"]    =  3758227.0;
+  events["MC_SingleTBar-s-powheg-tauola"] =  139974.0;
+  events["MC_SingleTBar-t-powheg-tauola"] =  1935072.0;
 
-  events["WW-pythia6-tauola"]           =  10000431.0;
-  events["WZ-pythia6-tauola"]           =  10000283.0;
-  events["ZZ-pythia6-tauola"]           =  9799908.0;
-  events["DYJJ01JetsToLL_M-50_MJJ-200"] =  510501.0;
+  events["MC_WW-pythia6-tauola"]           =  10000431.0;
+  events["MC_WZ-pythia6-tauola"]           =  10000283.0;
+  events["MC_ZZ-pythia6-tauola"]           =  9799908.0;
+  events["MC_DYJJ01JetsToLL_M-50_MJJ-200"] =  510501.0;
 
-  events["W1JetsToLNu_enu"]     =  76102995.0;
-  events["W2JetsToLNu_enu"]     =  76102995.0;
-  events["W3JetsToLNu_enu"]     =  76102995.0;
-  events["W4JetsToLNu_enu"]     =  76102995.0;
-  events["WJetsToLNu-v1_enu"]   =  76102995.0;
-  events["WJetsToLNu-v2_enu"]   =  76102995.0;
-  events["W1JetsToLNu_munu"]    =  76102995.0;
-  events["W2JetsToLNu_munu"]    =  76102995.0;
-  events["W3JetsToLNu_munu"]    =  76102995.0;
-  events["W4JetsToLNu_munu"]    =  76102995.0;
-  events["WJetsToLNu-v1_munu"]  =  76102995.0;
-  events["WJetsToLNu-v2_munu"]  =  76102995.0;
-  events["W1JetsToLNu_taunu"]   =  76102995.0;
-  events["W2JetsToLNu_taunu"]   =  76102995.0;
-  events["W3JetsToLNu_taunu"]   =  76102995.0;
-  events["W4JetsToLNu_taunu"]   =  76102995.0;
-  events["WJetsToLNu-v1_taunu"] =  76102995.0;
-  events["WJetsToLNu-v2_taunu"] =  76102995.0;
+  events["MC_W1JetsToLNu_enu"]     =  76102995.0;
+  events["MC_W2JetsToLNu_enu"]     =  76102995.0;
+  events["MC_W3JetsToLNu_enu"]     =  76102995.0;
+  events["MC_W4JetsToLNu_enu"]     =  76102995.0;
+  events["MC_WJetsToLNu-v1_enu"]   =  76102995.0;
+  events["MC_WJetsToLNu-v2_enu"]   =  76102995.0;
+  events["MC_W1JetsToLNu_munu"]    =  76102995.0;
+  events["MC_W2JetsToLNu_munu"]    =  76102995.0;
+  events["MC_W3JetsToLNu_munu"]    =  76102995.0;
+  events["MC_W4JetsToLNu_munu"]    =  76102995.0;
+  events["MC_WJetsToLNu-v1_munu"]  =  76102995.0;
+  events["MC_WJetsToLNu-v2_munu"]  =  76102995.0;
+  events["MC_W1JetsToLNu_taunu"]   =  76102995.0;
+  events["MC_W2JetsToLNu_taunu"]   =  76102995.0;
+  events["MC_W3JetsToLNu_taunu"]   =  76102995.0;
+  events["MC_W4JetsToLNu_taunu"]   =  76102995.0;
+  events["MC_WJetsToLNu-v1_taunu"] =  76102995.0;
+  events["MC_WJetsToLNu-v2_taunu"] =  76102995.0;
   
-  events["DYJetsToLL"]                  =  30459503.0;
-  events["DY1JetsToLL"]                 =  30459503.0;
-  events["DY2JetsToLL"]                 =  30459503.0;
-  events["DY3JetsToLL"]                 =  30459503.0;
-  events["DY4JetsToLL"]                 =  30459503.0;
-  events["DYJetsToLL_PtZ-100-madgraph"] =  2632137.0;
+  events["MC_DYJetsToLL"]                  =  30459503.0;
+  events["MC_DY1JetsToLL"]                 =  30459503.0;
+  events["MC_DY2JetsToLL"]                 =  30459503.0;
+  events["MC_DY3JetsToLL"]                 =  30459503.0;
+  events["MC_DY4JetsToLL"]                 =  30459503.0;
+  events["MC_DYJetsToLL_PtZ-100-madgraph"] =  2632137.0;
   
-  events["ZJetsToNuNu_50_HT_100"]  =  4040980.0;
-  events["ZJetsToNuNu_100_HT_200"] =  4416646.0;
-  events["ZJetsToNuNu_200_HT_400"] =  5055885.0;
-  events["ZJetsToNuNu_400_HT_inf"] =  1006928.0;
+  events["MC_ZJetsToNuNu_50_HT_100"]  =  4040980.0;
+  events["MC_ZJetsToNuNu_100_HT_200"] =  4416646.0;
+  events["MC_ZJetsToNuNu_200_HT_400"] =  5055885.0;
+  events["MC_ZJetsToNuNu_400_HT_inf"] =  1006928.0;
 
-  events["GJets-HT-200To400-madgraph"] =  58597147.0;
-  events["GJets-HT-400ToInf-madgraph"] =  42391678.0;
+  events["MC_GJets-HT-200To400-madgraph"] =  58597147.0;
+  events["MC_GJets-HT-400ToInf-madgraph"] =  42391678.0;
 
-  events["VBF_HToZZTo4Nu_M-120"] =  100118.0;
-  events["VBF_HToZZTo4Nu_M-150"] =  100280.0;
-  events["VBF_HToZZTo4Nu_M-200"] =  100118.0;
-  events["VBF_HToZZTo4Nu_M-300"] =  100076.0;
-  events["VBF_HToZZTo4Nu_M-400"] =  100083.0;
+  events["MC_VBF_HToZZTo4Nu_M-120"] =  100118.0;
+  events["MC_VBF_HToZZTo4Nu_M-150"] =  100280.0;
+  events["MC_VBF_HToZZTo4Nu_M-200"] =  100118.0;
+  events["MC_VBF_HToZZTo4Nu_M-300"] =  100076.0;
+  events["MC_VBF_HToZZTo4Nu_M-400"] =  100083.0;
 
   events["Powheg-Htoinv-mH110"] =  99885.0;
   events["Powheg-Htoinv-mH125"] =  99885.0;
@@ -311,39 +332,19 @@ int main(int argc, char *argv[]){
   events["Powheg-Htoinv-mH300"] =  49945.0;
   events["Powheg-Htoinv-mH400"] =  49964.0;
 
-  events["EWK-Z2j"]            =  2978717;
-  events["EWK-Z2jiglep"]       =  2978717;
-  events["EWK-W2jminus"]       =  4696648;
-  events["EWK-W2jminus_enu"]   =  4696648;
-  events["EWK-W2jminus_munu"]  =  4696648;
-  events["EWK-W2jminus_taunu"] =  4696648;
-  events["EWK-W2jplus"]        =  6776164;
-  events["EWK-W2jplus_enu"]    =  6776164;
-  events["EWK-W2jplus_munu"]   =  6776164;
-  events["EWK-W2jplus_taunu"]  =  6776164;
+  events["MC_EWK-Z2j"]            =  2978717;
+  events["MC_EWK-Z2jiglep"]       =  2978717;
+  events["MC_EWK-W2jminus"]       =  4696648;
+  events["MC_EWK-W2jminus_enu"]   =  4696648;
+  events["MC_EWK-W2jminus_munu"]  =  4696648;
+  events["MC_EWK-W2jminus_taunu"] =  4696648;
+  events["MC_EWK-W2jplus"]        =  6776164;
+  events["MC_EWK-W2jplus_enu"]    =  6776164;
+  events["MC_EWK-W2jplus_munu"]   =  6776164;
+  events["MC_EWK-W2jplus_taunu"]  =  6776164;
   
-  events["WGamma"] =  4772358;
-  
-  
-  vector<string> samples;
-  samples.push_back("QCD-Pt-30to50");     
-  samples.push_back("QCD-Pt-50to80");     
-  samples.push_back("QCD-Pt-80to120");    
-  samples.push_back("QCD-Pt-120to170");   
-  samples.push_back("QCD-Pt-170to300");  
-  samples.push_back("QCD-Pt-300to470");  
-  samples.push_back("QCD-Pt-470to600");  
-  samples.push_back("QCD-Pt-600to800");  
-  samples.push_back("QCD-Pt-800to1000");  
-  samples.push_back("QCD-Pt-1000to1400"); 
-  samples.push_back("QCD-Pt-1400to1800");
-  samples.push_back("QCD-Pt-1800");
-  samples.push_back("QCD_VBF-Pt-80to120");
-  samples.push_back("QCD_VBF-Pt-120to170");
-  samples.push_back("QCD_VBF-Pt-170to300");
-  samples.push_back("QCD_VBF-Pt-300to470");
-  samples.push_back("QCD_VBF-Pt-470to600");
-  
+  events["MC_WGamma"] =  4772358;
+    
   map<string,double> wgt; 
   for(map<string,TFile*>::iterator i=files.begin(); i!=files.end(); i++){
     
@@ -363,48 +364,48 @@ int main(int argc, char *argv[]){
 //_________________________________________________________________________________________________    
   // Samples to add
   //_________________________________________________________________________________________________
-  vector<string> samplesQCDIncAll;
-  samplesQCDIncAll.push_back("QCD-Pt-30to50");
-  samplesQCDIncAll.push_back("QCD-Pt-50to80");    
-  samplesQCDIncAll.push_back("QCD-Pt-80to120");   
-  samplesQCDIncAll.push_back("QCD-Pt-120to170");  
-  samplesQCDIncAll.push_back("QCD-Pt-170to300"); 
-  samplesQCDIncAll.push_back("QCD-Pt-300to470"); 
-  samplesQCDIncAll.push_back("QCD-Pt-470to600"); 
-  samplesQCDIncAll.push_back("QCD-Pt-600to800"); 
-  samplesQCDIncAll.push_back("QCD-Pt-800to1000"); 
-  samplesQCDIncAll.push_back("QCD-Pt-1000to1400");
-  samplesQCDIncAll.push_back("QCD-Pt-1400to1800");
-  samplesQCDIncAll.push_back("QCD-Pt-1800");
-  
   vector<string> samplesQCDInc;
-  samplesQCDInc.push_back("QCD-Pt-80to120"); 
-  samplesQCDInc.push_back("QCD-Pt-120to170");
-  samplesQCDInc.push_back("QCD-Pt-170to300");  
-  samplesQCDInc.push_back("QCD-Pt-300to470");  
-  samplesQCDInc.push_back("QCD-Pt-470to600");
+  samplesQCDInc.push_back("MC_QCD-Pt-80to120-pythia6"); 
+  samplesQCDInc.push_back("MC_QCD-Pt-120to170-pythia6");
+  samplesQCDInc.push_back("MC_QCD-Pt-170to300-pythia6");  
+  samplesQCDInc.push_back("MC_QCD-Pt-300to470-pythia6");  
+  samplesQCDInc.push_back("MC_QCD-Pt-470to600-pythia6");
   
   vector<string> samplesQCDVBF;
-  samplesQCDVBF.push_back("QCD_VBF-Pt-80to120");
-  samplesQCDVBF.push_back("QCD_VBF-Pt-120to170");
-  samplesQCDVBF.push_back("QCD_VBF-Pt-170to300");
-  samplesQCDVBF.push_back("QCD_VBF-Pt-300to470");
-  samplesQCDVBF.push_back("QCD_VBF-Pt-470to600");
+  samplesQCDVBF.push_back("MC_QCD-Pt-80to120_VBF-MET40");
+  samplesQCDVBF.push_back("MC_QCD-Pt-120to170_VBF-MET40");
+  samplesQCDVBF.push_back("MC_QCD-Pt-170to300_VBF-MET40");
+  samplesQCDVBF.push_back("MC_QCD-Pt-300to470_VBF-MET40");
+  samplesQCDVBF.push_back("MC_QCD-Pt-470to600_VBF-MET40");
 
+  vector<string> samplesQCDIncAll;
+  samplesQCDIncAll.push_back("MC_QCD-Pt-30to50-pythia6");
+  samplesQCDIncAll.push_back("MC_QCD-Pt-50to80-pythia6");    
+  samplesQCDIncAll.push_back("MC_QCD-Pt-80to120-pythia6");   
+  samplesQCDIncAll.push_back("MC_QCD-Pt-120to170-pythia6");  
+  samplesQCDIncAll.push_back("MC_QCD-Pt-170to300-pythia6"); 
+  samplesQCDIncAll.push_back("MC_QCD-Pt-300to470-pythia6"); 
+  samplesQCDIncAll.push_back("MC_QCD-Pt-470to600-pythia6"); 
+  samplesQCDIncAll.push_back("MC_QCD-Pt-600to800-pythia6"); 
+  samplesQCDIncAll.push_back("MC_QCD-Pt-800to1000-pythia6"); 
+  samplesQCDIncAll.push_back("MC_QCD-Pt-1000to1400-pythia6");
+  samplesQCDIncAll.push_back("MC_QCD-Pt-1400to1800-pythia6");
+  samplesQCDIncAll.push_back("MC_QCD-Pt-1800-pythia6");    
+  
   // QCD VBF + other
   vector<string> samples_qcdvbfextra;
-  samples_qcdvbfextra.push_back("QCD-Pt-30to50");
-  samples_qcdvbfextra.push_back("QCD-Pt-50to80");    
-  samples_qcdvbfextra.push_back("QCD_VBF-Pt-80to120");   
-  samples_qcdvbfextra.push_back("QCD_VBF-Pt-120to170");  
-  samples_qcdvbfextra.push_back("QCD_VBF-Pt-170to300"); 
-  samples_qcdvbfextra.push_back("QCD_VBF-Pt-300to470"); 
-  samples_qcdvbfextra.push_back("QCD_VBF-Pt-470to600"); 
-  samples_qcdvbfextra.push_back("QCD-Pt-600to800"); 
-  samples_qcdvbfextra.push_back("QCD-Pt-800to1000"); 
-  samples_qcdvbfextra.push_back("QCD-Pt-1000to1400");
-  samples_qcdvbfextra.push_back("QCD-Pt-1400to1800");
-  samples_qcdvbfextra.push_back("QCD-Pt-1800");
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-30to50-pythia6");
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-50to80-pythia6");    
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-80to120_VBF-MET40");   
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-120to170_VBF-MET40");  
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-170to300_VBF-MET40"); 
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-300to470_VBF-MET40"); 
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-470to600_VBF-MET40"); 
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-600to800-pythia6"); 
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-800to1000-pythia6"); 
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-1000to1400-pythia6");
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-1400to1800-pythia6");
+  samples_qcdvbfextra.push_back("MC_QCD-Pt-1800-pythia6");    
 
   // Data
   vector<string> samples_data;
@@ -418,72 +419,72 @@ int main(int argc, char *argv[]){
 
   // Samples VV
   vector<string> samples_vv;
-  samples_vv.push_back("WW-pythia6-tauola");
-  samples_vv.push_back("WZ-pythia6-tauola");
-  samples_vv.push_back("ZZ-pythia6-tauola");
-  samples_vv.push_back("WGamma");
+  samples_vv.push_back("MC_WW-pythia6-tauola");
+  samples_vv.push_back("MC_WZ-pythia6-tauola");
+  samples_vv.push_back("MC_ZZ-pythia6-tauola");
+  samples_vv.push_back("MC_WGamma");
   
   // Samples W+jets (Correct)
   vector<string> samples_wjets;     
-  samples_wjets.push_back("WJetsToLNu-v1_enu");  
-  samples_wjets.push_back("WJetsToLNu-v2_enu");  
-  samples_wjets.push_back("W1JetsToLNu_enu");    
-  samples_wjets.push_back("W2JetsToLNu_enu");    
-  samples_wjets.push_back("W3JetsToLNu_enu");    
-  samples_wjets.push_back("W4JetsToLNu_enu");    
-  samples_wjets.push_back("WJetsToLNu-v1_munu"); 
-  samples_wjets.push_back("WJetsToLNu-v2_munu"); 
-  samples_wjets.push_back("W1JetsToLNu_munu");   
-  samples_wjets.push_back("W2JetsToLNu_munu");   
-  samples_wjets.push_back("W3JetsToLNu_munu");   
-  samples_wjets.push_back("W4JetsToLNu_munu");   
-  samples_wjets.push_back("W1JetsToLNu_taunu");  
-  samples_wjets.push_back("W2JetsToLNu_taunu");  
-  samples_wjets.push_back("W3JetsToLNu_taunu");  
-  samples_wjets.push_back("W4JetsToLNu_taunu");  
-  samples_wjets.push_back("WJetsToLNu-v1_taunu");
-  samples_wjets.push_back("WJetsToLNu-v2_taunu");  
+  samples_wjets.push_back("MC_WJetsToLNu-v1_enu");  
+  samples_wjets.push_back("MC_WJetsToLNu-v2_enu");  
+  samples_wjets.push_back("MC_W1JetsToLNu_enu");    
+  samples_wjets.push_back("MC_W2JetsToLNu_enu");    
+  samples_wjets.push_back("MC_W3JetsToLNu_enu");    
+  samples_wjets.push_back("MC_W4JetsToLNu_enu");    
+  samples_wjets.push_back("MC_WJetsToLNu-v1_munu"); 
+  samples_wjets.push_back("MC_WJetsToLNu-v2_munu"); 
+  samples_wjets.push_back("MC_W1JetsToLNu_munu");   
+  samples_wjets.push_back("MC_W2JetsToLNu_munu");   
+  samples_wjets.push_back("MC_W3JetsToLNu_munu");   
+  samples_wjets.push_back("MC_W4JetsToLNu_munu");   
+  samples_wjets.push_back("MC_W1JetsToLNu_taunu");  
+  samples_wjets.push_back("MC_W2JetsToLNu_taunu");  
+  samples_wjets.push_back("MC_W3JetsToLNu_taunu");  
+  samples_wjets.push_back("MC_W4JetsToLNu_taunu");  
+  samples_wjets.push_back("MC_WJetsToLNu-v1_taunu");
+  samples_wjets.push_back("MC_WJetsToLNu-v2_taunu");  
   
   // Samples top (Correct)
   vector<string> samples_ttbar;
-  samples_ttbar.push_back("TTJets");
-  samples_ttbar.push_back("T-tW");
-  samples_ttbar.push_back("Tbar-tW");
-  samples_ttbar.push_back("SingleT-s-powheg-tauola");
-  samples_ttbar.push_back("SingleTBar-s-powheg-tauola");
-  samples_ttbar.push_back("SingleT-t-powheg-tauola");
-  samples_ttbar.push_back("SingleTBar-t-powheg-tauola");  
+  samples_ttbar.push_back("MC_TTJets");
+  samples_ttbar.push_back("MC_T-tW");
+  samples_ttbar.push_back("MC_Tbar-tW");
+  samples_ttbar.push_back("MC_SingleT-s-powheg-tauola");
+  samples_ttbar.push_back("MC_SingleTBar-s-powheg-tauola");
+  samples_ttbar.push_back("MC_SingleT-t-powheg-tauola");
+  samples_ttbar.push_back("MC_SingleTBar-t-powheg-tauola");  
   
   // Samples G+Jets (Correct)
   vector<string> samples_gjets;
-  samples_gjets.push_back("GJets-HT-200To400-madgraph");
-  samples_gjets.push_back("GJets-HT-400ToInf-madgraph");
+  samples_gjets.push_back("MC_GJets-HT-200To400-madgraph");
+  samples_gjets.push_back("MC_GJets-HT-400ToInf-madgraph");
   
   // Samples EWK
   vector<string> samples_ewk;
-  samples_ewk.push_back("EWK-Z2j");
-  samples_ewk.push_back("EWK-Z2jiglep");
-  samples_ewk.push_back("EWK-W2jminus_enu");
-  samples_ewk.push_back("EWK-W2jplus_enu");
-  samples_ewk.push_back("EWK-W2jminus_munu");
-  samples_ewk.push_back("EWK-W2jplus_munu");
-  samples_ewk.push_back("EWK-W2jminus_taunu");
-  samples_ewk.push_back("EWK-W2jplus_taunu");
+  samples_ewk.push_back("MC_EWK-Z2j");
+  samples_ewk.push_back("MC_EWK-Z2jiglep");
+  samples_ewk.push_back("MC_EWK-W2jminus_enu");
+  samples_ewk.push_back("MC_EWK-W2jplus_enu");
+  samples_ewk.push_back("MC_EWK-W2jminus_munu");
+  samples_ewk.push_back("MC_EWK-W2jplus_munu");
+  samples_ewk.push_back("MC_EWK-W2jminus_taunu");
+  samples_ewk.push_back("MC_EWK-W2jplus_taunu");
 
   // Samples ZJets
   vector<string> samples_zjets;
-  samples_zjets.push_back("ZJetsToNuNu_100_HT_200");
-  samples_zjets.push_back("ZJetsToNuNu_200_HT_400");
-  samples_zjets.push_back("ZJetsToNuNu_400_HT_inf");
-  samples_zjets.push_back("ZJetsToNuNu_50_HT_100");
+  samples_zjets.push_back("MC_ZJetsToNuNu_100_HT_200");
+  samples_zjets.push_back("MC_ZJetsToNuNu_200_HT_400");
+  samples_zjets.push_back("MC_ZJetsToNuNu_400_HT_inf");
+  samples_zjets.push_back("MC_ZJetsToNuNu_50_HT_100");
   
   // Samples DY
   vector<string> samples_dy;
-  samples_dy.push_back("DYJetsToLL");
-  samples_dy.push_back("DY1JetsToLL");
-  samples_dy.push_back("DY2JetsToLL");
-  samples_dy.push_back("DY3JetsToLL");
-  samples_dy.push_back("DY4JetsToLL");
+  samples_dy.push_back("MC_DYJetsToLL");
+  samples_dy.push_back("MC_DY1JetsToLL");
+  samples_dy.push_back("MC_DY2JetsToLL");
+  samples_dy.push_back("MC_DY3JetsToLL");
+  samples_dy.push_back("MC_DY4JetsToLL");
   
   //_________________________________________________________________________________________________
   // Cuts and histograms to print out to PDF
@@ -579,9 +580,9 @@ int main(int argc, char *argv[]){
   //_________________________________________________________________________________________________
   ICLatexTabular tabXSec = get_tabXSec();
 
-  for(unsigned i=0; i<samples.size(); i++){
+  for(unsigned i=0; i<sampleID.size(); i++){
     
-    string* s = &(samples[i]);
+    string* s = &(sampleID[i]);
     
     tabXSec.setCellContent(int(i+1),0,Form("\\verb|%s|",(*s).c_str()));//samples[i]);  
     tabXSec.setCellContent(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
@@ -606,94 +607,94 @@ int main(int argc, char *argv[]){
   //_________________________________________    
   for(unsigned i=0; i<cuts.size(); i++){
 
-    MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/n_vtx",cuts[i].c_str()));
+    MapString_ICH1F mPlots = MapString_ICH1F(files,Form("%s/n_vtx",cuts[i].c_str()));
 
     // QCD Sample Compare: Filling table absolute counts 
     tQCDCompare_YieldAbsolute.setCellContent(i+2, 0,cuts[i]);
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->GetEntries());    
-    tQCDCompare_YieldAbsolute.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->GetEntries());
-    tQCDCompare_YieldAbsolute.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 1,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 2,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 3,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 4,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 6,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 7,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 8,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->GetEntries());    
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 9,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2,10,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->GetEntries());
 
     // QCD Sample Compare: Filling table weighted events (trigger, pu)
     tQCDCompare_YieldTrigWgt.setCellContent(i+2, 0,cuts[i]);
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 1,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 2,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->Integral(0,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 3,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 4,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 6,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 7,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 8,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->GetNbinsX()+1));    
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 9,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2,10,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->GetNbinsX()+1));    
    
     // QCD Inclusive: Filling table absolute counts 
     tQCDInc_YieldAbsolute.setCellContent(i+1, 0,cuts[i]);
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->GetEntries());
-    tQCDInc_YieldAbsolute.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 1,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 2,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 3,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 4,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 6,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 7,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 8,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 9,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1,10,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1,11,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1,12,mPlots["MC_QCD-Pt-1800-pythia6"]      ->GetEntries());
 
     // QCD Inclusive: Filling table weighted events (trigger, pu) for All QCD Inclusive samples
     tQCDInc_YieldTrigWgt.setCellContent(i+1, 0,cuts[i]);
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->Integral(0,mPlots["QCD-Pt-120to170"]->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->Integral(0,mPlots["QCD-Pt-170to300"]->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->Integral(0,mPlots["QCD-Pt-300to470"]->GetNbinsX()+1));    
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->Integral(0,mPlots["QCD-Pt-470to600"]->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 1,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 2,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 3,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 4,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 6,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));    
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 7,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 8,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 9,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->Integral(0,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,10,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,11,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,12,mPlots["MC_QCD-Pt-1800-pythia6"]      ->Integral(0,mPlots["MC_QCD-Pt-1800-pythia6"]      ->GetNbinsX()+1));
 
     // Putting in cross section normalization weights
     mPlots.Scale(wgt);
 
     // Filling table weighted events (trigger, pu and xsec)
     tQCDCompare_YieldXsecWgt.setCellContent(i+2, 0,cuts[i]);
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 1,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 2,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->Integral(0,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 3,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 4,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 6,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 7,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 8,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->GetNbinsX()+1));    
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 9,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2,10,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->GetNbinsX()+1));    
     
     // QCD Inclusive: Filling table weighted events (trigger, pu and xsec)
     tQCDInc_YieldXsecWgt.setCellContent(i+1, 0,cuts[i]);
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->Integral(0,mPlots["QCD-Pt-120to170"]->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->Integral(0,mPlots["QCD-Pt-170to300"]->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->Integral(0,mPlots["QCD-Pt-300to470"]->GetNbinsX()+1));    
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->Integral(0,mPlots["QCD-Pt-470to600"]->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));    
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 1,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 2,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 3,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 4,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 6,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));    
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 7,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 8,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 9,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->Integral(0,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,10,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,11,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,12,mPlots["MC_QCD-Pt-1800-pythia6"]      ->Integral(0,mPlots["MC_QCD-Pt-1800-pythia6"]      ->GetNbinsX()+1));    
     
     // Merging samples and calculating integral    
     TH1F *hData   = mPlots.getMerged(Form("Data_%s_n_vtx",  cuts[i].c_str()),samples_data);
