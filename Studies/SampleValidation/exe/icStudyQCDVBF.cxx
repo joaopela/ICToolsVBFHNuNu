@@ -21,12 +21,15 @@
 using namespace std;
 
 ICLatexTabular get_tabXSec();
-ICLatexTabular get_tabEvAbsolute();
-ICLatexTabular get_tabEvTrig();
-ICLatexTabular get_tabEvWeighted();
-ICLatexTabular get_tabEvTotalWeighted();
+ICLatexTabular get_tQCDCompare_YieldAbsolute();
+ICLatexTabular get_tQCDCompare_YieldTrigWgt();
+ICLatexTabular get_tQCDCompare_YieldXsecWgt();
 
-ICLatexTabular get_tabEvAllTrig();
+ICLatexTabular get_tQCDInc_YieldAbsolute();
+ICLatexTabular get_tQCDInc_YieldTrigWgt();
+ICLatexTabular get_tQCDInc_YieldXsecWgt();
+
+ICLatexTabular get_tabEvTotalWeighted();
 ICLatexTabular get_tabEvAllTotalWeighted();
 
 int main(int argc, char *argv[]){
@@ -65,11 +68,11 @@ int main(int argc, char *argv[]){
   files["QCD_VBF-Pt-470to600"] = new TFile("MC_QCD-Pt-470to600_VBF-MET40.root");
   
   // TT
-  files["TTJets"] = new TFile("MC_TTJets");
+  files["TTJets"] = new TFile("MC_TTJets.root");
 
   //powheg samples
-  files["TT-v1"] = new TFile("MC_TT-v1");
-  files["TT-v2"] = new TFile("MC_TT-v2");
+  files["TT-v1"] = new TFile("MC_TT-v1.root");
+  files["TT-v2"] = new TFile("MC_TT-v2.root");
 
   //
   files["T-tW"]                       = new TFile("MC_T-tW.root");
@@ -142,89 +145,86 @@ int main(int argc, char *argv[]){
   xsec["QCD_VBF-Pt-300to470"] =     1759.549;
   xsec["QCD_VBF-Pt-470to600"] =      113.8791;
 
+  // MC TTbar
   xsec["TTJets"]                      =  245.8;
   xsec["TT-v1"]                       =  211.0;
   xsec["TT-v2"]                       =  211.0;
+  
+  // Single top
   xsec["T-tW"]                        =  11.1;
   xsec["Tbar-tW"]                     =  11.1;
   xsec["SingleT-s-powheg-tauola"]     =  3.79;
   xsec["SingleTBar-s-powheg-tauola"]  =  1.76;
   xsec["SingleT-t-powheg-tauola"]     =  56.4;
   xsec["SingleTBar-t-powheg-tauola"]  =  30.7;
-  xsec["WW-pythia6-tauola"]           =  54.838;
-  xsec["WZ-pythia6-tauola"]           =  33.21;
-  xsec["ZZ-pythia6-tauola"]           =  17.654;
+  
+  // MC Dibosons
+  xsec["WW-pythia6-tauola"] = 54.838;
+  xsec["WZ-pythia6-tauola"] = 33.21;
+  xsec["ZZ-pythia6-tauola"] = 17.654;
+  xsec["WGamma"]            = 461.6;
+  
   xsec["DYJJ01JetsToLL_M-50_MJJ-200"] =  1.4;
-  xsec["W1JetsToLNu"]                 =  37509;
-  xsec["W2JetsToLNu"]                 =  37509;
-  xsec["W3JetsToLNu"]                 =  37509;
-  xsec["W4JetsToLNu"]  =  37509;
-  xsec["WJetsToLNu-v1"]  =  37509;
-  xsec["WJetsToLNu-v2"]  =  37509;
-  xsec["W1JetsToLNu_enu"]  =  37509;
-  xsec["W2JetsToLNu_enu"]  =  37509;
-  xsec["W3JetsToLNu_enu"]  =  37509;
-  xsec["W4JetsToLNu_enu"]  =  37509;
-  xsec["WJetsToLNu-v1_enu"]  =  37509;
-  xsec["WJetsToLNu-v2_enu"]  =  37509;
-  xsec["W1JetsToLNu_munu"]  =  37509;
-  xsec["W2JetsToLNu_munu"]  =  37509;
-  xsec["W3JetsToLNu_munu"]  =  37509;
-  xsec["W4JetsToLNu_munu"]  =  37509;
-  xsec["WJetsToLNu-v1_munu"]  =  37509;
-  xsec["WJetsToLNu-v2_munu"]  =  37509;
-  xsec["W1JetsToLNu_taunu"]  =  37509;
-  xsec["W2JetsToLNu_taunu"]  =  37509;
-  xsec["W3JetsToLNu_taunu"]  =  37509;
-  xsec["W4JetsToLNu_taunu"]  =  37509;
-  xsec["WJetsToLNu-v1_taunu"]  =  37509;
-  xsec["WJetsToLNu-v2_taunu"]  =  37509;
+
+  xsec["W1JetsToLNu_enu"]     = 37509;
+  xsec["W2JetsToLNu_enu"]     = 37509;
+  xsec["W3JetsToLNu_enu"]     = 37509;
+  xsec["W4JetsToLNu_enu"]     = 37509;
+  xsec["WJetsToLNu-v1_enu"]   = 37509;
+  xsec["WJetsToLNu-v2_enu"]   = 37509;
+  xsec["W1JetsToLNu_munu"]    = 37509;
+  xsec["W2JetsToLNu_munu"]    = 37509;
+  xsec["W3JetsToLNu_munu"]    = 37509;
+  xsec["W4JetsToLNu_munu"]    = 37509;
+  xsec["WJetsToLNu-v1_munu"]  = 37509;
+  xsec["WJetsToLNu-v2_munu"]  = 37509;
+  xsec["W1JetsToLNu_taunu"]   = 37509;
+  xsec["W2JetsToLNu_taunu"]   = 37509;
+  xsec["W3JetsToLNu_taunu"]   = 37509;
+  xsec["W4JetsToLNu_taunu"]   = 37509;
+  xsec["WJetsToLNu-v1_taunu"] = 37509;
+  xsec["WJetsToLNu-v2_taunu"] = 37509;
+
   xsec["DYJetsToLL"]  =  3503.7;
   xsec["DY1JetsToLL"]  =  3503.7;
   xsec["DY2JetsToLL"]  =  3503.7;
   xsec["DY3JetsToLL"]  =  3503.7;
   xsec["DY4JetsToLL"]  =  3503.7;
   xsec["DYJetsToLL_PtZ-100-madgraph"] =  40.5;
+
   xsec["ZJetsToNuNu_50_HT_100"]       =  381.2;
   xsec["ZJetsToNuNu_100_HT_200"]      =  160.3;
   xsec["ZJetsToNuNu_200_HT_400"]      =  41.49;
   xsec["ZJetsToNuNu_400_HT_inf"]      =  5.274;
+  
   xsec["GJets-HT-200To400-madgraph"]  =  960.5;
   xsec["GJets-HT-400ToInf-madgraph"]  =  107.5;
-  xsec["QCD-Pt-30to50-pythia6"]       =  66285328;
-  xsec["QCD-Pt-50to80-pythia6"]       =  8148778.0;
-  xsec["QCD-Pt-80to120-pythia6"]  =  1033680.0;
-  xsec["QCD-Pt-120to170-pythia6"]  =  156293.3;
-  xsec["QCD-Pt-170to300-pythia6"]  =  34138.15;
-  xsec["QCD-Pt-300to470-pythia6"]  =  1759.549;
-  xsec["QCD-Pt-470to600-pythia6"]  =  113.8791;
-  xsec["QCD-Pt-600to800-pythia6"]  =  26.9921;
-  xsec["QCD-Pt-800to1000-pythia6"]  =  3.550036;
-  xsec["QCD-Pt-1000to1400-pythia6"]  =  0.737844;
-  xsec["QCD-Pt-1400to1800-pythia6"]  =  0.03352235;
-  xsec["QCD-Pt-1800-pythia6"]  =  0.001829005;
+
+  // MC VBF Higgs to invisible (signal)
   xsec["VBF_HToZZTo4Nu_M-120"]  =  1.649;
   xsec["VBF_HToZZTo4Nu_M-150"]  =  1.280;
   xsec["VBF_HToZZTo4Nu_M-200"]  =  0.8685;
   xsec["VBF_HToZZTo4Nu_M-300"]  =  0.4408;
   xsec["VBF_HToZZTo4Nu_M-400"]  =  0.2543;
+
+  // MC VBF Higgs to invisible POWHEG (signal)
   xsec["Powheg-Htoinv-mH110"]  =  1.809;
   xsec["Powheg-Htoinv-mH125"]  =  1.578;
   xsec["Powheg-Htoinv-mH150"]  =  1.280;
   xsec["Powheg-Htoinv-mH200"]  =  0.8685;
   xsec["Powheg-Htoinv-mH300"]  =  0.4408;
   xsec["Powheg-Htoinv-mH400"]  =  0.2543;
-  xsec["EWK-W2jminus"]  =  4.09;
-  xsec["EWK-W2jplus"]  =  6.48;
-  xsec["EWK-W2jminus_enu"]  =  4.09;
-  xsec["EWK-W2jplus_enu"]  =  6.48;
+
+  xsec["EWK-Z2j"]            =  0.888;
+  xsec["EWK-Z2jiglep"]       =  1.776;
+  xsec["EWK-W2jminus"]       =  4.09;
+  xsec["EWK-W2jplus"]        =  6.48;
+  xsec["EWK-W2jminus_enu"]   =  4.09;
+  xsec["EWK-W2jplus_enu"]    =  6.48;
   xsec["EWK-W2jminus_munu"]  =  4.09;
-  xsec["EWK-W2jplus_munu"]  =  6.48;
-  xsec["EWK-W2jminus_taunu"]  =  4.09;
-  xsec["EWK-W2jplus_taunu"]  =  6.48;
-  xsec["EWK-Z2j"]  =  0.888;
-  xsec["EWK-Z2jiglep"]  =  1.776;
-  xsec["WGamma"]  =  461.6;
+  xsec["EWK-W2jplus_munu"]   =  6.48;
+  xsec["EWK-W2jminus_taunu"] =  4.09;
+  xsec["EWK-W2jplus_taunu"]  =  6.48;  
   
   //_________________________________________
   map<string,double> events;  
@@ -264,12 +264,6 @@ int main(int argc, char *argv[]){
   events["ZZ-pythia6-tauola"]           =  9799908.0;
   events["DYJJ01JetsToLL_M-50_MJJ-200"] =  510501.0;
 
-  events["W1JetsToLNu"]         =  76102995.0;
-  events["W2JetsToLNu"]         =  76102995.0;
-  events["W3JetsToLNu"]         =  76102995.0;
-  events["W4JetsToLNu"]         =  76102995.0;
-  events["WJetsToLNu-v1"]       =  76102995.0;
-  events["WJetsToLNu-v2"]       =  76102995.0;
   events["W1JetsToLNu_enu"]     =  76102995.0;
   events["W2JetsToLNu_enu"]     =  76102995.0;
   events["W3JetsToLNu_enu"]     =  76102995.0;
@@ -317,16 +311,16 @@ int main(int argc, char *argv[]){
   events["Powheg-Htoinv-mH300"] =  49945.0;
   events["Powheg-Htoinv-mH400"] =  49964.0;
 
-  events["EWK-W2jminus"]       =  4696648;
-  events["EWK-W2jplus"]        =  6776164;
-  events["EWK-W2jminus_enu"]   =  4696648;
-  events["EWK-W2jplus_enu"]    =  6776164;
-  events["EWK-W2jminus_munu"]  =  4696648;
-  events["EWK-W2jplus_munu"]   =  6776164;
-  events["EWK-W2jminus_taunu"] =  4696648;
-  events["EWK-W2jplus_taunu"]  =  6776164;
   events["EWK-Z2j"]            =  2978717;
   events["EWK-Z2jiglep"]       =  2978717;
+  events["EWK-W2jminus"]       =  4696648;
+  events["EWK-W2jminus_enu"]   =  4696648;
+  events["EWK-W2jminus_munu"]  =  4696648;
+  events["EWK-W2jminus_taunu"] =  4696648;
+  events["EWK-W2jplus"]        =  6776164;
+  events["EWK-W2jplus_enu"]    =  6776164;
+  events["EWK-W2jplus_munu"]   =  6776164;
+  events["EWK-W2jplus_taunu"]  =  6776164;
   
   events["WGamma"] =  4772358;
   
@@ -366,25 +360,9 @@ int main(int argc, char *argv[]){
     wgt[s] = (lumi*xsec[s])/events[s];    
   }
   
-//   wgt["QCD-Pt-30to50"]       = (lumi*xsec["QCD-Pt-30to50"])    /events["QCD-Pt-30to50"];
-//   wgt["QCD-Pt-50to80"]       = (lumi*xsec["QCD-Pt-50to80"])    /events["QCD-Pt-50to80"];
-//   wgt["QCD-Pt-80to120"]      = (lumi*xsec["QCD-Pt-80to120"])   /events["QCD-Pt-80to120"];
-//   wgt["QCD-Pt-120to170"]     = (lumi*xsec["QCD-Pt-120to170"])  /events["QCD-Pt-120to170"];
-//   wgt["QCD-Pt-170to300"]     = (lumi*xsec["QCD-Pt-170to300"])  /events["QCD-Pt-170to300"];
-//   wgt["QCD-Pt-300to470"]     = (lumi*xsec["QCD-Pt-300to470"])  /events["QCD-Pt-300to470"];
-//   wgt["QCD-Pt-470to600"]     = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD-Pt-470to600"];
-//   wgt["QCD-Pt-600to800"]     = (lumi*xsec["QCD-Pt-600to800"])  /events["QCD-Pt-600to800"];
-//   wgt["QCD-Pt-800to1000"]    = (lumi*xsec["QCD-Pt-800to1000"]) /events["QCD-Pt-800to1000"];
-//   wgt["QCD-Pt-1000to1400"]   = (lumi*xsec["QCD-Pt-1000to1400"])/events["QCD-Pt-1000to1400"];
-//   wgt["QCD-Pt-1400to1800"]   = (lumi*xsec["QCD-Pt-1400to1800"])/events["QCD-Pt-1400to1800"];
-//   wgt["QCD-Pt-1800"]         = (lumi*xsec["QCD-Pt-1800"])      /events["QCD-Pt-1800"];
-//   wgt["QCD_VBF-Pt-80to120"]  = (lumi*xsec["QCD-Pt-80to120"])   /events["QCD_VBF-Pt-80to120"];
-//   wgt["QCD_VBF-Pt-120to170"] = (lumi*xsec["QCD-Pt-120to170"])  /events["QCD_VBF-Pt-120to170"];
-//   wgt["QCD_VBF-Pt-170to300"] = (lumi*xsec["QCD-Pt-170to300"])  /events["QCD_VBF-Pt-170to300"];
-//   wgt["QCD_VBF-Pt-300to470"] = (lumi*xsec["QCD-Pt-300to470"])  /events["QCD_VBF-Pt-300to470"];
-//   wgt["QCD_VBF-Pt-470to600"] = (lumi*xsec["QCD-Pt-470to600"])  /events["QCD_VBF-Pt-470to600"];
-
-  //_________________________________________    
+//_________________________________________________________________________________________________    
+  // Samples to add
+  //_________________________________________________________________________________________________
   vector<string> samplesQCDIncAll;
   samplesQCDIncAll.push_back("QCD-Pt-30to50");
   samplesQCDIncAll.push_back("QCD-Pt-50to80");    
@@ -413,6 +391,103 @@ int main(int argc, char *argv[]){
   samplesQCDVBF.push_back("QCD_VBF-Pt-300to470");
   samplesQCDVBF.push_back("QCD_VBF-Pt-470to600");
 
+  // QCD VBF + other
+  vector<string> samples_qcdvbfextra;
+  samples_qcdvbfextra.push_back("QCD-Pt-30to50");
+  samples_qcdvbfextra.push_back("QCD-Pt-50to80");    
+  samples_qcdvbfextra.push_back("QCD_VBF-Pt-80to120");   
+  samples_qcdvbfextra.push_back("QCD_VBF-Pt-120to170");  
+  samples_qcdvbfextra.push_back("QCD_VBF-Pt-170to300"); 
+  samples_qcdvbfextra.push_back("QCD_VBF-Pt-300to470"); 
+  samples_qcdvbfextra.push_back("QCD_VBF-Pt-470to600"); 
+  samples_qcdvbfextra.push_back("QCD-Pt-600to800"); 
+  samples_qcdvbfextra.push_back("QCD-Pt-800to1000"); 
+  samples_qcdvbfextra.push_back("QCD-Pt-1000to1400");
+  samples_qcdvbfextra.push_back("QCD-Pt-1400to1800");
+  samples_qcdvbfextra.push_back("QCD-Pt-1800");
+
+  // Data
+  vector<string> samples_data;
+  samples_data.push_back("Data_MET-2012A-13Jul2012-v1");
+  samples_data.push_back("Data_MET-2012A-06Aug2012-v1");
+  samples_data.push_back("Data_MET-2012B-13Jul2012-v1");
+  samples_data.push_back("Data_MET-2012C-24Aug2012-v1");
+  samples_data.push_back("Data_MET-2012C-11Dec2012-v1");
+  samples_data.push_back("Data_MET-2012C-PromptReco-v2");
+  samples_data.push_back("Data_MET-2012D-PromptReco-v1");
+
+  // Samples VV
+  vector<string> samples_vv;
+  samples_vv.push_back("WW-pythia6-tauola");
+  samples_vv.push_back("WZ-pythia6-tauola");
+  samples_vv.push_back("ZZ-pythia6-tauola");
+  samples_vv.push_back("WGamma");
+  
+  // Samples W+jets (Correct)
+  vector<string> samples_wjets;     
+  samples_wjets.push_back("WJetsToLNu-v1_enu");  
+  samples_wjets.push_back("WJetsToLNu-v2_enu");  
+  samples_wjets.push_back("W1JetsToLNu_enu");    
+  samples_wjets.push_back("W2JetsToLNu_enu");    
+  samples_wjets.push_back("W3JetsToLNu_enu");    
+  samples_wjets.push_back("W4JetsToLNu_enu");    
+  samples_wjets.push_back("WJetsToLNu-v1_munu"); 
+  samples_wjets.push_back("WJetsToLNu-v2_munu"); 
+  samples_wjets.push_back("W1JetsToLNu_munu");   
+  samples_wjets.push_back("W2JetsToLNu_munu");   
+  samples_wjets.push_back("W3JetsToLNu_munu");   
+  samples_wjets.push_back("W4JetsToLNu_munu");   
+  samples_wjets.push_back("W1JetsToLNu_taunu");  
+  samples_wjets.push_back("W2JetsToLNu_taunu");  
+  samples_wjets.push_back("W3JetsToLNu_taunu");  
+  samples_wjets.push_back("W4JetsToLNu_taunu");  
+  samples_wjets.push_back("WJetsToLNu-v1_taunu");
+  samples_wjets.push_back("WJetsToLNu-v2_taunu");  
+  
+  // Samples top (Correct)
+  vector<string> samples_ttbar;
+  samples_ttbar.push_back("TTJets");
+  samples_ttbar.push_back("T-tW");
+  samples_ttbar.push_back("Tbar-tW");
+  samples_ttbar.push_back("SingleT-s-powheg-tauola");
+  samples_ttbar.push_back("SingleTBar-s-powheg-tauola");
+  samples_ttbar.push_back("SingleT-t-powheg-tauola");
+  samples_ttbar.push_back("SingleTBar-t-powheg-tauola");  
+  
+  // Samples G+Jets (Correct)
+  vector<string> samples_gjets;
+  samples_gjets.push_back("GJets-HT-200To400-madgraph");
+  samples_gjets.push_back("GJets-HT-400ToInf-madgraph");
+  
+  // Samples EWK
+  vector<string> samples_ewk;
+  samples_ewk.push_back("EWK-Z2j");
+  samples_ewk.push_back("EWK-Z2jiglep");
+  samples_ewk.push_back("EWK-W2jminus_enu");
+  samples_ewk.push_back("EWK-W2jplus_enu");
+  samples_ewk.push_back("EWK-W2jminus_munu");
+  samples_ewk.push_back("EWK-W2jplus_munu");
+  samples_ewk.push_back("EWK-W2jminus_taunu");
+  samples_ewk.push_back("EWK-W2jplus_taunu");
+
+  // Samples ZJets
+  vector<string> samples_zjets;
+  samples_zjets.push_back("ZJetsToNuNu_100_HT_200");
+  samples_zjets.push_back("ZJetsToNuNu_200_HT_400");
+  samples_zjets.push_back("ZJetsToNuNu_400_HT_inf");
+  samples_zjets.push_back("ZJetsToNuNu_50_HT_100");
+  
+  // Samples DY
+  vector<string> samples_dy;
+  samples_dy.push_back("DYJetsToLL");
+  samples_dy.push_back("DY1JetsToLL");
+  samples_dy.push_back("DY2JetsToLL");
+  samples_dy.push_back("DY3JetsToLL");
+  samples_dy.push_back("DY4JetsToLL");
+  
+  //_________________________________________________________________________________________________
+  // Cuts and histograms to print out to PDF
+  //_________________________________________________________________________________________________
   vector<string> cuts;
   cuts.push_back("HLTMetClean");
   cuts.push_back("JetPair");  
@@ -499,10 +574,11 @@ int main(int argc, char *argv[]){
     } 
   }
   
-  //_________________________________________  
+  //_________________________________________________________________________________________________
+  // Filling table: Cross sections
+  //_________________________________________________________________________________________________
   ICLatexTabular tabXSec = get_tabXSec();
-  
-  cout << "N Samples: " << samples.size() << endl;
+
   for(unsigned i=0; i<samples.size(); i++){
     
     string* s = &(samples[i]);
@@ -516,12 +592,15 @@ int main(int argc, char *argv[]){
   tabXSec.print();
          
   //_____________________________________________________
-  ICLatexTabular tabEvAbsolute      = get_tabEvAbsolute();      // Initialization of absolute event yields table 
-  ICLatexTabular tabEvTrig          = get_tabEvTrig();          // Initialization of trigger weighted eventd
-  ICLatexTabular tabEvWeighted      = get_tabEvWeighted();      // Initialization of weighted event yields table
-  ICLatexTabular tabEvTotalWeighted = get_tabEvTotalWeighted(); // Initialization of merged table
+  ICLatexTabular tQCDCompare_YieldAbsolute = get_tQCDCompare_YieldAbsolute(); // Initialization of absolute event yields table 
+  ICLatexTabular tQCDCompare_YieldTrigWgt  = get_tQCDCompare_YieldTrigWgt();  // Initialization of trigger weighted eventd
+  ICLatexTabular tQCDCompare_YieldXsecWgt  = get_tQCDCompare_YieldXsecWgt();  // Initialization of xsec weighted
  
-  ICLatexTabular tabEvAllTrig          = get_tabEvAllTrig(); // Initialization of merged table
+  ICLatexTabular tQCDInc_YieldAbsolute     = get_tQCDInc_YieldAbsolute();
+  ICLatexTabular tQCDInc_YieldTrigWgt      = get_tQCDInc_YieldTrigWgt();      // Initialization of merged table
+  ICLatexTabular tQCDInc_YieldXsecWgt      = get_tQCDInc_YieldXsecWgt();  // Initialization of xsec weighted
+  
+  ICLatexTabular tabEvTotalWeighted        = get_tabEvTotalWeighted(); // Initialization of merged table
   ICLatexTabular tabEvAllTotalWeighted = get_tabEvAllTotalWeighted(); 
   
   //_________________________________________    
@@ -529,107 +608,180 @@ int main(int argc, char *argv[]){
 
     MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/n_vtx",cuts[i].c_str()));
 
-    // Filling table absolute counts
-    tabEvAbsolute.setCellContent(i+2, 0,cuts[i]);
-    tabEvAbsolute.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->GetEntries());
-    tabEvAbsolute.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->GetEntries());    
-    tabEvAbsolute.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->GetEntries());
-    tabEvAbsolute.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->GetEntries());
+    // QCD Sample Compare: Filling table absolute counts 
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 0,cuts[i]);
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->GetEntries());    
+    tQCDCompare_YieldAbsolute.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->GetEntries());
+    tQCDCompare_YieldAbsolute.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->GetEntries());
 
-    // Filling table weighted events (trigger, pu)
-    tabEvTrig.setCellContent(i+2, 0,cuts[i]);
-    tabEvTrig.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
-    tabEvTrig.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
-    tabEvTrig.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
+    // QCD Sample Compare: Filling table weighted events (trigger, pu)
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 0,cuts[i]);
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
    
-    // Filling table weighted events (trigger, pu) for All QCD Inclusive samples
-    tabEvAllTrig.setCellContent(i+1, 0,cuts[i]);
-    tabEvAllTrig.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->Integral(0,mPlots["QCD-Pt-120to170"]->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->Integral(0,mPlots["QCD-Pt-170to300"]->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->Integral(0,mPlots["QCD-Pt-300to470"]->GetNbinsX()+1));    
-    tabEvAllTrig.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->Integral(0,mPlots["QCD-Pt-470to600"]->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvAllTrig.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    // QCD Inclusive: Filling table absolute counts 
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 0,cuts[i]);
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->GetEntries());
+    tQCDInc_YieldAbsolute.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->GetEntries());
 
-    // Putting in normalization weights
+    // QCD Inclusive: Filling table weighted events (trigger, pu) for All QCD Inclusive samples
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 0,cuts[i]);
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->Integral(0,mPlots["QCD-Pt-120to170"]->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->Integral(0,mPlots["QCD-Pt-170to300"]->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->Integral(0,mPlots["QCD-Pt-300to470"]->GetNbinsX()+1));    
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->Integral(0,mPlots["QCD-Pt-470to600"]->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+
+    // Putting in cross section normalization weights
     mPlots.Scale(wgt);
 
-    TH1F *hIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samplesQCDIncAll);
-    double intQCDIncAll = hIncAll->Integral(0,hIncAll->GetNbinsX()+1);
-   
-    tabEvAllTotalWeighted.setCellContent(i+1,0,cuts[i]);
-    tabEvAllTotalWeighted.setCellContent(i+1,1,intQCDIncAll);
+    // Filling table weighted events (trigger, pu and xsec)
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 0,cuts[i]);
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
     
-    delete hIncAll;
-
-    // Filling table weighted events (trigger, pu and xsec)    
-    tabEvWeighted.setCellContent(i+2, 0,cuts[i]);
-    tabEvWeighted.setCellContent(i+2, 1,mPlots["QCD-Pt-80to120"]     ->Integral(0,mPlots["QCD-Pt-80to120"]     ->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 2,mPlots["QCD_VBF-Pt-80to120"] ->Integral(0,mPlots["QCD_VBF-Pt-80to120"] ->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 3,mPlots["QCD-Pt-120to170"]    ->Integral(0,mPlots["QCD-Pt-120to170"]    ->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 4,mPlots["QCD_VBF-Pt-120to170"]->Integral(0,mPlots["QCD_VBF-Pt-120to170"]->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 5,mPlots["QCD-Pt-170to300"]    ->Integral(0,mPlots["QCD-Pt-170to300"]    ->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 6,mPlots["QCD_VBF-Pt-170to300"]->Integral(0,mPlots["QCD_VBF-Pt-170to300"]->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 7,mPlots["QCD-Pt-300to470"]    ->Integral(0,mPlots["QCD-Pt-300to470"]    ->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2, 8,mPlots["QCD_VBF-Pt-300to470"]->Integral(0,mPlots["QCD_VBF-Pt-300to470"]->GetNbinsX()+1));    
-    tabEvWeighted.setCellContent(i+2, 9,mPlots["QCD-Pt-470to600"]    ->Integral(0,mPlots["QCD-Pt-470to600"]    ->GetNbinsX()+1));
-    tabEvWeighted.setCellContent(i+2,10,mPlots["QCD_VBF-Pt-470to600"]->Integral(0,mPlots["QCD_VBF-Pt-470to600"]->GetNbinsX()+1));    
+    // QCD Inclusive: Filling table weighted events (trigger, pu and xsec)
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 0,cuts[i]);
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 1,mPlots["QCD-Pt-30to50"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 2,mPlots["QCD-Pt-50to80"]    ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 3,mPlots["QCD-Pt-80to120"]   ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 4,mPlots["QCD-Pt-120to170"]  ->Integral(0,mPlots["QCD-Pt-120to170"]->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 5,mPlots["QCD-Pt-170to300"]  ->Integral(0,mPlots["QCD-Pt-170to300"]->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 6,mPlots["QCD-Pt-300to470"]  ->Integral(0,mPlots["QCD-Pt-300to470"]->GetNbinsX()+1));    
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 7,mPlots["QCD-Pt-470to600"]  ->Integral(0,mPlots["QCD-Pt-470to600"]->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 8,mPlots["QCD-Pt-600to800"]  ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 9,mPlots["QCD-Pt-800to1000"] ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,10,mPlots["QCD-Pt-1000to1400"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,11,mPlots["QCD-Pt-1400to1800"]->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,12,mPlots["QCD-Pt-1800"]      ->Integral(0,mPlots["QCD-Pt-80to120"] ->GetNbinsX()+1));    
     
-    TH1F *hInc    = mPlots.getMerged(Form("QCDInc_%s_n_vtx",   cuts[i].c_str()),samplesQCDInc);
-    TH1F *hVBF    = mPlots.getMerged(Form("QCDVBF_%s_n_vtx",   cuts[i].c_str()),samplesQCDVBF);
+    // Merging samples and calculating integral    
+    TH1F *hData   = mPlots.getMerged(Form("Data_%s_n_vtx",  cuts[i].c_str()),samples_data);
+    TH1F *hQCDInc = mPlots.getMerged(Form("QCDInc_%s_n_vtx",cuts[i].c_str()),samplesQCDInc);
+    TH1F *hQCDVBF = mPlots.getMerged(Form("QCDVBF_%s_n_vtx",cuts[i].c_str()),samplesQCDVBF);
+    TH1F *hTTbar  = mPlots.getMerged(Form("TTBar_%s_n_vtx", cuts[i].c_str()),samples_ttbar);
+    TH1F *hWjets  = mPlots.getMerged(Form("Wjets_%s_n_vtx", cuts[i].c_str()),samples_wjets);
+    TH1F *hVV     = mPlots.getMerged(Form("VV_%s_n_vtx",    cuts[i].c_str()),samples_vv);
+    TH1F *hGjets  = mPlots.getMerged(Form("Gjets_%s_n_vtx", cuts[i].c_str()),samples_gjets);
+    TH1F *hEWK    = mPlots.getMerged(Form("EWK_%s_n_vtx",   cuts[i].c_str()),samples_ewk);
+    TH1F *hZjets  = mPlots.getMerged(Form("Zjets_%s_n_vtx", cuts[i].c_str()),samples_zjets);
+    TH1F *hDY     = mPlots.getMerged(Form("DY_%s_n_vtx",    cuts[i].c_str()),samples_dy);
     
-    double intQCDInc    = hInc   ->Integral(0,hInc->GetNbinsX()+1);
-    double intQCDVBF    = hVBF   ->Integral(0,hVBF->GetNbinsX()+1);
+    TH1F *hQCDIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samplesQCDIncAll);
+    TH1F *hQCDVBFAll = mPlots.getMerged(Form("QCDVBFAll_%s_n_vtx",cuts[i].c_str()),samples_qcdvbfextra);
     
-    tabEvTotalWeighted.setCellContent(i+1,0,cuts[i]);
-    tabEvTotalWeighted.setCellContent(i+1,1,intQCDInc);
-    tabEvTotalWeighted.setCellContent(i+1,2,intQCDVBF);
+    tabEvTotalWeighted.setCellContent(i+1, 0,cuts[i]);
+    tabEvTotalWeighted.setCellContent(i+1, 1,hData  ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 2,hQCDInc->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 3,hQCDVBF->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 4,hTTbar ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 5,hWjets ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 6,hVV    ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 7,hGjets ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 8,hEWK   ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1, 9,hZjets ->Integral());
+    tabEvTotalWeighted.setCellContent(i+1,10,hDY    ->Integral());
     
-    delete hInc;
-    delete hVBF;
+    double mcTotal = hTTbar ->Integral()
+                    +hWjets ->Integral()
+		    +hVV    ->Integral()
+                    +hGjets ->Integral()
+                    +hEWK   ->Integral()
+                    +hZjets ->Integral()
+                    +hDY    ->Integral();
+		    
+		    
+    tabEvAllTotalWeighted.setCellContent(i+1, 0,cuts[i]);
+    tabEvAllTotalWeighted.setCellContent(i+1, 1,hQCDIncAll->Integral());
+    tabEvAllTotalWeighted.setCellContent(i+1, 2,hQCDVBFAll->Integral());
+    tabEvAllTotalWeighted.setCellContent(i+1, 3,hData     ->Integral());
+		    
+    tabEvAllTotalWeighted.setCellContent(i+1,11,mcTotal);
+    
+    delete hData;
+    delete hQCDInc;
+    delete hQCDVBF;
+    delete hTTbar;
+    delete hWjets;
+    delete hVV;
+    delete hGjets;
+    delete hEWK;
+    delete hZjets;
+    delete hDY;
   }
   
   // Fixing the underscore
-  tabEvAbsolute        .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-  tabEvTrig            .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-  tabEvWeighted        .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-  tabEvTotalWeighted   .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
-  tabEvAllTrig         .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
-  tabEvAllTotalWeighted.setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDCompare_YieldAbsolute.setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDCompare_YieldTrigWgt .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDCompare_YieldXsecWgt .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDInc_YieldAbsolute    .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDInc_YieldTrigWgt     .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDInc_YieldXsecWgt     .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
 
-  tabEvWeighted.saveAs("table_EvWeighted.tex");
-  tabEvWeighted.print();
+  tabEvTotalWeighted       .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tabEvAllTotalWeighted    .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
 
-  tabEvTrig.saveAs("table_EvTrig.tex");
-  tabEvTrig.print();
+  tQCDCompare_YieldAbsolute.saveAs("tQCDCompare_YieldAbsolute.tex");
+  tQCDCompare_YieldAbsolute.print();
   
-  tabEvAbsolute.saveAs("table_EvAbsolute.tex");
-  tabEvWeighted.print();
+  tQCDCompare_YieldTrigWgt.saveAs("tQCDCompare_YieldTrigWgt.tex");
+  tQCDCompare_YieldTrigWgt.print();
+  
+  tQCDCompare_YieldXsecWgt.saveAs("tQCDCompare_YieldXsecWgt.tex");
+  tQCDCompare_YieldXsecWgt.print();
+
+  tQCDInc_YieldAbsolute.saveAs("tQCDInc_YieldAbsolute.tex");
+  tQCDInc_YieldAbsolute.print();
+  
+  tQCDInc_YieldTrigWgt.saveAs("tQCDInc_YieldTrigWgt.tex");
+  tQCDInc_YieldTrigWgt.print();
+  
+  tQCDInc_YieldXsecWgt.saveAs("tQCDInc_YieldXsecWgt.tex");
+  tQCDInc_YieldXsecWgt.print();
   
   tabEvTotalWeighted.saveAs("table_EvTotalWeighted.tex");
   tabEvTotalWeighted.print();
 
-  tabEvAllTrig.saveAs("table_EvAllTrig.tex");
-  tabEvAllTrig.print();
 
   tabEvAllTotalWeighted.saveAs("table_EvAllTotalWeighted.tex");
   tabEvAllTotalWeighted.print();
@@ -656,175 +808,259 @@ ICLatexTabular get_tabXSec(){
 }
 
 //_____________________________________________________
-ICLatexTabular get_tabEvAbsolute(){
+ICLatexTabular get_tQCDCompare_YieldAbsolute(){
 
-  ICLatexTabular tabEvAbsolute(9,11);
-  tabEvAbsolute.setTabularPrecision(".0");
+  ICLatexTabular tQCDCompare_YieldAbsolute(9,11);
+  tQCDCompare_YieldAbsolute.setTabularPrecision(".0");
   
-  tabEvAbsolute.setColumnDecorationBefore( 0,"|");
-  tabEvAbsolute.setColumnDecorationAfter ( 0,"||");
-  tabEvAbsolute.setColumnDecorationAfter ( 2,"||");
-  tabEvAbsolute.setColumnDecorationAfter ( 4,"||");
-  tabEvAbsolute.setColumnDecorationAfter ( 6,"||");
-  tabEvAbsolute.setColumnDecorationAfter ( 8,"||");
-  tabEvAbsolute.setColumnDecorationAfter (10,"|");
+  tQCDCompare_YieldAbsolute.setColumnDecorationBefore( 0,"|");
+  tQCDCompare_YieldAbsolute.setColumnDecorationAfter ( 0,"||");
+  tQCDCompare_YieldAbsolute.setColumnDecorationAfter ( 2,"||");
+  tQCDCompare_YieldAbsolute.setColumnDecorationAfter ( 4,"||");
+  tQCDCompare_YieldAbsolute.setColumnDecorationAfter ( 6,"||");
+  tQCDCompare_YieldAbsolute.setColumnDecorationAfter ( 8,"||");
+  tQCDCompare_YieldAbsolute.setColumnDecorationAfter (10,"|");
   
-  tabEvAbsolute.setRowDecorationBefore(0,"\\hline");
-  tabEvAbsolute.setRowDecorationBefore(1,"\\hline");
-  tabEvAbsolute.setRowDecorationBefore(2,"\\hline \\hline");
-  tabEvAbsolute.setRowDecorationAfter (8,"\\hline");
+  tQCDCompare_YieldAbsolute.setRowDecorationBefore(0,"\\hline");
+  tQCDCompare_YieldAbsolute.setRowDecorationBefore(1,"\\hline");
+  tQCDCompare_YieldAbsolute.setRowDecorationBefore(2,"\\hline \\hline");
+  tQCDCompare_YieldAbsolute.setRowDecorationAfter (8,"\\hline");
   
-  tabEvAbsolute.setCellContent(1, 0,"Sample");
-  tabEvAbsolute.setCellContent(0, 1, "80to120"); tabEvAbsolute.setCellContent(1, 1,"Inc");
-  tabEvAbsolute.setCellContent(0, 2, "80to120"); tabEvAbsolute.setCellContent(1, 2,"VBF");
-  tabEvAbsolute.setCellContent(0, 3,"120to170"); tabEvAbsolute.setCellContent(1, 3,"Inc");
-  tabEvAbsolute.setCellContent(0, 4,"120to170"); tabEvAbsolute.setCellContent(1, 4,"VBF");
-  tabEvAbsolute.setCellContent(0, 5,"170to300"); tabEvAbsolute.setCellContent(1, 5,"Inc");
-  tabEvAbsolute.setCellContent(0, 6,"170to300"); tabEvAbsolute.setCellContent(1, 6,"VBF");
-  tabEvAbsolute.setCellContent(0, 7,"300to470"); tabEvAbsolute.setCellContent(1, 7,"Inc");
-  tabEvAbsolute.setCellContent(0, 8,"300to470"); tabEvAbsolute.setCellContent(1, 8,"VBF");
-  tabEvAbsolute.setCellContent(0, 9,"470to600"); tabEvAbsolute.setCellContent(1, 9,"Inc");
-  tabEvAbsolute.setCellContent(0,10,"470to600"); tabEvAbsolute.setCellContent(1,10,"VBF");
+  tQCDCompare_YieldAbsolute.setCellContent(1, 0,"Sample");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 1, "80-120"); tQCDCompare_YieldAbsolute.setCellContent(1, 1,"Inc");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 2, "80-120"); tQCDCompare_YieldAbsolute.setCellContent(1, 2,"VBF");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 3,"120-170"); tQCDCompare_YieldAbsolute.setCellContent(1, 3,"Inc");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 4,"120-170"); tQCDCompare_YieldAbsolute.setCellContent(1, 4,"VBF");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 5,"170-300"); tQCDCompare_YieldAbsolute.setCellContent(1, 5,"Inc");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 6,"170-300"); tQCDCompare_YieldAbsolute.setCellContent(1, 6,"VBF");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 7,"300-470"); tQCDCompare_YieldAbsolute.setCellContent(1, 7,"Inc");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 8,"300-470"); tQCDCompare_YieldAbsolute.setCellContent(1, 8,"VBF");
+  tQCDCompare_YieldAbsolute.setCellContent(0, 9,"470-600"); tQCDCompare_YieldAbsolute.setCellContent(1, 9,"Inc");
+  tQCDCompare_YieldAbsolute.setCellContent(0,10,"470-600"); tQCDCompare_YieldAbsolute.setCellContent(1,10,"VBF");
  
-  return tabEvAbsolute;
+  return tQCDCompare_YieldAbsolute;
 }
 
 //_____________________________________________________
-ICLatexTabular get_tabEvTrig(){
+ICLatexTabular get_tQCDCompare_YieldTrigWgt(){
 
-  ICLatexTabular tabEvTrig(9,11);
-  tabEvTrig.setTabularPrecision(".2");
+  ICLatexTabular tQCDCompare_YieldTrigWgt(9,11);
+  tQCDCompare_YieldTrigWgt.setTabularPrecision(".2");
   
-  tabEvTrig.setColumnDecorationBefore( 0,"|");
-  tabEvTrig.setColumnDecorationAfter ( 0,"||");
-  tabEvTrig.setColumnDecorationAfter ( 2,"||");
-  tabEvTrig.setColumnDecorationAfter ( 4,"||");
-  tabEvTrig.setColumnDecorationAfter ( 6,"||");
-  tabEvTrig.setColumnDecorationAfter ( 8,"||");
-  tabEvTrig.setColumnDecorationAfter (10,"|");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationBefore( 0,"|");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationAfter ( 0,"||");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationAfter ( 2,"||");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationAfter ( 4,"||");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationAfter ( 6,"||");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationAfter ( 8,"||");
+  tQCDCompare_YieldTrigWgt.setColumnDecorationAfter (10,"|");
   
-  tabEvTrig.setRowDecorationBefore(0,"\\hline");
-  tabEvTrig.setRowDecorationBefore(1,"\\hline");
-  tabEvTrig.setRowDecorationBefore(2,"\\hline \\hline");
-  tabEvTrig.setRowDecorationAfter (8,"\\hline");
+  tQCDCompare_YieldTrigWgt.setRowDecorationBefore(0,"\\hline");
+  tQCDCompare_YieldTrigWgt.setRowDecorationBefore(1,"\\hline");
+  tQCDCompare_YieldTrigWgt.setRowDecorationBefore(2,"\\hline \\hline");
+  tQCDCompare_YieldTrigWgt.setRowDecorationAfter (8,"\\hline");
   
-  tabEvTrig.setCellContent(1, 0,"Sample");
-  tabEvTrig.setCellContent(0, 1, "80to120"); tabEvTrig.setCellContent(1, 1,"Inc");
-  tabEvTrig.setCellContent(0, 2, "80to120"); tabEvTrig.setCellContent(1, 2,"VBF");
-  tabEvTrig.setCellContent(0, 3,"120to170"); tabEvTrig.setCellContent(1, 3,"Inc");
-  tabEvTrig.setCellContent(0, 4,"120to170"); tabEvTrig.setCellContent(1, 4,"VBF");
-  tabEvTrig.setCellContent(0, 5,"170to300"); tabEvTrig.setCellContent(1, 5,"Inc");
-  tabEvTrig.setCellContent(0, 6,"170to300"); tabEvTrig.setCellContent(1, 6,"VBF");
-  tabEvTrig.setCellContent(0, 7,"300to470"); tabEvTrig.setCellContent(1, 7,"Inc");
-  tabEvTrig.setCellContent(0, 8,"300to470"); tabEvTrig.setCellContent(1, 8,"VBF");
-  tabEvTrig.setCellContent(0, 9,"470to600"); tabEvTrig.setCellContent(1, 9,"Inc");
-  tabEvTrig.setCellContent(0,10,"470to600"); tabEvTrig.setCellContent(1,10,"VBF");
+  tQCDCompare_YieldTrigWgt.setCellContent(1, 0,"Sample");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 1, "80-120"); tQCDCompare_YieldTrigWgt.setCellContent(1, 1,"Inc");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 2, "80-120"); tQCDCompare_YieldTrigWgt.setCellContent(1, 2,"VBF");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 3,"120-170"); tQCDCompare_YieldTrigWgt.setCellContent(1, 3,"Inc");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 4,"120-170"); tQCDCompare_YieldTrigWgt.setCellContent(1, 4,"VBF");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 5,"170-300"); tQCDCompare_YieldTrigWgt.setCellContent(1, 5,"Inc");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 6,"170-300"); tQCDCompare_YieldTrigWgt.setCellContent(1, 6,"VBF");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 7,"300-470"); tQCDCompare_YieldTrigWgt.setCellContent(1, 7,"Inc");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 8,"300-470"); tQCDCompare_YieldTrigWgt.setCellContent(1, 8,"VBF");
+  tQCDCompare_YieldTrigWgt.setCellContent(0, 9,"470-600"); tQCDCompare_YieldTrigWgt.setCellContent(1, 9,"Inc");
+  tQCDCompare_YieldTrigWgt.setCellContent(0,10,"470-600"); tQCDCompare_YieldTrigWgt.setCellContent(1,10,"VBF");
  
-  return tabEvTrig;
+  return tQCDCompare_YieldTrigWgt;
 }
   
 //_____________________________________________________
-ICLatexTabular get_tabEvWeighted(){
+ICLatexTabular get_tQCDCompare_YieldXsecWgt(){
   
-  ICLatexTabular tabEvWeighted(9,11);
-  tabEvWeighted.setTabularPrecision(".2");
+  ICLatexTabular tQCDCompare_YieldXsecWgt(9,11);
+  tQCDCompare_YieldXsecWgt.setTabularPrecision(".2");
   
-  tabEvWeighted.setColumnDecorationBefore( 0,"|");
-  tabEvWeighted.setColumnDecorationAfter ( 0,"||");
-  tabEvWeighted.setColumnDecorationAfter ( 2,"||");
-  tabEvWeighted.setColumnDecorationAfter ( 4,"||");
-  tabEvWeighted.setColumnDecorationAfter ( 6,"||");
-  tabEvWeighted.setColumnDecorationAfter ( 8,"||");
-  tabEvWeighted.setColumnDecorationAfter (10,"|");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationBefore( 0,"|");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationAfter ( 0,"||");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationAfter ( 2,"||");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationAfter ( 4,"||");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationAfter ( 6,"||");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationAfter ( 8,"||");
+  tQCDCompare_YieldXsecWgt.setColumnDecorationAfter (10,"|");
   
-  tabEvWeighted.setRowDecorationBefore(0,"\\hline");
-  tabEvWeighted.setRowDecorationBefore(1,"\\hline");
-  tabEvWeighted.setRowDecorationBefore(2,"\\hline \\hline");
-  tabEvWeighted.setRowDecorationAfter (8,"\\hline");
+  tQCDCompare_YieldXsecWgt.setRowDecorationBefore(0,"\\hline");
+  tQCDCompare_YieldXsecWgt.setRowDecorationBefore(1,"\\hline");
+  tQCDCompare_YieldXsecWgt.setRowDecorationBefore(2,"\\hline \\hline");
+  tQCDCompare_YieldXsecWgt.setRowDecorationAfter (8,"\\hline");
   
-  tabEvWeighted.setCellContent(1, 0,"Sample");
-  tabEvWeighted.setCellContent(0, 1, "80to120"); tabEvWeighted.setCellContent(1, 1,"Inc");
-  tabEvWeighted.setCellContent(0, 2, "80to120"); tabEvWeighted.setCellContent(1, 2,"VBF");
-  tabEvWeighted.setCellContent(0, 3,"120to170"); tabEvWeighted.setCellContent(1, 3,"Inc");
-  tabEvWeighted.setCellContent(0, 4,"120to170"); tabEvWeighted.setCellContent(1, 4,"VBF");
-  tabEvWeighted.setCellContent(0, 5,"170to300"); tabEvWeighted.setCellContent(1, 5,"Inc");
-  tabEvWeighted.setCellContent(0, 6,"170to300"); tabEvWeighted.setCellContent(1, 6,"VBF");
-  tabEvWeighted.setCellContent(0, 7,"300to470"); tabEvWeighted.setCellContent(1, 7,"Inc");
-  tabEvWeighted.setCellContent(0, 8,"300to470"); tabEvWeighted.setCellContent(1, 8,"VBF");
-  tabEvWeighted.setCellContent(0, 9,"470to600"); tabEvWeighted.setCellContent(1, 9,"Inc");
-  tabEvWeighted.setCellContent(0,10,"470to600"); tabEvWeighted.setCellContent(1,10,"VBF");
+  tQCDCompare_YieldXsecWgt.setCellContent(1, 0,"Sample");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 1, "80-120"); tQCDCompare_YieldXsecWgt.setCellContent(1, 1,"Inc");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 2, "80-120"); tQCDCompare_YieldXsecWgt.setCellContent(1, 2,"VBF");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 3,"120-170"); tQCDCompare_YieldXsecWgt.setCellContent(1, 3,"Inc");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 4,"120-170"); tQCDCompare_YieldXsecWgt.setCellContent(1, 4,"VBF");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 5,"170-300"); tQCDCompare_YieldXsecWgt.setCellContent(1, 5,"Inc");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 6,"170-300"); tQCDCompare_YieldXsecWgt.setCellContent(1, 6,"VBF");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 7,"300-470"); tQCDCompare_YieldXsecWgt.setCellContent(1, 7,"Inc");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 8,"300-470"); tQCDCompare_YieldXsecWgt.setCellContent(1, 8,"VBF");
+  tQCDCompare_YieldXsecWgt.setCellContent(0, 9,"470-600"); tQCDCompare_YieldXsecWgt.setCellContent(1, 9,"Inc");
+  tQCDCompare_YieldXsecWgt.setCellContent(0,10,"470-600"); tQCDCompare_YieldXsecWgt.setCellContent(1,10,"VBF");
   
-  return tabEvWeighted;
+  return tQCDCompare_YieldXsecWgt;
 }
   
 //_____________________________________________________
 ICLatexTabular get_tabEvTotalWeighted(){
   
-  ICLatexTabular tabEvTotalWeighted(8,3);
+  ICLatexTabular tabEvTotalWeighted(8,12);
   tabEvTotalWeighted.setTabularPrecision(".2");
   
-  tabEvTotalWeighted.setColumnDecorationBefore( 0,"|");
-  tabEvTotalWeighted.setColumnDecorationAfter ( 0,"||");
-  tabEvTotalWeighted.setColumnDecorationAfter ( 2,"|");
+  tabEvTotalWeighted.setTabularColumnDecoration("|");
+  tabEvTotalWeighted.setColumnDecorationAfter  ( 0,"||");
+  tabEvTotalWeighted.setColumnDecorationAfter  (10,"||");
   
   tabEvTotalWeighted.setRowDecorationBefore(0,"\\hline");
   tabEvTotalWeighted.setRowDecorationBefore(1,"\\hline \\hline");
   tabEvTotalWeighted.setRowDecorationAfter (7,"\\hline");
   
   tabEvTotalWeighted.setCellContent(0, 0,"Sample");
-  tabEvTotalWeighted.setCellContent(0, 1,"Inc");
-  tabEvTotalWeighted.setCellContent(0, 2,"VBF");
+  tabEvTotalWeighted.setCellContent(0, 1,"Data");
+  tabEvTotalWeighted.setCellContent(0, 2,"QCD Inc");
+  tabEvTotalWeighted.setCellContent(0, 3,"QCD VBF");
+  tabEvTotalWeighted.setCellContent(0, 4,"$t\\bar{t}$");
+  tabEvTotalWeighted.setCellContent(0, 5,"W+Jets");
+  tabEvTotalWeighted.setCellContent(0, 6,"VV");
+  tabEvTotalWeighted.setCellContent(0, 7,"G+Jets");
+  tabEvTotalWeighted.setCellContent(0, 8,"EWK V+2j");
+  tabEvTotalWeighted.setCellContent(0, 9,"Z+Jets");
+  tabEvTotalWeighted.setCellContent(0,10,"DY");
+  tabEvTotalWeighted.setCellContent(0,11,"MC Total");
   
   return tabEvTotalWeighted;
 }
 
 //_____________________________________________________
-ICLatexTabular get_tabEvAllTrig(){
+ICLatexTabular get_tQCDInc_YieldAbsolute(){
+
+  ICLatexTabular tQCDInc_YieldAbsolute(8,13);
+  tQCDInc_YieldAbsolute.setTabularPrecision(".0");
   
-  ICLatexTabular tabEvAllTrig(8,13);
-  tabEvAllTrig.setTabularPrecision(".2");
   
-  tabEvAllTrig.setTabularColumnDecoration("|");
-  tabEvAllTrig.setColumnDecorationAfter(0,"||");
   
-  tabEvAllTrig.setRowDecorationBefore(0,"\\hline");
-  tabEvAllTrig.setRowDecorationBefore(1,"\\hline \\hline");
-  tabEvAllTrig.setRowDecorationAfter (7,"\\hline");
+  tQCDInc_YieldAbsolute.setTabularColumnDecoration("|");
+  tQCDInc_YieldAbsolute.setColumnDecorationAfter( 0,"||");
   
-  tabEvAllTrig.setCellContent(0, 0,    "Sample");
-  tabEvAllTrig.setCellContent(0, 1,    "30to50");
-  tabEvAllTrig.setCellContent(0, 2,    "50to80");  
-  tabEvAllTrig.setCellContent(0, 3,   "80to120");
-  tabEvAllTrig.setCellContent(0, 4,"  120to170");
-  tabEvAllTrig.setCellContent(0, 5,"  170to300");
-  tabEvAllTrig.setCellContent(0, 6,"  300to470");
-  tabEvAllTrig.setCellContent(0, 7,"  470to600"); 
-  tabEvAllTrig.setCellContent(0, 8,"  600to800"); 
-  tabEvAllTrig.setCellContent(0, 9," 800to1000"); 
-  tabEvAllTrig.setCellContent(0,10,"1000to1400");
-  tabEvAllTrig.setCellContent(0,11,"1400to1800");
-  tabEvAllTrig.setCellContent(0,12,      "1800");
+  tQCDInc_YieldAbsolute.setRowDecorationBefore(0,"\\hline");
+  tQCDInc_YieldAbsolute.setRowDecorationBefore(1,"\\hline \\hline");
+  tQCDInc_YieldAbsolute.setRowDecorationAfter (7,"\\hline");
   
-  return tabEvAllTrig;
+  tQCDInc_YieldAbsolute.setCellContent(1, 0,"Sample");
+  tQCDInc_YieldAbsolute.setCellContent(0, 1, "80-120");
+  tQCDInc_YieldAbsolute.setCellContent(0, 2, "80-120");
+  tQCDInc_YieldAbsolute.setCellContent(0, 3,"120-170");
+  tQCDInc_YieldAbsolute.setCellContent(0, 4,"120-170");
+  tQCDInc_YieldAbsolute.setCellContent(0, 5,"170-300");
+  tQCDInc_YieldAbsolute.setCellContent(0, 6,"170-300");
+  tQCDInc_YieldAbsolute.setCellContent(0, 7,"300-470");
+  tQCDInc_YieldAbsolute.setCellContent(0, 8,"300-470");
+  tQCDInc_YieldAbsolute.setCellContent(0, 9,"470-600");
+  tQCDInc_YieldAbsolute.setCellContent(0,10,"470-600");
+ 
+  tQCDInc_YieldAbsolute.setCellContent(0, 0,   "Sample");
+  tQCDInc_YieldAbsolute.setCellContent(0, 1,    "30-50");
+  tQCDInc_YieldAbsolute.setCellContent(0, 2,    "50-80");  
+  tQCDInc_YieldAbsolute.setCellContent(0, 3,   "80-120");
+  tQCDInc_YieldAbsolute.setCellContent(0, 4,  "120-170");
+  tQCDInc_YieldAbsolute.setCellContent(0, 5,  "170-300");
+  tQCDInc_YieldAbsolute.setCellContent(0, 6,  "300-470");
+  tQCDInc_YieldAbsolute.setCellContent(0, 7,  "470-600"); 
+  tQCDInc_YieldAbsolute.setCellContent(0, 8,  "600-800"); 
+  tQCDInc_YieldAbsolute.setCellContent(0, 9, "800-1000"); 
+  tQCDInc_YieldAbsolute.setCellContent(0,10,"1000-1400");
+  tQCDInc_YieldAbsolute.setCellContent(0,11,"1400-1800");
+  tQCDInc_YieldAbsolute.setCellContent(0,12,     "1800");
   
+  return tQCDInc_YieldAbsolute;
+}
+
+//_____________________________________________________
+ICLatexTabular get_tQCDInc_YieldTrigWgt(){
+  
+  ICLatexTabular tQCDInc_YieldTrigWgt(8,13);
+  tQCDInc_YieldTrigWgt.setTabularPrecision(".2");
+  
+  tQCDInc_YieldTrigWgt.setTabularColumnDecoration("|");
+  tQCDInc_YieldTrigWgt.setColumnDecorationAfter(0,"||");
+  
+  tQCDInc_YieldTrigWgt.setRowDecorationBefore(0,"\\hline");
+  tQCDInc_YieldTrigWgt.setRowDecorationBefore(1,"\\hline \\hline");
+  tQCDInc_YieldTrigWgt.setRowDecorationAfter (7,"\\hline");
+  
+  tQCDInc_YieldTrigWgt.setCellContent(0, 0,   "Sample");
+  tQCDInc_YieldTrigWgt.setCellContent(0, 1,    "30-50");
+  tQCDInc_YieldTrigWgt.setCellContent(0, 2,    "50-80");  
+  tQCDInc_YieldTrigWgt.setCellContent(0, 3,   "80-120");
+  tQCDInc_YieldTrigWgt.setCellContent(0, 4,  "120-170");
+  tQCDInc_YieldTrigWgt.setCellContent(0, 5,  "170-300");
+  tQCDInc_YieldTrigWgt.setCellContent(0, 6,  "300-470");
+  tQCDInc_YieldTrigWgt.setCellContent(0, 7,  "470-600"); 
+  tQCDInc_YieldTrigWgt.setCellContent(0, 8,  "600-800"); 
+  tQCDInc_YieldTrigWgt.setCellContent(0, 9, "800-1000"); 
+  tQCDInc_YieldTrigWgt.setCellContent(0,10,"1000-1400");
+  tQCDInc_YieldTrigWgt.setCellContent(0,11,"1400-1800");
+  tQCDInc_YieldTrigWgt.setCellContent(0,12,     "1800");
+  
+  return tQCDInc_YieldTrigWgt;
+  
+}
+
+ICLatexTabular get_tQCDInc_YieldXsecWgt(){
+  
+  ICLatexTabular tQCDInc_YieldXsecWgt(8,13);
+  tQCDInc_YieldXsecWgt.setTabularPrecision(".2");
+  
+  tQCDInc_YieldXsecWgt.setTabularColumnDecoration("|");
+  tQCDInc_YieldXsecWgt.setColumnDecorationAfter(0,"||");
+  
+  tQCDInc_YieldXsecWgt.setRowDecorationBefore(0,"\\hline");
+  tQCDInc_YieldXsecWgt.setRowDecorationBefore(1,"\\hline \\hline");
+  tQCDInc_YieldXsecWgt.setRowDecorationAfter (7,"\\hline");
+  
+  tQCDInc_YieldXsecWgt.setCellContent(0, 0,   "Sample");
+  tQCDInc_YieldXsecWgt.setCellContent(0, 1,    "30-50");
+  tQCDInc_YieldXsecWgt.setCellContent(0, 2,    "50-80");  
+  tQCDInc_YieldXsecWgt.setCellContent(0, 3,   "80-120");
+  tQCDInc_YieldXsecWgt.setCellContent(0, 4,  "120-170");
+  tQCDInc_YieldXsecWgt.setCellContent(0, 5,  "170-300");
+  tQCDInc_YieldXsecWgt.setCellContent(0, 6,  "300-470");
+  tQCDInc_YieldXsecWgt.setCellContent(0, 7,  "470-600"); 
+  tQCDInc_YieldXsecWgt.setCellContent(0, 8,  "600-800"); 
+  tQCDInc_YieldXsecWgt.setCellContent(0, 9, "800-1000"); 
+  tQCDInc_YieldXsecWgt.setCellContent(0,10,"1000-1400");
+  tQCDInc_YieldXsecWgt.setCellContent(0,11,"1400-1800");
+  tQCDInc_YieldXsecWgt.setCellContent(0,12,     "1800");
+  
+  return tQCDInc_YieldXsecWgt;
 }
 
 //_____________________________________________________
 ICLatexTabular get_tabEvAllTotalWeighted(){
   
-  ICLatexTabular tabEvTotalWeighted(8,3);
+  ICLatexTabular tabEvTotalWeighted(8,4);
   tabEvTotalWeighted.setTabularPrecision(".2");
   
-  tabEvTotalWeighted.setColumnDecorationBefore( 0,"|");
-  tabEvTotalWeighted.setColumnDecorationAfter ( 0,"||");
-  tabEvTotalWeighted.setColumnDecorationAfter ( 2,"|");
+  tabEvTotalWeighted.setTabularColumnDecoration("|");
+  tabEvTotalWeighted.setColumnDecorationAfter  (0,"||");
+  tabEvTotalWeighted.setColumnDecorationAfter  (2,"||");
   
   tabEvTotalWeighted.setRowDecorationBefore(0,"\\hline");
   tabEvTotalWeighted.setRowDecorationBefore(1,"\\hline \\hline");
   tabEvTotalWeighted.setRowDecorationAfter (7,"\\hline");
   
   tabEvTotalWeighted.setCellContent(0, 0,"Sample");
-  tabEvTotalWeighted.setCellContent(0, 1,"Inc");
+  tabEvTotalWeighted.setCellContent(0, 1,"QCD Inc");
+  tabEvTotalWeighted.setCellContent(0, 2,"QCD VBF");
+  tabEvTotalWeighted.setCellContent(0, 3,"Data");
   
   return tabEvTotalWeighted;
 }
