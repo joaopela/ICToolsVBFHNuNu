@@ -71,13 +71,19 @@ Weights used on the normalization of each monte carlo sample to the total lumino
 
 \begin{table}[!h]
 \centering
-\resizebox{\linewidth}{!}{\input{table_EvAllTrig}}
+\resizebox{\linewidth}{!}{\input{tQCDInc_YieldAbsolute}}
 \caption{}
 \end{table}
 
 \begin{table}[!h]
 \centering
-\input{table_EvAllTotalWeighted}
+\resizebox{\linewidth}{!}{\input{tQCDInc_YieldTrigWgt}}
+\caption{}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{\input{tQCDInc_YieldXsecWgt}}
 \caption{}
 \end{table}
 
@@ -86,27 +92,36 @@ Weights used on the normalization of each monte carlo sample to the total lumino
 
 \begin{table}[!h]
 \centering
-\resizebox{\linewidth}{!}{\input{table_EvAbsolute}}
+\resizebox{\linewidth}{!}{\input{tQCDCompare_YieldAbsolute}}
 \caption{Number of entries for each QCD $p_T$ hat for after several cuts in current cut flow}
 \end{table}
 
 \begin{table}[!h]
 \centering
-\resizebox{\linewidth}{!}{\input{table_EvTrig}}
+\resizebox{\linewidth}{!}{\input{tQCDCompare_YieldTrigWgt}}
 \caption{Weighted (only trigger, PU) number of events for each QCD $p_T$ hat for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
 \end{table}
 
 \begin{table}[!h]
 \centering
-\resizebox{\linewidth}{!}{\input{table_EvWeighted}}
+\resizebox{\linewidth}{!}{\input{tQCDCompare_YieldXsecWgt}}
 \caption{Weighted (only trigger, PU, cross section) number of events for each QCD $p_T$ hat for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
+\end{table}
+
+\subsection{Comparison summary tables}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{\input{table_EvTotalWeighted}}
+\caption{Weighted number of events for summed QCD $p_T$ hats for 80 to 600 $[GeV]$ for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
 \end{table}
 
 \begin{table}[!h]
 \centering
-\input{table_EvTotalWeighted}
-\caption{Weighted number of events for summed QCD $p_T$ hats for 80 to 600 $[GeV]$ for after several cuts in current cut flow. Weights include cross section normalization and event by event weights.}
+\input{table_EvAllTotalWeighted}
+\caption{}
 \end{table}
+
 
 \section{Plots}
 
