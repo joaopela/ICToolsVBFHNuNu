@@ -20,6 +20,9 @@
 
 using namespace std;
 
+double getIntegralFullRange(TH1F* plot);
+double getIntegralFullRange(TH1D* plot);
+
 ICLatexTabular get_tabXSec();
 ICLatexTabular get_tQCDCompare_YieldAbsolute();
 ICLatexTabular get_tQCDCompare_YieldTrigWgt();
@@ -29,8 +32,11 @@ ICLatexTabular get_tQCDInc_YieldAbsolute();
 ICLatexTabular get_tQCDInc_YieldTrigWgt();
 ICLatexTabular get_tQCDInc_YieldXsecWgt();
 
-ICLatexTabular get_tabEvTotalWeighted();
-ICLatexTabular get_tabEvAllTotalWeighted();
+ICLatexTabular get_tMCSummary_YieldAbsolute();
+ICLatexTabular get_tMCSummary_YieldXsecWgt();
+ICLatexTabular get_tQCDSummary_YieldWeighted();
+
+
 
 int main(int argc, char *argv[]){
 
@@ -345,6 +351,7 @@ int main(int argc, char *argv[]){
   
   events["MC_WGamma"] =  4772358;
     
+  // 
   map<string,double> wgt; 
   for(map<string,TFile*>::iterator i=files.begin(); i!=files.end(); i++){
     
@@ -364,33 +371,33 @@ int main(int argc, char *argv[]){
 //_________________________________________________________________________________________________    
   // Samples to add
   //_________________________________________________________________________________________________
-  vector<string> samplesQCDInc;
-  samplesQCDInc.push_back("MC_QCD-Pt-80to120-pythia6"); 
-  samplesQCDInc.push_back("MC_QCD-Pt-120to170-pythia6");
-  samplesQCDInc.push_back("MC_QCD-Pt-170to300-pythia6");  
-  samplesQCDInc.push_back("MC_QCD-Pt-300to470-pythia6");  
-  samplesQCDInc.push_back("MC_QCD-Pt-470to600-pythia6");
+  vector<string> samples_QCDIncCompare;
+  samples_QCDIncCompare.push_back("MC_QCD-Pt-80to120-pythia6"); 
+  samples_QCDIncCompare.push_back("MC_QCD-Pt-120to170-pythia6");
+  samples_QCDIncCompare.push_back("MC_QCD-Pt-170to300-pythia6");  
+  samples_QCDIncCompare.push_back("MC_QCD-Pt-300to470-pythia6");  
+  samples_QCDIncCompare.push_back("MC_QCD-Pt-470to600-pythia6");
   
-  vector<string> samplesQCDVBF;
-  samplesQCDVBF.push_back("MC_QCD-Pt-80to120_VBF-MET40");
-  samplesQCDVBF.push_back("MC_QCD-Pt-120to170_VBF-MET40");
-  samplesQCDVBF.push_back("MC_QCD-Pt-170to300_VBF-MET40");
-  samplesQCDVBF.push_back("MC_QCD-Pt-300to470_VBF-MET40");
-  samplesQCDVBF.push_back("MC_QCD-Pt-470to600_VBF-MET40");
+  vector<string> samples_QCDVbfCompare;
+  samples_QCDVbfCompare.push_back("MC_QCD-Pt-80to120_VBF-MET40");
+  samples_QCDVbfCompare.push_back("MC_QCD-Pt-120to170_VBF-MET40");
+  samples_QCDVbfCompare.push_back("MC_QCD-Pt-170to300_VBF-MET40");
+  samples_QCDVbfCompare.push_back("MC_QCD-Pt-300to470_VBF-MET40");
+  samples_QCDVbfCompare.push_back("MC_QCD-Pt-470to600_VBF-MET40");
 
-  vector<string> samplesQCDIncAll;
-  samplesQCDIncAll.push_back("MC_QCD-Pt-30to50-pythia6");
-  samplesQCDIncAll.push_back("MC_QCD-Pt-50to80-pythia6");    
-  samplesQCDIncAll.push_back("MC_QCD-Pt-80to120-pythia6");   
-  samplesQCDIncAll.push_back("MC_QCD-Pt-120to170-pythia6");  
-  samplesQCDIncAll.push_back("MC_QCD-Pt-170to300-pythia6"); 
-  samplesQCDIncAll.push_back("MC_QCD-Pt-300to470-pythia6"); 
-  samplesQCDIncAll.push_back("MC_QCD-Pt-470to600-pythia6"); 
-  samplesQCDIncAll.push_back("MC_QCD-Pt-600to800-pythia6"); 
-  samplesQCDIncAll.push_back("MC_QCD-Pt-800to1000-pythia6"); 
-  samplesQCDIncAll.push_back("MC_QCD-Pt-1000to1400-pythia6");
-  samplesQCDIncAll.push_back("MC_QCD-Pt-1400to1800-pythia6");
-  samplesQCDIncAll.push_back("MC_QCD-Pt-1800-pythia6");    
+  vector<string> samples_qcdinc;
+  samples_qcdinc.push_back("MC_QCD-Pt-30to50-pythia6");
+  samples_qcdinc.push_back("MC_QCD-Pt-50to80-pythia6");    
+  samples_qcdinc.push_back("MC_QCD-Pt-80to120-pythia6");   
+  samples_qcdinc.push_back("MC_QCD-Pt-120to170-pythia6");  
+  samples_qcdinc.push_back("MC_QCD-Pt-170to300-pythia6"); 
+  samples_qcdinc.push_back("MC_QCD-Pt-300to470-pythia6"); 
+  samples_qcdinc.push_back("MC_QCD-Pt-470to600-pythia6"); 
+  samples_qcdinc.push_back("MC_QCD-Pt-600to800-pythia6"); 
+  samples_qcdinc.push_back("MC_QCD-Pt-800to1000-pythia6"); 
+  samples_qcdinc.push_back("MC_QCD-Pt-1000to1400-pythia6");
+  samples_qcdinc.push_back("MC_QCD-Pt-1400to1800-pythia6");
+  samples_qcdinc.push_back("MC_QCD-Pt-1800-pythia6");    
   
   // QCD VBF + other
   vector<string> samples_qcdvbfextra;
@@ -515,11 +522,11 @@ int main(int argc, char *argv[]){
 
       MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/%s",cuts[c].c_str(),hists[h].c_str()));
       mPlots.Scale(wgt);  // removed since already included
-      hInc = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samplesQCDInc);
-      hVBF = mPlots.getMerged(Form("QCDVBF_%s_%s",cuts[c].c_str(),hists[h].c_str()),samplesQCDVBF);
+      hInc = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDIncCompare);
+      hVBF = mPlots.getMerged(Form("QCDVBF_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDVbfCompare);
 
-      if(hInc->Integral()!=0){hInc->Scale(1/hInc->Integral());}
-      if(hVBF->Integral()!=0){hVBF->Scale(1/hVBF->Integral());}      
+      if(hInc->Integral()!=0){hInc->Scale(1/getIntegralFullRange(hInc));}
+      if(hVBF->Integral()!=0){hVBF->Scale(1/getIntegralFullRange(hVBF));}      
       
       if     (cuts[c]=="HLTMetClean"        && hists[h]=="jpt_1") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="HLTMetClean"        && hists[h]=="jpt_2") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
@@ -578,20 +585,20 @@ int main(int argc, char *argv[]){
   //_________________________________________________________________________________________________
   // Filling table: Cross sections
   //_________________________________________________________________________________________________
-  ICLatexTabular tabXSec = get_tabXSec();
-
-  for(unsigned i=0; i<sampleID.size(); i++){
-    
-    string* s = &(sampleID[i]);
-    
-    tabXSec.setCellContent(int(i+1),0,Form("\\verb|%s|",(*s).c_str()));//samples[i]);  
-    tabXSec.setCellContent(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
-    tabXSec.setCellContent(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
-  }
-
-  tabXSec.saveAs("table_xSec.tex");
-  tabXSec.print();
-         
+//   ICLatexTabular tabXSec = get_tabXSec();
+// 
+//   for(unsigned i=0; i<sampleID.size(); i++){
+//     
+//     string* s = &(sampleID[i]);
+//     
+//     tabXSec.setCellContent(int(i+1),0,Form("\\verb|%s|",(*s).c_str()));//samples[i]);  
+//     tabXSec.setCellContent(int(i+1),1,xsec[(*s)]);//xsec[(*s)]);
+//     tabXSec.setCellContent(int(i+1),2,wgt [(*s)]);//wgt [(*s)]);
+//   }
+// 
+//   tabXSec.saveAs("table_xSec.tex");
+//   tabXSec.print();
+//          
   //_____________________________________________________
   ICLatexTabular tQCDCompare_YieldAbsolute = get_tQCDCompare_YieldAbsolute(); // Initialization of absolute event yields table 
   ICLatexTabular tQCDCompare_YieldTrigWgt  = get_tQCDCompare_YieldTrigWgt();  // Initialization of trigger weighted eventd
@@ -600,13 +607,15 @@ int main(int argc, char *argv[]){
   ICLatexTabular tQCDInc_YieldAbsolute     = get_tQCDInc_YieldAbsolute();
   ICLatexTabular tQCDInc_YieldTrigWgt      = get_tQCDInc_YieldTrigWgt();      // Initialization of merged table
   ICLatexTabular tQCDInc_YieldXsecWgt      = get_tQCDInc_YieldXsecWgt();  // Initialization of xsec weighted
+
+  ICLatexTabular tMCSummary_YieldAbsolute  = get_tMCSummary_YieldAbsolute(); // Initialization of merged table  
+  ICLatexTabular tMCSummary_YieldXsecWgt   = get_tMCSummary_YieldXsecWgt();  // Initialization of merged table
   
-  ICLatexTabular tabEvTotalWeighted        = get_tabEvTotalWeighted(); // Initialization of merged table
-  ICLatexTabular tabEvAllTotalWeighted = get_tabEvAllTotalWeighted(); 
+  ICLatexTabular tQCDSummary_YieldWeighted = get_tQCDSummary_YieldWeighted(); 
   
   //_________________________________________    
   for(unsigned i=0; i<cuts.size(); i++){
-
+    
     MapString_ICH1F mPlots = MapString_ICH1F(files,Form("%s/n_vtx",cuts[i].c_str()));
 
     // QCD Sample Compare: Filling table absolute counts 
@@ -624,17 +633,18 @@ int main(int argc, char *argv[]){
 
     // QCD Sample Compare: Filling table weighted events (trigger, pu)
     tQCDCompare_YieldTrigWgt.setCellContent(i+2, 0,cuts[i]);
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 1,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 2,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->Integral(0,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 3,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 4,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 6,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 7,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 8,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->GetNbinsX()+1));    
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 9,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldTrigWgt.setCellContent(i+2,10,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->GetNbinsX()+1));    
-   
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 1,getIntegralFullRange(mPlots["MC_QCD-Pt-80to120-pythia6"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 2,getIntegralFullRange(mPlots["MC_QCD-Pt-80to120_VBF-MET40"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 3,getIntegralFullRange(mPlots["MC_QCD-Pt-120to170-pythia6"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 4,getIntegralFullRange(mPlots["MC_QCD-Pt-120to170_VBF-MET40"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 5,getIntegralFullRange(mPlots["MC_QCD-Pt-170to300-pythia6"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 6,getIntegralFullRange(mPlots["MC_QCD-Pt-170to300_VBF-MET40"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 7,getIntegralFullRange(mPlots["MC_QCD-Pt-300to470-pythia6"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 8,getIntegralFullRange(mPlots["MC_QCD-Pt-300to470_VBF-MET40"]));    
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2, 9,getIntegralFullRange(mPlots["MC_QCD-Pt-470to600-pythia6"]));
+    tQCDCompare_YieldTrigWgt.setCellContent(i+2,10,getIntegralFullRange(mPlots["MC_QCD-Pt-470to600_VBF-MET40"]));    
+  
+    
     // QCD Inclusive: Filling table absolute counts 
     tQCDInc_YieldAbsolute.setCellContent(i+1, 0,cuts[i]);
     tQCDInc_YieldAbsolute.setCellContent(i+1, 1,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->GetEntries());
@@ -649,57 +659,26 @@ int main(int argc, char *argv[]){
     tQCDInc_YieldAbsolute.setCellContent(i+1,10,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->GetEntries());
     tQCDInc_YieldAbsolute.setCellContent(i+1,11,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->GetEntries());
     tQCDInc_YieldAbsolute.setCellContent(i+1,12,mPlots["MC_QCD-Pt-1800-pythia6"]      ->GetEntries());
-
+    
     // QCD Inclusive: Filling table weighted events (trigger, pu) for All QCD Inclusive samples
     tQCDInc_YieldTrigWgt.setCellContent(i+1, 0,cuts[i]);
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 1,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 2,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 3,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 4,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 6,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));    
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 7,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 8,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1, 9,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->Integral(0,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1,10,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1,11,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->GetNbinsX()+1));
-    tQCDInc_YieldTrigWgt.setCellContent(i+1,12,mPlots["MC_QCD-Pt-1800-pythia6"]      ->Integral(0,mPlots["MC_QCD-Pt-1800-pythia6"]      ->GetNbinsX()+1));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 1,getIntegralFullRange(mPlots["MC_QCD-Pt-30to50-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 2,getIntegralFullRange(mPlots["MC_QCD-Pt-50to80-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 3,getIntegralFullRange(mPlots["MC_QCD-Pt-80to120-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 4,getIntegralFullRange(mPlots["MC_QCD-Pt-120to170-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 5,getIntegralFullRange(mPlots["MC_QCD-Pt-170to300-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 6,getIntegralFullRange(mPlots["MC_QCD-Pt-300to470-pythia6"]));    
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 7,getIntegralFullRange(mPlots["MC_QCD-Pt-470to600-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 8,getIntegralFullRange(mPlots["MC_QCD-Pt-600to800-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1, 9,getIntegralFullRange(mPlots["MC_QCD-Pt-800to1000-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,10,getIntegralFullRange(mPlots["MC_QCD-Pt-1000to1400-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,11,getIntegralFullRange(mPlots["MC_QCD-Pt-1400to1800-pythia6"]));
+    tQCDInc_YieldTrigWgt.setCellContent(i+1,12,getIntegralFullRange(mPlots["MC_QCD-Pt-1800-pythia6"]));
 
-    // Putting in cross section normalization weights
-    mPlots.Scale(wgt);
-
-    // Filling table weighted events (trigger, pu and xsec)
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 0,cuts[i]);
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 1,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 2,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->Integral(0,mPlots["MC_QCD-Pt-80to120_VBF-MET40"] ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 3,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 4,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-120to170_VBF-MET40"]->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 6,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-170to300_VBF-MET40"]->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 7,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 8,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-300to470_VBF-MET40"]->GetNbinsX()+1));    
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 9,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
-    tQCDCompare_YieldXsecWgt.setCellContent(i+2,10,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->Integral(0,mPlots["MC_QCD-Pt-470to600_VBF-MET40"]->GetNbinsX()+1));    
-    
-    // QCD Inclusive: Filling table weighted events (trigger, pu and xsec)
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 0,cuts[i]);
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 1,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-30to50-pythia6"]    ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 2,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->Integral(0,mPlots["MC_QCD-Pt-50to80-pythia6"]    ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 3,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->Integral(0,mPlots["MC_QCD-Pt-80to120-pythia6"]   ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 4,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-120to170-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 5,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-170to300-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 6,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-300to470-pythia6"]  ->GetNbinsX()+1));    
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 7,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-470to600-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 8,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->Integral(0,mPlots["MC_QCD-Pt-600to800-pythia6"]  ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1, 9,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->Integral(0,mPlots["MC_QCD-Pt-800to1000-pythia6"] ->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1,10,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1000to1400-pythia6"]->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1,11,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->Integral(0,mPlots["MC_QCD-Pt-1400to1800-pythia6"]->GetNbinsX()+1));
-    tQCDInc_YieldXsecWgt.setCellContent(i+1,12,mPlots["MC_QCD-Pt-1800-pythia6"]      ->Integral(0,mPlots["MC_QCD-Pt-1800-pythia6"]      ->GetNbinsX()+1));    
-    
     // Merging samples and calculating integral    
     TH1F *hData   = mPlots.getMerged(Form("Data_%s_n_vtx",  cuts[i].c_str()),samples_data);
-    TH1F *hQCDInc = mPlots.getMerged(Form("QCDInc_%s_n_vtx",cuts[i].c_str()),samplesQCDInc);
-    TH1F *hQCDVBF = mPlots.getMerged(Form("QCDVBF_%s_n_vtx",cuts[i].c_str()),samplesQCDVBF);
+    TH1F *hQCDInc = mPlots.getMerged(Form("QCDInc_%s_n_vtx",cuts[i].c_str()),samples_QCDIncCompare);
+    TH1F *hQCDVBF = mPlots.getMerged(Form("QCDVBF_%s_n_vtx",cuts[i].c_str()),samples_QCDVbfCompare);
     TH1F *hTTbar  = mPlots.getMerged(Form("TTBar_%s_n_vtx", cuts[i].c_str()),samples_ttbar);
     TH1F *hWjets  = mPlots.getMerged(Form("Wjets_%s_n_vtx", cuts[i].c_str()),samples_wjets);
     TH1F *hVV     = mPlots.getMerged(Form("VV_%s_n_vtx",    cuts[i].c_str()),samples_vv);
@@ -708,36 +687,20 @@ int main(int argc, char *argv[]){
     TH1F *hZjets  = mPlots.getMerged(Form("Zjets_%s_n_vtx", cuts[i].c_str()),samples_zjets);
     TH1F *hDY     = mPlots.getMerged(Form("DY_%s_n_vtx",    cuts[i].c_str()),samples_dy);
     
-    TH1F *hQCDIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samplesQCDIncAll);
+    TH1F *hQCDIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samples_qcdinc);
     TH1F *hQCDVBFAll = mPlots.getMerged(Form("QCDVBFAll_%s_n_vtx",cuts[i].c_str()),samples_qcdvbfextra);
     
-    tabEvTotalWeighted.setCellContent(i+1, 0,cuts[i]);
-    tabEvTotalWeighted.setCellContent(i+1, 1,hData  ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 2,hQCDInc->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 3,hQCDVBF->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 4,hTTbar ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 5,hWjets ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 6,hVV    ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 7,hGjets ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 8,hEWK   ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1, 9,hZjets ->Integral());
-    tabEvTotalWeighted.setCellContent(i+1,10,hDY    ->Integral());
-    
-    double mcTotal = hTTbar ->Integral()
-                    +hWjets ->Integral()
-		    +hVV    ->Integral()
-                    +hGjets ->Integral()
-                    +hEWK   ->Integral()
-                    +hZjets ->Integral()
-                    +hDY    ->Integral();
-		    
-		    
-    tabEvAllTotalWeighted.setCellContent(i+1, 0,cuts[i]);
-    tabEvAllTotalWeighted.setCellContent(i+1, 1,hQCDIncAll->Integral());
-    tabEvAllTotalWeighted.setCellContent(i+1, 2,hQCDVBFAll->Integral());
-    tabEvAllTotalWeighted.setCellContent(i+1, 3,hData     ->Integral());
-		    
-    tabEvAllTotalWeighted.setCellContent(i+1,11,mcTotal);
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 0,cuts[i]);
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 1,hData->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 2,hQCDIncAll->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 3,hQCDVBFAll->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 4,hTTbar->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 5,hWjets->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 6,hVV->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 7,hGjets->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 8,hEWK->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1, 9,hZjets->GetEntries());
+    tMCSummary_YieldAbsolute.setCellContent(i+1,10,hDY->GetEntries());
     
     delete hData;
     delete hQCDInc;
@@ -749,45 +712,124 @@ int main(int argc, char *argv[]){
     delete hEWK;
     delete hZjets;
     delete hDY;
+    delete hQCDIncAll;
+    delete hQCDVBFAll;
+
+    
+    // Putting in cross section normalization weights
+    mPlots.Scale(wgt);
+
+    // Filling table weighted events (trigger, pu and xsec)
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 0,cuts[i]);
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 1,getIntegralFullRange(mPlots["MC_QCD-Pt-80to120-pythia6"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 2,getIntegralFullRange(mPlots["MC_QCD-Pt-80to120_VBF-MET40"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 3,getIntegralFullRange(mPlots["MC_QCD-Pt-120to170-pythia6"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 4,getIntegralFullRange(mPlots["MC_QCD-Pt-120to170_VBF-MET40"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 5,getIntegralFullRange(mPlots["MC_QCD-Pt-170to300-pythia6"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 6,getIntegralFullRange(mPlots["MC_QCD-Pt-170to300_VBF-MET40"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 7,getIntegralFullRange(mPlots["MC_QCD-Pt-300to470-pythia6"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 8,getIntegralFullRange(mPlots["MC_QCD-Pt-300to470_VBF-MET40"]));    
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2, 9,getIntegralFullRange(mPlots["MC_QCD-Pt-470to600-pythia6"]));
+    tQCDCompare_YieldXsecWgt.setCellContent(i+2,10,getIntegralFullRange(mPlots["MC_QCD-Pt-470to600_VBF-MET40"]));    
+  
+    // QCD Inclusive: Filling table weighted events (trigger, pu and xsec)
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 0,cuts[i]);
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 1,getIntegralFullRange(mPlots["MC_QCD-Pt-30to50-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 2,getIntegralFullRange(mPlots["MC_QCD-Pt-50to80-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 3,getIntegralFullRange(mPlots["MC_QCD-Pt-80to120-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 4,getIntegralFullRange(mPlots["MC_QCD-Pt-120to170-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 5,getIntegralFullRange(mPlots["MC_QCD-Pt-170to300-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 6,getIntegralFullRange(mPlots["MC_QCD-Pt-300to470-pythia6"]));    
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 7,getIntegralFullRange(mPlots["MC_QCD-Pt-470to600-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 8,getIntegralFullRange(mPlots["MC_QCD-Pt-600to800-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1, 9,getIntegralFullRange(mPlots["MC_QCD-Pt-800to1000-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,10,getIntegralFullRange(mPlots["MC_QCD-Pt-1000to1400-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,11,getIntegralFullRange(mPlots["MC_QCD-Pt-1400to1800-pythia6"]));
+    tQCDInc_YieldXsecWgt.setCellContent(i+1,12,getIntegralFullRange(mPlots["MC_QCD-Pt-1800-pythia6"]));    
+
+    // Merging samples and calculating integral    
+    hData   = mPlots.getMerged(Form("Data_%s_n_vtx",  cuts[i].c_str()),samples_data);
+    hQCDInc = mPlots.getMerged(Form("QCDInc_%s_n_vtx",cuts[i].c_str()),samples_QCDIncCompare);
+    hQCDVBF = mPlots.getMerged(Form("QCDVBF_%s_n_vtx",cuts[i].c_str()),samples_QCDVbfCompare);
+    hTTbar  = mPlots.getMerged(Form("TTBar_%s_n_vtx", cuts[i].c_str()),samples_ttbar);
+    hWjets  = mPlots.getMerged(Form("Wjets_%s_n_vtx", cuts[i].c_str()),samples_wjets);
+    hVV     = mPlots.getMerged(Form("VV_%s_n_vtx",    cuts[i].c_str()),samples_vv);
+    hGjets  = mPlots.getMerged(Form("Gjets_%s_n_vtx", cuts[i].c_str()),samples_gjets);
+    hEWK    = mPlots.getMerged(Form("EWK_%s_n_vtx",   cuts[i].c_str()),samples_ewk);
+    hZjets  = mPlots.getMerged(Form("Zjets_%s_n_vtx", cuts[i].c_str()),samples_zjets);
+    hDY     = mPlots.getMerged(Form("DY_%s_n_vtx",    cuts[i].c_str()),samples_dy);
+    
+    hQCDIncAll = mPlots.getMerged(Form("QCDIncAll_%s_n_vtx",cuts[i].c_str()),samples_qcdinc);
+    hQCDVBFAll = mPlots.getMerged(Form("QCDVBFAll_%s_n_vtx",cuts[i].c_str()),samples_qcdvbfextra);
+    
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 0,cuts[i]);
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 1,getIntegralFullRange(hData));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 2,getIntegralFullRange(hQCDIncAll));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 3,getIntegralFullRange(hQCDVBFAll));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 4,getIntegralFullRange(hTTbar));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 5,getIntegralFullRange(hWjets));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 6,getIntegralFullRange(hVV));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 7,getIntegralFullRange(hGjets));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 8,getIntegralFullRange(hEWK));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1, 9,getIntegralFullRange(hZjets));
+    tMCSummary_YieldXsecWgt.setCellContent(i+1,10,getIntegralFullRange(hDY));
+    
+    double mcTotal = getIntegralFullRange(hTTbar)
+                    +getIntegralFullRange(hWjets)
+                    +getIntegralFullRange(hVV)
+                    +getIntegralFullRange(hGjets)
+                    +getIntegralFullRange(hEWK)
+                    +getIntegralFullRange(hZjets)
+                    +getIntegralFullRange(hDY);
+    
+    tQCDSummary_YieldWeighted.setCellContent(i+1, 0,cuts[i]);
+    tQCDSummary_YieldWeighted.setCellContent(i+1, 1,getIntegralFullRange(hQCDIncAll));
+    tQCDSummary_YieldWeighted.setCellContent(i+1, 2,getIntegralFullRange(hQCDVBFAll));
+    tQCDSummary_YieldWeighted.setCellContent(i+1, 3,getIntegralFullRange(hData));
+    tQCDSummary_YieldWeighted.setCellContent(i+1, 4,mcTotal);
+
+    delete hData;
+    delete hQCDInc;
+    delete hQCDVBF;
+    delete hTTbar;
+    delete hWjets;
+    delete hVV;
+    delete hGjets;
+    delete hEWK;
+    delete hZjets;
+    delete hDY;
+    delete hQCDIncAll;
+    delete hQCDVBFAll;
+    
   }
   
   // Fixing the underscore
-  tQCDCompare_YieldAbsolute.setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-  tQCDCompare_YieldTrigWgt .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-  tQCDCompare_YieldXsecWgt .setCellContent(8, 0,"DPhiSIGNAL\\_CJVpass");
-  tQCDInc_YieldAbsolute    .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
-  tQCDInc_YieldTrigWgt     .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
-  tQCDInc_YieldXsecWgt     .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
-
-  tabEvTotalWeighted       .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
-  tabEvAllTotalWeighted    .setCellContent(7, 0,"DPhiSIGNAL\\_CJVpass");
+  tQCDCompare_YieldAbsolute.setCellContent(8, 0,"DPhi");
+  tQCDCompare_YieldTrigWgt .setCellContent(8, 0,"DPhi");
+  tQCDCompare_YieldXsecWgt .setCellContent(8, 0,"DPhi");
+  tQCDInc_YieldAbsolute    .setCellContent(7, 0,"DPhi");
+  tQCDInc_YieldTrigWgt     .setCellContent(7, 0,"DPhi");
+  tQCDInc_YieldXsecWgt     .setCellContent(7, 0,"DPhi");
+  tMCSummary_YieldXsecWgt  .setCellContent(7, 0,"DPhi");
+  tMCSummary_YieldAbsolute .setCellContent(7, 0,"DPhi");
+  tQCDSummary_YieldWeighted.setCellContent(7, 0,"DPhi");
 
   tQCDCompare_YieldAbsolute.saveAs("tQCDCompare_YieldAbsolute.tex");
-  tQCDCompare_YieldAbsolute.print();
+  tQCDCompare_YieldTrigWgt .saveAs("tQCDCompare_YieldTrigWgt.tex");
+  tQCDCompare_YieldXsecWgt .saveAs("tQCDCompare_YieldXsecWgt.tex");
+  tQCDInc_YieldAbsolute    .saveAs("tQCDInc_YieldAbsolute.tex");
+  tQCDInc_YieldTrigWgt     .saveAs("tQCDInc_YieldTrigWgt.tex");
+  tQCDInc_YieldXsecWgt     .saveAs("tQCDInc_YieldXsecWgt.tex");
+  tMCSummary_YieldAbsolute .saveAs("tMCSummary_YieldAbsolute.tex");
+  tMCSummary_YieldXsecWgt  .saveAs("tMCSummary_YieldXsecWgt.tex");
   
-  tQCDCompare_YieldTrigWgt.saveAs("tQCDCompare_YieldTrigWgt.tex");
-  tQCDCompare_YieldTrigWgt.print();
-  
-  tQCDCompare_YieldXsecWgt.saveAs("tQCDCompare_YieldXsecWgt.tex");
-  tQCDCompare_YieldXsecWgt.print();
-
-  tQCDInc_YieldAbsolute.saveAs("tQCDInc_YieldAbsolute.tex");
-  tQCDInc_YieldAbsolute.print();
-  
-  tQCDInc_YieldTrigWgt.saveAs("tQCDInc_YieldTrigWgt.tex");
-  tQCDInc_YieldTrigWgt.print();
-  
-  tQCDInc_YieldXsecWgt.saveAs("tQCDInc_YieldXsecWgt.tex");
-  tQCDInc_YieldXsecWgt.print();
-  
-  tabEvTotalWeighted.saveAs("table_EvTotalWeighted.tex");
-  tabEvTotalWeighted.print();
-
-
-  tabEvAllTotalWeighted.saveAs("table_EvAllTotalWeighted.tex");
-  tabEvAllTotalWeighted.print();
+  tQCDSummary_YieldWeighted.saveAs("tQCDSummary_YieldWeighted.tex");
   
 }
+
+double getIntegralFullRange(TH1F* plot){return plot->Integral(0,plot->GetNbinsX()+1);}
+
+double getIntegralFullRange(TH1D* plot){return plot->Integral(0,plot->GetNbinsX()+1);}
 
 //_____________________________________________________
 ICLatexTabular get_tabXSec(){
@@ -909,36 +951,6 @@ ICLatexTabular get_tQCDCompare_YieldXsecWgt(){
   
   return tQCDCompare_YieldXsecWgt;
 }
-  
-//_____________________________________________________
-ICLatexTabular get_tabEvTotalWeighted(){
-  
-  ICLatexTabular tabEvTotalWeighted(8,12);
-  tabEvTotalWeighted.setTabularPrecision(".2");
-  
-  tabEvTotalWeighted.setTabularColumnDecoration("|");
-  tabEvTotalWeighted.setColumnDecorationAfter  ( 0,"||");
-  tabEvTotalWeighted.setColumnDecorationAfter  (10,"||");
-  
-  tabEvTotalWeighted.setRowDecorationBefore(0,"\\hline");
-  tabEvTotalWeighted.setRowDecorationBefore(1,"\\hline \\hline");
-  tabEvTotalWeighted.setRowDecorationAfter (7,"\\hline");
-  
-  tabEvTotalWeighted.setCellContent(0, 0,"Sample");
-  tabEvTotalWeighted.setCellContent(0, 1,"Data");
-  tabEvTotalWeighted.setCellContent(0, 2,"QCD Inc");
-  tabEvTotalWeighted.setCellContent(0, 3,"QCD VBF");
-  tabEvTotalWeighted.setCellContent(0, 4,"$t\\bar{t}$");
-  tabEvTotalWeighted.setCellContent(0, 5,"W+Jets");
-  tabEvTotalWeighted.setCellContent(0, 6,"VV");
-  tabEvTotalWeighted.setCellContent(0, 7,"G+Jets");
-  tabEvTotalWeighted.setCellContent(0, 8,"EWK V+2j");
-  tabEvTotalWeighted.setCellContent(0, 9,"Z+Jets");
-  tabEvTotalWeighted.setCellContent(0,10,"DY");
-  tabEvTotalWeighted.setCellContent(0,11,"MC Total");
-  
-  return tabEvTotalWeighted;
-}
 
 //_____________________________________________________
 ICLatexTabular get_tQCDInc_YieldAbsolute(){
@@ -1044,24 +1056,84 @@ ICLatexTabular get_tQCDInc_YieldXsecWgt(){
   return tQCDInc_YieldXsecWgt;
 }
 
+ICLatexTabular get_tMCSummary_YieldAbsolute(){
+  
+  ICLatexTabular tMCSummary_YieldAbsolute(8,12);
+  tMCSummary_YieldAbsolute.setTabularPrecision(".0");
+  
+  tMCSummary_YieldAbsolute.setTabularColumnDecoration("|");
+  tMCSummary_YieldAbsolute.setColumnDecorationAfter  ( 0,"||");
+  tMCSummary_YieldAbsolute.setColumnDecorationAfter  (10,"||");
+  
+  tMCSummary_YieldAbsolute.setRowDecorationBefore(0,"\\hline");
+  tMCSummary_YieldAbsolute.setRowDecorationBefore(1,"\\hline \\hline");
+  tMCSummary_YieldAbsolute.setRowDecorationAfter (7,"\\hline");
+  
+  tMCSummary_YieldAbsolute.setCellContent(0, 0,"Sample");
+  tMCSummary_YieldAbsolute.setCellContent(0, 1,"Data");
+  tMCSummary_YieldAbsolute.setCellContent(0, 2,"QCD Inc");
+  tMCSummary_YieldAbsolute.setCellContent(0, 3,"QCD VBF");
+  tMCSummary_YieldAbsolute.setCellContent(0, 4,"$t\\bar{t}$");
+  tMCSummary_YieldAbsolute.setCellContent(0, 5,"W+Jets");
+  tMCSummary_YieldAbsolute.setCellContent(0, 6,"VV");
+  tMCSummary_YieldAbsolute.setCellContent(0, 7,"G+Jets");
+  tMCSummary_YieldAbsolute.setCellContent(0, 8,"EWK V+2j");
+  tMCSummary_YieldAbsolute.setCellContent(0, 9,"Z+Jets");
+  tMCSummary_YieldAbsolute.setCellContent(0,10,"DY");
+  tMCSummary_YieldAbsolute.setCellContent(0,11,"MC Total");
+  
+  return tMCSummary_YieldAbsolute;
+}
+
 //_____________________________________________________
-ICLatexTabular get_tabEvAllTotalWeighted(){
+ICLatexTabular get_tMCSummary_YieldXsecWgt(){
   
-  ICLatexTabular tabEvTotalWeighted(8,4);
-  tabEvTotalWeighted.setTabularPrecision(".2");
+  ICLatexTabular tMCSummary_YieldXsecWgt(8,12);
+  tMCSummary_YieldXsecWgt.setTabularPrecision(".2");
   
-  tabEvTotalWeighted.setTabularColumnDecoration("|");
-  tabEvTotalWeighted.setColumnDecorationAfter  (0,"||");
-  tabEvTotalWeighted.setColumnDecorationAfter  (2,"||");
+  tMCSummary_YieldXsecWgt.setTabularColumnDecoration("|");
+  tMCSummary_YieldXsecWgt.setColumnDecorationAfter  ( 0,"||");
+  tMCSummary_YieldXsecWgt.setColumnDecorationAfter  (10,"||");
   
-  tabEvTotalWeighted.setRowDecorationBefore(0,"\\hline");
-  tabEvTotalWeighted.setRowDecorationBefore(1,"\\hline \\hline");
-  tabEvTotalWeighted.setRowDecorationAfter (7,"\\hline");
+  tMCSummary_YieldXsecWgt.setRowDecorationBefore(0,"\\hline");
+  tMCSummary_YieldXsecWgt.setRowDecorationBefore(1,"\\hline \\hline");
+  tMCSummary_YieldXsecWgt.setRowDecorationAfter (7,"\\hline");
   
-  tabEvTotalWeighted.setCellContent(0, 0,"Sample");
-  tabEvTotalWeighted.setCellContent(0, 1,"QCD Inc");
-  tabEvTotalWeighted.setCellContent(0, 2,"QCD VBF");
-  tabEvTotalWeighted.setCellContent(0, 3,"Data");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 0,"Sample");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 1,"Data");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 2,"QCD Inc");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 3,"QCD VBF");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 4,"$t\\bar{t}$");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 5,"W+Jets");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 6,"VV");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 7,"G+Jets");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 8,"EWK V+2j");
+  tMCSummary_YieldXsecWgt.setCellContent(0, 9,"Z+Jets");
+  tMCSummary_YieldXsecWgt.setCellContent(0,10,"DY");
+  tMCSummary_YieldXsecWgt.setCellContent(0,11,"MC Total");
   
-  return tabEvTotalWeighted;
+  return tMCSummary_YieldXsecWgt;
+}
+
+//_____________________________________________________
+ICLatexTabular get_tQCDSummary_YieldWeighted(){
+  
+  ICLatexTabular tQCDSummary_YieldWeighted(8,5);
+  tQCDSummary_YieldWeighted.setTabularPrecision(".2");
+  
+  tQCDSummary_YieldWeighted.setTabularColumnDecoration("|");
+  tQCDSummary_YieldWeighted.setColumnDecorationAfter  (0,"||");
+  tQCDSummary_YieldWeighted.setColumnDecorationAfter  (2,"||");
+  
+  tQCDSummary_YieldWeighted.setRowDecorationBefore(0,"\\hline");
+  tQCDSummary_YieldWeighted.setRowDecorationBefore(1,"\\hline \\hline");
+  tQCDSummary_YieldWeighted.setRowDecorationAfter (7,"\\hline");
+  
+  tQCDSummary_YieldWeighted.setCellContent(0, 0,"Sample");
+  tQCDSummary_YieldWeighted.setCellContent(0, 1,"QCD Inc");
+  tQCDSummary_YieldWeighted.setCellContent(0, 2,"QCD VBF");
+  tQCDSummary_YieldWeighted.setCellContent(0, 3,"Data");
+  tQCDSummary_YieldWeighted.setCellContent(0, 4,"Total");
+  
+  return tQCDSummary_YieldWeighted;
 }
