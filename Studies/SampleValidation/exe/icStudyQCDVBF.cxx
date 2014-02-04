@@ -6,6 +6,7 @@
 #include "Latex/Table/interface/ICLatexCaption.h"
 #include "Plots/Tools/interface/ICPlotFwd.h"
 #include "Plots/Tools/interface/ICPlotCollection.h"
+#include "Plots/Style/interface/ICStyle.h"
 
 // ROOT includes
 #include "TFile.h"
@@ -36,10 +37,11 @@ ICLatexTabular get_tMCSummary_YieldAbsolute();
 ICLatexTabular get_tMCSummary_YieldXsecWgt();
 ICLatexTabular get_tQCDSummary_YieldWeighted();
 
-
-
 int main(int argc, char *argv[]){
 
+  ICStyle myStyle;
+  myStyle.setTDRStyle();
+  
   double lumi          = 19500.3;
   string pathRootFiles = "";
   string pathOutput    = "";
@@ -517,16 +519,19 @@ int main(int argc, char *argv[]){
   for(unsigned c=0; c<cuts.size(); c++){
     for(unsigned h=0; h<hists.size(); h++){
       
-      TH1F *hInc,*hVBF;
+      TH1F *hInc,*hVBF,*hData;
       TCanvas *canv = new TCanvas();
 
       MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/%s",cuts[c].c_str(),hists[h].c_str()));
       mPlots.Scale(wgt);  // removed since already included
-      hInc = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDIncCompare);
-      hVBF = mPlots.getMerged(Form("QCDVBF_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDVbfCompare);
+      
+      hData = mPlots.getMerged(Form("Data_%s_%s",  cuts[c].c_str(),hists[h].c_str()),samples_data);
+      hInc  = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDIncCompare);
+      hVBF  = mPlots.getMerged(Form("QCDVBF_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDVbfCompare);
 
-      if(hInc->Integral()!=0){hInc->Scale(1/getIntegralFullRange(hInc));}
-      if(hVBF->Integral()!=0){hVBF->Scale(1/getIntegralFullRange(hVBF));}      
+      if(hData->Integral()!=0){hData->Scale(1/getIntegralFullRange(hData));}      
+      if(hInc->Integral()!=0) {hInc ->Scale(1/getIntegralFullRange(hInc));}
+      if(hVBF->Integral()!=0) {hVBF ->Scale(1/getIntegralFullRange(hVBF));}      
       
       if     (cuts[c]=="HLTMetClean"        && hists[h]=="jpt_1") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="HLTMetClean"        && hists[h]=="jpt_2") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
@@ -558,24 +563,49 @@ int main(int argc, char *argv[]){
       else if(cuts[c]=="TightMjj"           && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
       else if(cuts[c]=="TightMjj"           && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="TightMjj"           && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}  
+      else if(cuts[c]=="TightMjj"           && hists[h]=="dphijj"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hData->Rebin(r);} 
       else if(cuts[c]=="CJVpass"            && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="CJVpass"            && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="CJVpass"            && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
       else if(cuts[c]=="CJVpass"            && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
       else if(cuts[c]=="CJVpass"            && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="CJVpass"            && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
+      else if(cuts[c]=="CJVpass"            && hists[h]=="dphijj"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hData->Rebin(r);} 
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="jeta_2"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="met")   {int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);} 
+      else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}       
+
+      hData->SetLineColor(kBlack);
+      hVBF ->SetLineColor(kRed);
+      hInc ->SetLineColor(kBlue);
       
-      hVBF->SetLineColor(kRed);
-      hInc->Draw();
+      if(hists[h]=="dphijj"){
+	canv->SetLogy(true);
+
+        hData->SetMarkerStyle(20);
+	hData->SetMarkerSize(1);
+	
+	hVBF->SetFillColor(kRed);
+	hVBF->GetXaxis()->SetTitle("#Delta#phi");
+	hVBF->GetXaxis()->SetTitle("Normalized to 1");
+	
+        hVBF ->Draw("HIST");
+	hData->Draw("sameP0E1");
+        canv->SaveAs(Form("DataVsQCDVBF_%s_%s.pdf",cuts[c].c_str(),hists[h].c_str()));
+	
+      }
+      
+      else{canv->SetLogy(false);}
+      
+      hInc->Draw("");
       hVBF->Draw("same");
       canv->SaveAs(Form("%s_%s.pdf",cuts[c].c_str(),hists[h].c_str()));
       
+      delete hData;
       delete hInc;
       delete hVBF;
       delete canv;
