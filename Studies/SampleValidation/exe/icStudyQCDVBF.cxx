@@ -545,12 +545,41 @@ int main(int argc, char *argv[]){
       else if(cuts[c]=="JetPair"            && hists[h]=="jeta_2"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
       else if(cuts[c]=="JetPair"            && hists[h]=="met")   {int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
       else if(cuts[c]=="JetPair"            && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jpt_1") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jpt_2") {int r= 5; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jeta_1"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="DEta"               && hists[h]=="jeta_2"){int r= 2; hInc->Rebin(r);hVBF->Rebin(r);}
-      else if(cuts[c]=="DEta"               && hists[h]=="met")   {int r= 4; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);}
-      else if(cuts[c]=="DEta"               && hists[h]=="mjj")   {int r=25; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}     
+      else if(cuts[c]=="DEta"               && hists[h]=="jpt_1"){
+        int r=10; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);
+        hInc->GetXaxis()->SetTitle("Lead Jet p_{T} [GeV]");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      }
+      else if(cuts[c]=="DEta"               && hists[h]=="jpt_2") {
+        int r=10; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);
+        hInc->GetXaxis()->SetTitle("Sublead Jet p_{T} [GeV]");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      }
+      else if(cuts[c]=="DEta"               && hists[h]=="jeta_1"){
+        int r= 4; hInc->Rebin(r);hVBF->Rebin(r);
+        hInc->GetXaxis()->SetTitle("Lead Jet #eta");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      }
+      else if(cuts[c]=="DEta"               && hists[h]=="jeta_2"){
+        int r= 4; hInc->Rebin(r);hVBF->Rebin(r);
+        hInc->GetXaxis()->SetTitle("Sublead Jet #eta");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      }
+      else if(cuts[c]=="DEta"               && hists[h]=="met")   {
+        int r= 8; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,300);
+        hInc->GetXaxis()->SetTitle("MET [GeV]");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      }
+      else if(cuts[c]=="DEta"               && hists[h]=="mjj")   {
+        int r=100; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);
+        hInc->GetXaxis()->SetTitle("Jets m_{jj}");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      }     
+      else if(cuts[c]=="DEta"               && hists[h]=="dphijj"){
+        int r= 4; hInc->Rebin(r);hVBF->Rebin(r);
+        hInc->GetXaxis()->SetTitle("Jets #Delta#phi");
+        hInc->GetYaxis()->SetTitle("Normalized to 1");
+      } 
       else if(cuts[c]=="MET"                && hists[h]=="jpt_1") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="MET"                && hists[h]=="jpt_2") {int r=20; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,500);}
       else if(cuts[c]=="MET"                && hists[h]=="jeta_1"){int r= 4; hInc->Rebin(r);hVBF->Rebin(r);}
@@ -579,19 +608,16 @@ int main(int argc, char *argv[]){
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);} 
       else if(cuts[c]=="DPhiSIGNAL_CJVpass" && hists[h]=="mjj")   {int r=50; hInc->Rebin(r);hVBF->Rebin(r);hInc->SetAxisRange(0,2500);}       
 
-      hData->SetLineColor(kBlack);
-      hVBF ->SetLineColor(kRed);
-      hInc ->SetLineColor(kBlue);
+      hData->SetLineColor(kBlack); hData->SetMarkerColor(kBlack); hData->SetMarkerStyle(20); hData->SetMarkerSize(1);
+      hVBF ->SetLineColor(kRed);   hVBF ->SetMarkerColor(kRed);   hVBF ->SetMarkerStyle(20); hVBF ->SetMarkerSize(1);
+      hInc ->SetLineColor(kBlue);  hInc ->SetMarkerColor(kBlue);  hInc ->SetMarkerStyle(20); hInc ->SetMarkerSize(1);
       
       if(hists[h]=="dphijj"){
 	canv->SetLogy(true);
 
-        hData->SetMarkerStyle(20);
-	hData->SetMarkerSize(1);
-	
 	hVBF->SetFillColor(kRed);
 	hVBF->GetXaxis()->SetTitle("#Delta#phi");
-	hVBF->GetXaxis()->SetTitle("Normalized to 1");
+	hVBF->GetYaxis()->SetTitle("Normalized to 1");
 	
         hVBF ->Draw("HIST");
 	hData->Draw("sameP0E1");
@@ -599,10 +625,9 @@ int main(int argc, char *argv[]){
 	
       }
       
-      else{canv->SetLogy(false);}
-      
-      hInc->Draw("");
-      hVBF->Draw("same");
+      canv->SetLogy(false);
+      hInc->Draw("P0E1");
+      hVBF->Draw("sameP0E1");
       canv->SaveAs(Form("%s_%s.pdf",cuts[c].c_str(),hists[h].c_str()));
       
       delete hData;
