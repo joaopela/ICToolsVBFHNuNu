@@ -523,7 +523,7 @@ int main(int argc, char *argv[]){
       TCanvas *canv = new TCanvas();
 
       MapString_ICH1F mPlots  = MapString_ICH1F(files,Form("%s/%s",cuts[c].c_str(),hists[h].c_str()));
-      mPlots.Scale(wgt);  // removed since already included
+      mPlots.scale(wgt);  // removed since already included
       
       hData = mPlots.getMerged(Form("Data_%s_%s",  cuts[c].c_str(),hists[h].c_str()),samples_data);
       hInc  = mPlots.getMerged(Form("QCDInc_%s_%s",cuts[c].c_str(),hists[h].c_str()),samples_QCDIncCompare);
@@ -770,9 +770,8 @@ int main(int argc, char *argv[]){
     delete hQCDIncAll;
     delete hQCDVBFAll;
 
-    
     // Putting in cross section normalization weights
-    mPlots.Scale(wgt);
+    mPlots.scale(wgt);
 
     // Filling table weighted events (trigger, pu and xsec)
     tQCDCompare_YieldXsecWgt.setCellContent(i+2, 0,cuts[i]);

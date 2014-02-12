@@ -399,9 +399,9 @@ int main(int argc, char *argv[]){
   ICLatexTabular tGenVsReco_Factor    = get_tGenVsReco_Factor();
   
   MapString_ICH2D mPlots = MapString_ICH2D(files,"GenLevel/genVsReco_met");
-  mPlots.Scale(wgt);
-  mPlots.SetXaxisTitle("Gen Met [GeV]");
-  mPlots.SetYaxisTitle("Reco PFMet Met [GeV]");
+  mPlots.scale(wgt);
+  mPlots.setXaxisTitle("Gen Met [GeV]");
+  mPlots.setYaxisTitle("Reco PFMet Met [GeV]");
   
   TLine horLine( 0,130,500,130); horLine.SetLineColor(kBlue); horLine.SetLineWidth(3);
   TLine verLine(40,  0, 40,500); verLine.SetLineColor(kRed);  verLine.SetLineWidth(3);
